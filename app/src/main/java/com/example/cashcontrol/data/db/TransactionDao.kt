@@ -5,7 +5,8 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.example.cashcontrol.data.entity.Transaction
+import com.example.cashcontrol.data.db.entity.DateFrame
+import com.example.cashcontrol.data.db.entity.Transaction
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -24,11 +25,15 @@ interface TransactionDao {
     fun getAllTransactionsFromDb (): Flow<List<Transaction>>
 
     @androidx.room.Transaction
-    @Query ("SELECT * FROM transaction_table WHERE transactionType = :transactionType")
-    suspend fun getAllExpenses (transactionType: String): List<Transaction>
+    @Query ("SELECT * FROM transaction_table WHERE dateFrameId = :dateFrameId")
+    suspend fun getAllTransactionsByDateFrame (dateFrameId: Int): List<Transaction>
 
     @androidx.room.Transaction
-    @Query ("SELECT * FROM transaction_table WHERE transactionType = :transactionType")
-    suspend fun getAllIncomes (transactionType: String): List<Transaction>
+    @Query ("SELECT * FROM transaction_table WHERE transactionType = :transactionType AND dateFrameId = :dateFrameId")
+    suspend fun getAllExpensesByDateFrame (transactionType: String, dateFrameId: Int): List<Transaction>
+
+    @androidx.room.Transaction
+    @Query ("SELECT * FROM transaction_table WHERE transactionType = :transactionType AND dateFrameId = :dateFrameId")
+    suspend fun getAllIncomesByDateFrame (transactionType: String, dateFrameId: Int): List<Transaction>
 
 }

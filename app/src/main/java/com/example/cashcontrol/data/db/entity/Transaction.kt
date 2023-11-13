@@ -1,4 +1,4 @@
-package com.example.cashcontrol.data.entity
+package com.example.cashcontrol.data.db.entity
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

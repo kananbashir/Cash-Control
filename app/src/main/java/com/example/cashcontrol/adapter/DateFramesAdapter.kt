@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.cashcontrol.R
 import com.example.cashcontrol.adapter.listener.DateFramesClickListener
-import com.example.cashcontrol.data.entity.DateFrame
+import com.example.cashcontrol.data.db.entity.DateFrame
 import com.example.cashcontrol.databinding.ItemLayoutDateFramesBinding
 import com.example.cashcontrol.util.extension.getCurrencySymbol
 

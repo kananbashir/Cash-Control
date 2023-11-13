@@ -26,7 +26,7 @@ class OnBoardingSavingsFragment : Fragment() {
             binding.etSaveFragOBSavings.setText(savedInstanceState.getString(SAVINGS_AMOUNT_INPUT_KEY))
         }
 
-        val callBack = requireActivity().onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+        requireActivity().onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
                 findNavController().popBackStack()
             }

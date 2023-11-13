@@ -18,7 +18,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.example.cashcontrol.R
-import com.example.cashcontrol.data.entity.Profile
+import com.example.cashcontrol.data.db.entity.Profile
 import com.example.cashcontrol.databinding.FragmentOnBoardingProfileBinding
 import com.example.cashcontrol.ui.viewmodel.ProfileViewModel
 import com.example.cashcontrol.ui.viewmodel.UserViewModel
@@ -65,39 +65,23 @@ class OnBoardingProfileFragment : Fragment() {
         binding.btContinueFragOBProfile.setOnClickListener{
             val profileName = binding.etProfileNameFragSignIn.text.toString()
 
-            if (profileName.isNotEmpty()) {
-                if (userViewModel.userWithProfiles.isNotEmpty()) {
-                    if (profileViewModel.checkProfileName(profileName, userViewModel.userWithProfiles.first())) {
-                        lifecycleScope.launch {
-                            updateButtonToLoadingState(true)
-                            delay(1500) // JUST TO SIMULATE LOADING..
-                            profileViewModel.updateOnlineProfile(userViewModel.userWithProfiles.first())
-                            findNavController().navigate(OnBoardingProfileFragmentDirections.actionOnBoardingProfileFragmentToOnboardingSession())
-                        }
-                    } else {
-                        showErrorMessage("This profile name has already been taken!", binding)
-                    }
-                } else {
-                    viewLifecycleOwner.lifecycleScope.launch {
-                        repeatOnLifecycle(Lifecycle.State.STARTED) {
-                            userViewModel.onlineUser.collect {
-                                it?.let { onlineUser ->
-                                    updateButtonToLoadingState(true)
-                                    profileViewModel.upsertProfile(Profile(
-                                        profileName,
-                                        true,
-                                        onlineUser.userId!!
-                                    ))
-                                    delay(1500) // JUST TO SIMULATE LOADING..
-                                    profileViewModel.updateOnlineProfile(onlineUser.userId!!)
-                                    findNavController().navigate(OnBoardingProfileFragmentDirections.actionOnBoardingProfileFragmentToOnboardingSession())
-                                }
+            viewLifecycleOwner.lifecycleScope.launch {
+                repeatOnLifecycle(Lifecycle.State.STARTED) {
+                    userViewModel.getOnlineUser()?.let {
+                        if (profileName.isNotEmpty()) {
+                            if (profileViewModel.getProfileOfUserByName(it.userId!!, profileName) == null) {
+                                updateButtonToLoadingState()
+                                profileViewModel.upsertProfile(Profile(profileName, true, it.userId!!))
+                                delay(1500) // JUST TO SIMULATE LOADING..
+                                findNavController().navigate(OnBoardingProfileFragmentDirections.actionOnBoardingProfileFragmentToOnboardingSession())
+                            } else {
+                                showErrorMessage("This profile name has already been taken!", binding)
                             }
+                        } else {
+                            showErrorMessage("Consider adding profile name", binding)
                         }
                     }
                 }
-            } else {
-                showErrorMessage("Consider adding profile name", binding)
             }
         }
 
@@ -111,24 +95,12 @@ class OnBoardingProfileFragment : Fragment() {
 
     }
 
-    private fun updateButtonToLoadingState (condition: Boolean) {
-        when (condition) {
-            true -> {
-                binding.apply {
-                    btContinueFragOBProfile.startAnimation(shrinkInsideAnim)
-                    ltLoadingFragOBProfile.visibility = View.VISIBLE
-                    btContinueFragOBProfile.isClickable = false
-                    btContinueFragOBProfile.visibility = View.INVISIBLE
-                }
-            }
-
-            else -> {
-                binding.apply {
-                    ltLoadingFragOBProfile.visibility = View.GONE
-                    btContinueFragOBProfile.isClickable = true
-                    btContinueFragOBProfile.visibility = View.VISIBLE
-                }
-            }
+    private fun updateButtonToLoadingState () {
+        binding.apply {
+            btContinueFragOBProfile.startAnimation(shrinkInsideAnim)
+            ltLoadingFragOBProfile.visibility = View.VISIBLE
+            btContinueFragOBProfile.isClickable = false
+            btContinueFragOBProfile.visibility = View.INVISIBLE
         }
     }
 }

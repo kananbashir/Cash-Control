@@ -1,9 +1,9 @@
-package com.example.cashcontrol.data.entity.relation
+package com.example.cashcontrol.data.db.entity.relation
 
 import androidx.room.Embedded
 import androidx.room.Relation
-import com.example.cashcontrol.data.entity.DateLimit
-import com.example.cashcontrol.data.entity.Transaction
+import com.example.cashcontrol.data.db.entity.DateLimit
+import com.example.cashcontrol.data.db.entity.Transaction
 
 data class DateLimitWithTransactions (
     @Embedded val dateLimit: DateLimit,

@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.cashcontrol.R
-import com.example.cashcontrol.data.entity.Profile
+import com.example.cashcontrol.data.db.entity.Profile
 import com.example.cashcontrol.databinding.ItemLayoutProfilesBinding
 
 class ProfilesAdapter: RecyclerView.Adapter<ProfilesAdapter.ProfilesViewHolder>() {

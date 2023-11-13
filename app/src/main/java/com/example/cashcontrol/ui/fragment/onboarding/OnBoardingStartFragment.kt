@@ -39,16 +39,6 @@ class OnBoardingStartFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
 
-       viewLifecycleOwner.lifecycleScope.launch {
-           repeatOnLifecycle(Lifecycle.State.STARTED) {
-               profileViewModel.allProfiles.collect { profileList ->
-                   if (profileList.isNotEmpty()) {
-                       binding.btReturnHomeFragOBStart.visibility = View.VISIBLE
-                   }
-               }
-           }
-       }
-
        binding.apply {
            btContinueFragOBStart.setOnClickListener{
                findNavController().navigate(OnBoardingStartFragmentDirections.actionOnBoardingStartFragmentToOnBoardingProfileFragment())

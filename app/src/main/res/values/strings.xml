@@ -54,7 +54,7 @@
     <string name="text_currency_to">To</string>
     <string name="text_bulk">Bulk</string>
     <string name="text_budget">Budget</string>
-    <string name="placeholder_text_hello">Hello, <b>%1$s</b></string>
+    <string name="placeholder_text_hello">Hello, %1$s</string>
     <string name="text_onboarding_finish_header_1">Now we know that you have a budget of %1$s %2$s for the period of %3$s to %4$s and you intend to save %5$s %6$s</string>
     <string name="text_no_data">No data</string>
 

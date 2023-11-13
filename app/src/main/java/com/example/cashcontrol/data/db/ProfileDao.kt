@@ -6,8 +6,8 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
-import com.example.cashcontrol.data.entity.Profile
-import com.example.cashcontrol.data.entity.relation.ProfileWithDateFrames
+import com.example.cashcontrol.data.db.entity.Profile
+import com.example.cashcontrol.data.db.entity.relation.ProfileWithDateFrames
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -23,8 +23,12 @@ interface ProfileDao {
     fun getAllProfilesFromDb (): Flow<List<Profile>>
 
     @Transaction
-    @Query ("SELECT * FROM profile_table WHERE isOnline = 1")
-    suspend fun getOnlineProfile (): List<Profile>
+    @Query ("SELECT * FROM profile_table WHERE userId = :userId AND isOnline = 1")
+    suspend fun getOnlineProfileById (userId: Int): List<Profile>
+
+    @Transaction
+    @Query ("SELECT * FROM profile_table WHERE userId = :userId AND profileName = :profileName")
+    suspend fun getProfileOfUserByName (userId: Int, profileName: String): List<Profile>
 
     @Transaction
     @Query ("SELECT * FROM profile_table WHERE profileId = :profileId")

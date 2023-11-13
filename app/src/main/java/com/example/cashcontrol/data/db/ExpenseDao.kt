@@ -4,8 +4,8 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.example.cashcontrol.data.entity.Transaction
-import com.example.cashcontrol.data.entity.expense.Expense
+import com.example.cashcontrol.data.db.entity.Transaction
+import com.example.cashcontrol.data.db.entity.expense.Expense
 import com.example.cashcontrol.util.constant.TransactionConstant.TRANSACTION_TYPE_EXPENSE
 import kotlinx.coroutines.flow.Flow
 

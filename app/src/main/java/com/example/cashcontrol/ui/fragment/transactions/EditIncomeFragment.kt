@@ -18,8 +18,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.cashcontrol.R
-import com.example.cashcontrol.data.entity.income.BatchIncome
-import com.example.cashcontrol.data.entity.income.SingleIncome
 import com.example.cashcontrol.databinding.FragmentEditIncomeBinding
 import com.example.cashcontrol.ui.viewmodel.DateFrameViewModel
 import com.example.cashcontrol.ui.viewmodel.DateLimitViewModel
@@ -82,134 +80,134 @@ class EditIncomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
 
-        binding.apply {
-            val selectedTransaction = dateLimitViewModel.selectedTransaction
-            selectedTransaction?.let {
-                if (it.transactionSource.isEmpty()) {
-                    etIncomeCategoryFragEditIncome.setText(it.transactionCategories[0])
-                    inflateCategories(it.transactionSources)
-                } else {
-                    etIncomeCategoryFragEditIncome.setText(it.transactionSource)
-                }
-
-                etAmountFragEditIncome.setText(it.transactionAmount.toString())
-                etDescriptionFragEditIncome.setText(it.transactionDescription)
-                tvSelectedDateFragEditIncome.text = it.date
-                setCacheCategoryDropDownList(etIncomeCategoryFragEditIncome)
-            }
-
-            btAddMoreFragEditIncome.setOnClickListener {
-                addNewItem()
-            }
-
-            btSelectDateFragEditIncome.setOnClickListener {
-                showMaterialDatePickerDialog {
-                    it.addOnPositiveButtonClickListener { selection ->
-                        val selectedDate = Instant.ofEpochMilli(selection).atZone(ZoneId.systemDefault()).toLocalDate()
-
-                        dateFrameViewModel.unfinishedDateFrame.value?.let { unfinishedDf ->
-                            val startPointDate = LocalDate.parse(unfinishedDf.startPointDate, DateTimeFormatter.ofPattern(DateConstant.DATE_LIMIT_DATE_PATTERN))
-
-                            if (selectedDate > LocalDate.now()) {
-                                showErrorMessage("You cannot choose future dates..")
-                            } else if (selectedDate < startPointDate) {
-                                showErrorMessage("The chosen date must not be earlier than the start point (${unfinishedDf.startPointDate}) date!")
-                            } else {
-                                tvSelectedDateFragEditIncome.text = selectedDate.format(DateTimeFormatter.ofPattern(DateConstant.DATE_LIMIT_DATE_PATTERN))
-                            }
-                        }
-                    }
-                    it.show(childFragmentManager, "date_selection")
-                }
-            }
-
-            ivReturnBackFragEditIncome.setOnClickListener {
-                val materialAlertDialog = MaterialAlertDialogBuilder(requireContext())
-                materialAlertDialog.setMessage("Are you sure you want to discard all changes?")
-                    .setPositiveButton("Yes") { _, _ ->
-                        findNavController().popBackStack()
-                    }
-                    .setNegativeButton("No") { dialogInterface, _ ->
-                        dialogInterface.cancel()
-                    }
-                    .show()
-            }
-
-            btSaveFragEditIncome.setOnClickListener {
-                lifecycleScope.launch {
-
-//                    if (checkForEmptyColumns()) {
-//                        dateLimitViewModel.currentDateLimit.value?.let {
-//                            val transaction = dateLimitViewModel.selectedTransaction!!
-//                            if (isSingleIncome()) {
-//                                if (wasBatchIncome()) {
-//                                    transactionViewModel.deleteTransaction(transaction)
-//                                    transactionViewModel.upsertTransaction(
-//                                        SingleIncome(
-//                                            etAmountFragEditIncome.text.toString().toDouble(),
-//                                            actvCurrencyFragEditIncome.text.toString(),
-//                                            etIncomeCategoryFragEditIncome.text.toString(),
-//                                            etDescriptionFragEditIncome.text.toString(),
-//                                            tvSelectedDateFragEditIncome.text.toString()
-//                                        )
-//                                    )
-//                                } else {
-//                                    transaction.transactionAmount = etAmountFragEditIncome.text.toString().toDouble()
-//                                    transaction.transactionCurrency = actvCurrencyFragEditIncome.text.toString()
-//                                    transaction.transactionSource = etIncomeCategoryFragEditIncome.text.toString()
-//                                    transaction.transactionDescription = etDescriptionFragEditIncome.text.toString()
-//                                    transaction.date = tvSelectedDateFragEditIncome.text.toString()
-//                                    transaction.isSelected = false
-//                                    transactionViewModel.upsertTransaction(transaction)
-//                                }
-//                                userViewModel.cacheNewExpenseCategory(etIncomeCategoryFragEditIncome.text.toString())
+//        binding.apply {
+//            val selectedTransaction = dateLimitViewModel.selectedTransaction
+//            selectedTransaction?.let {
+//                if (it.transactionSource.isEmpty()) {
+//                    etIncomeCategoryFragEditIncome.setText(it.transactionCategories[0])
+//                    inflateCategories(it.transactionSources)
+//                } else {
+//                    etIncomeCategoryFragEditIncome.setText(it.transactionSource)
+//                }
+//
+//                etAmountFragEditIncome.setText(it.transactionAmount.toString())
+//                etDescriptionFragEditIncome.setText(it.transactionDescription)
+//                tvSelectedDateFragEditIncome.text = it.date
+//                setCacheCategoryDropDownList(etIncomeCategoryFragEditIncome)
+//            }
+//
+//            btAddMoreFragEditIncome.setOnClickListener {
+//                addNewItem()
+//            }
+//
+//            btSelectDateFragEditIncome.setOnClickListener {
+//                showMaterialDatePickerDialog {
+//                    it.addOnPositiveButtonClickListener { selection ->
+//                        val selectedDate = Instant.ofEpochMilli(selection).atZone(ZoneId.systemDefault()).toLocalDate()
+//
+//                        dateFrameViewModel.unfinishedDateFrame.value?.let { unfinishedDf ->
+//                            val startPointDate = LocalDate.parse(unfinishedDf.startPointDate, DateTimeFormatter.ofPattern(DateConstant.DATE_LIMIT_DATE_PATTERN))
+//
+//                            if (selectedDate > LocalDate.now()) {
+//                                showErrorMessage("You cannot choose future dates..")
+//                            } else if (selectedDate < startPointDate) {
+//                                showErrorMessage("The chosen date must not be earlier than the start point (${unfinishedDf.startPointDate}) date!")
 //                            } else {
-//                                val expenseCategoryList = getAllExpenseCategoryList()
-//                                if (wasSingleIncome()) {
-//                                    transactionViewModel.deleteTransaction(transaction)
-//                                    transactionViewModel.upsertTransaction(
-//                                        BatchIncome(
-//                                            etAmountFragEditIncome.text.toString().toDouble(),
-//                                            actvCurrencyFragEditIncome.text.toString(),
-//                                            expenseCategoryList,
-//                                            etDescriptionFragEditIncome.text.toString(),
-//                                            tvSelectedDateFragEditIncome.text.toString()
-//                                        )
-//                                    )
-//                                } else {
-//                                    transaction.transactionAmount = etAmountFragEditIncome.text.toString().toDouble()
-//                                    transaction.transactionCurrency = actvCurrencyFragEditIncome.text.toString()
-//                                    transaction.transactionSources = expenseCategoryList
-//                                    transaction.transactionDescription = etDescriptionFragEditIncome.text.toString()
-//                                    transaction.date = tvSelectedDateFragEditIncome.text.toString()
-//                                    transaction.isSelected = false
-//                                    transactionViewModel.upsertTransaction(transaction)
-//                                }
-//                                userViewModel.cacheNewExpenseCategory(expenseCategoryList)
+//                                tvSelectedDateFragEditIncome.text = selectedDate.format(DateTimeFormatter.ofPattern(DateConstant.DATE_LIMIT_DATE_PATTERN))
 //                            }
-//                            updateButtonToLoadingState()
-//                            dateFrameViewModel.updateIncomeAmount(etAmountFragEditIncome.text.toString().toDouble())
-//                            dateLimitViewModel.setIncomesForDate()
-//                            profileViewModel.setProfileWithDateFrames()
-//                            delay(1500) // JUST TO SIMULATE LOADING..
-//                            dateFrameViewModel.uiAnimState = false
-//                            dateLimitViewModel.uiAnimState = false
-//                            findNavController().navigate(EditExpenseFragmentDirections.actionEditExpenseFragmentToTransactionsDetailFragment())
 //                        }
 //                    }
-                }
-            }
-
-            parentContainerLayoutFragEditIncome.setOnHierarchyChangeListener(object : ViewGroup.OnHierarchyChangeListener {
-                override fun onChildViewAdded(parent: View?, child: View?) {
-                    val etCategory = child?.findViewById<AutoCompleteTextView>(R.id.etCategoryItemLayoutExpenseAndIncomeCategory)
-                    setCacheCategoryDropDownList(etCategory!!)
-                }
-
-                override fun onChildViewRemoved(parent: View?, child: View?) {}
-            })
-
-        }
+//                    it.show(childFragmentManager, "date_selection")
+//                }
+//            }
+//
+//            ivReturnBackFragEditIncome.setOnClickListener {
+//                val materialAlertDialog = MaterialAlertDialogBuilder(requireContext())
+//                materialAlertDialog.setMessage("Are you sure you want to discard all changes?")
+//                    .setPositiveButton("Yes") { _, _ ->
+//                        findNavController().popBackStack()
+//                    }
+//                    .setNegativeButton("No") { dialogInterface, _ ->
+//                        dialogInterface.cancel()
+//                    }
+//                    .show()
+//            }
+//
+//            btSaveFragEditIncome.setOnClickListener {
+//                lifecycleScope.launch {
+//
+////                    if (checkForEmptyColumns()) {
+////                        dateLimitViewModel.currentDateLimit.value?.let {
+////                            val transaction = dateLimitViewModel.selectedTransaction!!
+////                            if (isSingleIncome()) {
+////                                if (wasBatchIncome()) {
+////                                    transactionViewModel.deleteTransaction(transaction)
+////                                    transactionViewModel.upsertTransaction(
+////                                        SingleIncome(
+////                                            etAmountFragEditIncome.text.toString().toDouble(),
+////                                            actvCurrencyFragEditIncome.text.toString(),
+////                                            etIncomeCategoryFragEditIncome.text.toString(),
+////                                            etDescriptionFragEditIncome.text.toString(),
+////                                            tvSelectedDateFragEditIncome.text.toString()
+////                                        )
+////                                    )
+////                                } else {
+////                                    transaction.transactionAmount = etAmountFragEditIncome.text.toString().toDouble()
+////                                    transaction.transactionCurrency = actvCurrencyFragEditIncome.text.toString()
+////                                    transaction.transactionSource = etIncomeCategoryFragEditIncome.text.toString()
+////                                    transaction.transactionDescription = etDescriptionFragEditIncome.text.toString()
+////                                    transaction.date = tvSelectedDateFragEditIncome.text.toString()
+////                                    transaction.isSelected = false
+////                                    transactionViewModel.upsertTransaction(transaction)
+////                                }
+////                                userViewModel.cacheNewExpenseCategory(etIncomeCategoryFragEditIncome.text.toString())
+////                            } else {
+////                                val expenseCategoryList = getAllExpenseCategoryList()
+////                                if (wasSingleIncome()) {
+////                                    transactionViewModel.deleteTransaction(transaction)
+////                                    transactionViewModel.upsertTransaction(
+////                                        BatchIncome(
+////                                            etAmountFragEditIncome.text.toString().toDouble(),
+////                                            actvCurrencyFragEditIncome.text.toString(),
+////                                            expenseCategoryList,
+////                                            etDescriptionFragEditIncome.text.toString(),
+////                                            tvSelectedDateFragEditIncome.text.toString()
+////                                        )
+////                                    )
+////                                } else {
+////                                    transaction.transactionAmount = etAmountFragEditIncome.text.toString().toDouble()
+////                                    transaction.transactionCurrency = actvCurrencyFragEditIncome.text.toString()
+////                                    transaction.transactionSources = expenseCategoryList
+////                                    transaction.transactionDescription = etDescriptionFragEditIncome.text.toString()
+////                                    transaction.date = tvSelectedDateFragEditIncome.text.toString()
+////                                    transaction.isSelected = false
+////                                    transactionViewModel.upsertTransaction(transaction)
+////                                }
+////                                userViewModel.cacheNewExpenseCategory(expenseCategoryList)
+////                            }
+////                            updateButtonToLoadingState()
+////                            dateFrameViewModel.updateIncomeAmount(etAmountFragEditIncome.text.toString().toDouble())
+////                            dateLimitViewModel.setIncomesForDate()
+////                            profileViewModel.setProfileWithDateFrames()
+////                            delay(1500) // JUST TO SIMULATE LOADING..
+////                            dateFrameViewModel.uiAnimState = false
+////                            dateLimitViewModel.uiAnimState = false
+////                            findNavController().navigate(EditExpenseFragmentDirections.actionEditExpenseFragmentToTransactionsDetailFragment())
+////                        }
+////                    }
+//                }
+//            }
+//
+//            parentContainerLayoutFragEditIncome.setOnHierarchyChangeListener(object : ViewGroup.OnHierarchyChangeListener {
+//                override fun onChildViewAdded(parent: View?, child: View?) {
+//                    val etCategory = child?.findViewById<AutoCompleteTextView>(R.id.etCategoryItemLayoutExpenseAndIncomeCategory)
+//                    setCacheCategoryDropDownList(etCategory!!)
+//                }
+//
+//                override fun onChildViewRemoved(parent: View?, child: View?) {}
+//            })
+//
+//        }
 
         return binding.root
     }
@@ -314,13 +312,13 @@ class EditIncomeFragment : Fragment() {
         return parentLayout.childCount == 1
     }
 
-    private fun wasBatchIncome (): Boolean {
-        return dateLimitViewModel.selectedTransaction!!.transactionCategory.isEmpty()
-    }
-
-    private fun wasSingleIncome (): Boolean {
-        return dateLimitViewModel.selectedTransaction!!.transactionCategory.isNotEmpty()
-    }
+//    private fun wasBatchIncome (): Boolean {
+//        return dateLimitViewModel.selectedTransaction!!.transactionCategory.isEmpty()
+//    }
+//
+//    private fun wasSingleIncome (): Boolean {
+//        return dateLimitViewModel.selectedTransaction!!.transactionCategory.isNotEmpty()
+//    }
 
     private fun inflateCategories(categoriesList: List<String>) {
         val parentLayout = binding.parentContainerLayoutFragEditIncome
@@ -371,26 +369,26 @@ class EditIncomeFragment : Fragment() {
         return expenseCategoryList
     }
 
-    private fun showMaterialDatePickerDialog (callback: (MaterialDatePicker<Long>) -> Unit) {
-        val date = LocalDate.parse(dateLimitViewModel.selectedTransaction?.date, DateTimeFormatter.ofPattern(DateConstant.DATE_LIMIT_DATE_PATTERN))
-        var materialDatePicker: MaterialDatePicker<Long>? = null
-        materialDatePicker = MaterialDatePicker.Builder.datePicker()
-            .setTitleText("Select expense date")
-            .setSelection(date.atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli())
-            .build()
-
-        callback (materialDatePicker)
-    }
-
-    private fun setCacheCategoryDropDownList (autoCompleteTextView: AutoCompleteTextView) {
-        userViewModel.onlineUser.value?.let {
-            if (it.cachedExpenseCategories.isNotEmpty()) {
-                val cachedCategoriesAdapter = ArrayAdapter (requireContext(),
-                    R.layout.item_layout_cached_categories, R.id.tvCategoryName, it.cachedExpenseCategories.toTypedArray())
-                autoCompleteTextView.setAdapter(cachedCategoriesAdapter)
-            }
-        }
-    }
+//    private fun showMaterialDatePickerDialog (callback: (MaterialDatePicker<Long>) -> Unit) {
+//        val date = LocalDate.parse(dateLimitViewModel.selectedTransaction?.date, DateTimeFormatter.ofPattern(DateConstant.DATE_LIMIT_DATE_PATTERN))
+//        var materialDatePicker: MaterialDatePicker<Long>? = null
+//        materialDatePicker = MaterialDatePicker.Builder.datePicker()
+//            .setTitleText("Select expense date")
+//            .setSelection(date.atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli())
+//            .build()
+//
+//        callback (materialDatePicker)
+//    }
+//
+//    private fun setCacheCategoryDropDownList (autoCompleteTextView: AutoCompleteTextView) {
+//        userViewModel.onlineUser.value?.let {
+//            if (it.cachedExpenseCategories.isNotEmpty()) {
+//                val cachedCategoriesAdapter = ArrayAdapter (requireContext(),
+//                    R.layout.item_layout_cached_categories, R.id.tvCategoryName, it.cachedExpenseCategories.toTypedArray())
+//                autoCompleteTextView.setAdapter(cachedCategoriesAdapter)
+//            }
+//        }
+//    }
 
     private fun updateButtonToLoadingState () {
         binding.apply {

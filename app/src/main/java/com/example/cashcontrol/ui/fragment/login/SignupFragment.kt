@@ -8,6 +8,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.OnBackPressedDispatcher
 import androidx.lifecycle.Lifecycle
@@ -16,7 +18,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.example.cashcontrol.R
-import com.example.cashcontrol.data.entity.User
+import com.example.cashcontrol.data.db.entity.User
 import com.example.cashcontrol.databinding.FragmentSignupBinding
 import com.example.cashcontrol.ui.viewmodel.UserViewModel
 import com.example.cashcontrol.util.MessageUtil.showErrorMessage
@@ -34,6 +36,7 @@ import kotlinx.coroutines.launch
 class SignupFragment : Fragment() {
     private lateinit var binding: FragmentSignupBinding
     private lateinit var userViewModel: UserViewModel
+    private val shrinkInsideAnim: Animation by lazy { AnimationUtils.loadAnimation(requireContext(), R.anim.shrink_inside) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -62,31 +65,33 @@ class SignupFragment : Fragment() {
 
         binding.apply {
             btSignUpFragSignUp.setOnClickListener {
-                Log.i("TCPQQ","Button clicked")
                 val username = binding.etUsernameFragSignUp.text.toString()
                 val password = binding.etPasswordFragSignUp.text.toString()
                 val passwordReenter = binding.etReenterPasswordFragSignUp.text.toString()
 
-                if (username.isNotEmpty() && password.isNotEmpty() && passwordReenter.isNotEmpty()) {
-                    if (password == passwordReenter) {
-                        if (password.length > 5) {
-                            userViewModel.isUsernameValid(username) { isValidUsername ->
-                                Log.i("TCPQQ","Username is valid or not - $isValidUsername")
-                                if (isValidUsername) {
-                                    userViewModel.upsertUser(User(username, password, true, mutableSetOf(), mutableSetOf()))
-                                    userViewModel.updateOnlineUser()
+                viewLifecycleOwner.lifecycleScope.launch {
+                    repeatOnLifecycle(Lifecycle.State.STARTED) {
+                        if (username.isNotEmpty() && password.isNotEmpty() && passwordReenter.isNotEmpty()) {
+                            if (password == passwordReenter) {
+                                if (password.length > 5) {
+                                    if (userViewModel.isUsernameValid(username)) {
+                                        updateButtonToLoadingState()
+                                        userViewModel.upsertUser(User(username, password, true, mutableSetOf(), mutableSetOf()))
+                                        delay(1000)
+                                        findNavController().navigate(SignupFragmentDirections.actionGlobalOnBoardingStartFragment())
+                                    } else {
+                                        showErrorMessage("This username has already been taken", binding)
+                                    }
                                 } else {
-                                    showErrorMessage("This username has already been taken", binding)
+                                    showErrorMessage("The length of password should be longer than 5!", binding)
                                 }
+                            } else {
+                                showErrorMessage("Passwords are not matching!", binding)
                             }
                         } else {
-                            showErrorMessage("The length of password should be longer than 5!", binding)
+                            showErrorMessage("All columns must be filled!", binding)
                         }
-                    } else {
-                        showErrorMessage("Passwords are not matching!", binding)
                     }
-                } else if (username.isEmpty() || password.isEmpty() || passwordReenter.isEmpty()){
-                    showErrorMessage("All columns must be filled!", binding)
                 }
             }
 
@@ -99,22 +104,6 @@ class SignupFragment : Fragment() {
         }
 
         return binding.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        viewLifecycleOwner.lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                userViewModel.onlineUser.collect {
-                    it?.let {
-                        delay(1000)
-                        findNavController().navigate(SignupFragmentDirections.actionGlobalOnBoardingStartFragment())
-                    }
-                }
-            }
-        }
-
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -144,6 +133,15 @@ class SignupFragment : Fragment() {
                     ivPasswordToHideFragSignUp.visibility = View.INVISIBLE
                 }
             }
+        }
+    }
+
+    private fun updateButtonToLoadingState () {
+        binding.apply {
+            btSignUpFragSignUp.startAnimation(shrinkInsideAnim)
+            ltLoadingFragSignUp.visibility = View.VISIBLE
+            btSignUpFragSignUp.isClickable = false
+            btSignUpFragSignUp.visibility = View.INVISIBLE
         }
     }
 }

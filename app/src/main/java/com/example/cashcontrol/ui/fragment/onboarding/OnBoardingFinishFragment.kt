@@ -14,14 +14,16 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.example.cashcontrol.R
-import com.example.cashcontrol.data.entity.DateFrame
-import com.example.cashcontrol.data.entity.DateLimit
+import com.example.cashcontrol.data.db.entity.DateFrame
+import com.example.cashcontrol.data.db.entity.DateLimit
 import com.example.cashcontrol.databinding.FragmentOnBoardingFinishBinding
 import com.example.cashcontrol.ui.viewmodel.DateFrameViewModel
 import com.example.cashcontrol.ui.viewmodel.DateLimitViewModel
 import com.example.cashcontrol.ui.viewmodel.ProfileViewModel
+import com.example.cashcontrol.ui.viewmodel.UserViewModel
 import com.example.cashcontrol.util.MessageUtil.showErrorMessage
 import com.example.cashcontrol.util.MessageUtil.showErrorMessageWithButton
+import com.example.cashcontrol.util.MessageUtil.showErrorMessageWithButtonWithNavAction
 import com.example.cashcontrol.util.constant.DateConstant.DATE_LIMIT_DATE_PATTERN
 import com.example.cashcontrol.util.extension.getCurrencySymbol
 import com.google.android.material.snackbar.Snackbar
@@ -38,6 +40,7 @@ class OnBoardingFinishFragment : Fragment() {
     private lateinit var binding: FragmentOnBoardingFinishBinding
     private lateinit var dateFrameViewModel: DateFrameViewModel
     private lateinit var profileViewModel: ProfileViewModel
+    private lateinit var userViewModel: UserViewModel
     private lateinit var dateLimitViewModel: DateLimitViewModel
     private lateinit var args: OnBoardingFinishFragmentArgs
     private val shrinkInsideAnim: Animation by lazy { AnimationUtils.loadAnimation(requireContext(), R.anim.shrink_inside) }
@@ -46,6 +49,7 @@ class OnBoardingFinishFragment : Fragment() {
         super.onCreate(savedInstanceState)
         dateFrameViewModel = ViewModelProvider(requireActivity()).get(DateFrameViewModel::class.java)
         profileViewModel = ViewModelProvider(requireActivity()).get(ProfileViewModel::class.java)
+        userViewModel = ViewModelProvider(requireActivity()).get(UserViewModel::class.java)
         dateLimitViewModel = ViewModelProvider(requireActivity()).get(DateLimitViewModel::class.java)
         args = OnBoardingFinishFragmentArgs.fromBundle(requireArguments())
         binding = FragmentOnBoardingFinishBinding.inflate(layoutInflater)
@@ -74,90 +78,82 @@ class OnBoardingFinishFragment : Fragment() {
             )
 
             btStartTrackingFragOBFinish.setOnClickListener {
-                if (profileViewModel.profileWithDateFrames.isNotEmpty()) {
-                    if (!dateFrameViewModel.checkDateFrames(profileViewModel.profileWithDateFrames.first(), args)) {
-                        showErrorMessageWithButton("This profile already has such a date frame. Consider creating another profile or select different date frame", "OK", binding, Snackbar.LENGTH_INDEFINITE)
-                    } else {
-                        updateButtonToLoadingState()
-                    }
-                } else {
-                    profileViewModel.onlineProfile.value?.let {
-                        updateButtonToLoadingState()
-                        dateFrameViewModel.upsertDateFrame(DateFrame(
-                            args.startPointDate,
-                            args.endPointDate,
-                            args.budget.toDouble(),
-                            args.currency,
-                            args.saving.toDouble(),
-                            true,
-                            it.profileId!!
-                        ))
-                        dateFrameViewModel.updateUnfinishedDateFrame(it.profileId!!)
+                viewLifecycleOwner.lifecycleScope.launch {
+                    repeatOnLifecycle(Lifecycle.State.STARTED) {
+                        userViewModel.getOnlineUser()?.let { onlineUser ->
+                                profileViewModel.getOnlineProfileById(onlineUser.userId!!)?.let { onlineProfile ->
+                                if (dateFrameViewModel.getDateFrameOfProfileByDates(args.startPointDate,args.endPointDate,onlineProfile.profileId!!) == null) {
+                                    updateButtonToLoadingState()
+                                    dateFrameViewModel.upsertDateFrame(DateFrame(
+                                        args.startPointDate,
+                                        args.endPointDate,
+                                        args.budget.toDouble(),
+                                        args.currency,
+                                        args.saving.toDouble(),
+                                        true,
+                                        onlineProfile.profileId!!
+                                    ))
+                                    createDateLimits(onlineProfile.profileId!!)
+                                } else {
+                                    showErrorMessageWithButton(
+                                        "This profile already has such a date frame. Consider creating another profile or select different date frame",
+                                        "CHANGE DATES",
+                                        binding,
+                                        Snackbar.LENGTH_INDEFINITE
+                                    )
+                                }
+                            }
+                        }
                     }
                 }
             }
 
             tvPreviousFragOBFinish.setOnClickListener {
-                findNavController().navigate(OnBoardingFinishFragmentDirections.actionOnBoardingFinishFragmentToOnBoardingSavingsFragment(
-                    args.startPointDate,
-                    args.endPointDate,
-                    args.budget,
-                    args.currency
-                ))
+                findNavController().navigate(
+                    OnBoardingFinishFragmentDirections.actionOnBoardingFinishFragmentToOnBoardingSavingsFragment(
+                        args.startPointDate,
+                        args.endPointDate,
+                        args.budget,
+                        args.currency
+                    )
+                )
             }
         }
 
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    private suspend fun createDateLimits (profileId: Int) {
+        dateFrameViewModel.getUnfinishedDateFrameByProfile(profileId)?.let { unfinishedDateFrame ->
+            val parsedStartPointDate = LocalDate.parse(
+                unfinishedDateFrame.startPointDate,
+                DateTimeFormatter.ofPattern(DATE_LIMIT_DATE_PATTERN)
+            )
+            val daysPassedFromStartPoint = ChronoUnit.DAYS.between(
+                parsedStartPointDate,
+                LocalDate.now().plusDays(1)
+            ).absoluteValue
 
-        viewLifecycleOwner.lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                dateFrameViewModel.unfinishedDateFrame.collect {
-                    it?.let { unfinishedDateFrame ->
-                        val parsedStartPointDate = LocalDate.parse(unfinishedDateFrame.startPointDate,
-                            DateTimeFormatter.ofPattern(DATE_LIMIT_DATE_PATTERN))
-                        val daysPassedFromStartPoint = ChronoUnit.DAYS.between(parsedStartPointDate,
-                            LocalDate.now().plusDays(1)).absoluteValue
-                        val dateLimitList: MutableList<DateLimit> = mutableListOf()
+            val dateLimitList: MutableList<DateLimit> = mutableListOf()
 
-                        for (i in 0 until daysPassedFromStartPoint) {
-                            val updatedDate = parsedStartPointDate.plusDays(i)
+            for (i in 0 until daysPassedFromStartPoint) {
+                val updatedDate = parsedStartPointDate.plusDays(i)
 
-                            val dateLimit = DateLimit(
-                                updatedDate.format(DateTimeFormatter.ofPattern(DATE_LIMIT_DATE_PATTERN)),
-                                unfinishedDateFrame.dateFrameId!!,
-                                0.0,
-                                0.0)
-                            dateLimitList.add(dateLimit)
-                        }
-                        dateLimitViewModel.upsertAllDateLimits(*dateLimitList.toTypedArray())
-                    }
-                }
+                val dateLimit = DateLimit(
+                    updatedDate.format(DateTimeFormatter.ofPattern(DATE_LIMIT_DATE_PATTERN)),
+                    unfinishedDateFrame.dateFrameId!!,
+                    0.0,
+                    0.0
+                )
+                dateLimitList.add(dateLimit)
             }
+            dateLimitViewModel.upsertAllDateLimits(*dateLimitList.toTypedArray())
+            delay(1500) // JUST TO SIMULATE LOADING..
+            findNavController().navigate(OnBoardingFinishFragmentDirections.actionGlobalMainSession2())
         }
-
-        viewLifecycleOwner.lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                dateLimitViewModel.allDateLimits.collect {
-                    delay(1500) // JUST TO SIMULATE LOADING..
-                    if (dateFrameViewModel.dateFrameWithDateLimits.isNotEmpty()) {
-                        dateLimitViewModel.checkCurrentDateLimit(dateFrameViewModel.dateFrameWithDateLimits.first()) {
-                            it?.let {
-                                findNavController().navigate(OnBoardingFinishFragmentDirections.actionGlobalMainSession2())
-                            }
-                        }
-                    }
-
-                }
-            }
-        }
-
     }
 
-    private fun updateButtonToLoadingState () {
+    private fun updateButtonToLoadingState() {
         binding.apply {
             btStartTrackingFragOBFinish.startAnimation(shrinkInsideAnim)
             ltLoadingFragOBFinish.visibility = View.VISIBLE

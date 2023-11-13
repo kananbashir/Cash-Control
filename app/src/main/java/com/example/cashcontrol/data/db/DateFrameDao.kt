@@ -6,9 +6,9 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
-import com.example.cashcontrol.data.entity.DateFrame
-import com.example.cashcontrol.data.entity.relation.DateFrameWithDateLimits
-import com.example.cashcontrol.data.entity.relation.DateFrameWithTransactions
+import com.example.cashcontrol.data.db.entity.DateFrame
+import com.example.cashcontrol.data.db.entity.relation.DateFrameWithDateLimits
+import com.example.cashcontrol.data.db.entity.relation.DateFrameWithTransactions
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -24,8 +24,12 @@ interface DateFrameDao {
     fun getAllDateFramesFromDb (): Flow<List<DateFrame>>
 
     @Transaction
-    @Query ("SELECT * FROM dateFrame_table WHERE isUnfinished = 1")
-    suspend fun getUnfinishedDateFrame (): List<DateFrame>
+    @Query ("SELECT * FROM dateFrame_table WHERE profileId = :profileId AND isUnfinished = 1")
+    suspend fun getUnfinishedDateFrameByProfile (profileId: Int): List<DateFrame>
+
+    @Transaction
+    @Query ("SELECT * FROM dateframe_table WHERE profileId = :profileId AND startPointDate = :startPointDate AND endPointDate = :endPointDate")
+    suspend fun getDateFrameOfProfileByDates (startPointDate: String, endPointDate: String, profileId: Int): List<DateFrame>
 
     @Transaction
     @Query ("SELECT * FROM dateFrame_table WHERE dateFrameId = :dateFrameId")

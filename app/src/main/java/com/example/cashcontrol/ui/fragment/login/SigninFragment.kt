@@ -60,35 +60,35 @@ class SigninFragment : Fragment() {
                 val password = binding.etPasswordFragSignIn.text.toString()
 
 
-                if (username.isNotEmpty() && password.isNotEmpty()) {
-                    viewLifecycleOwner.lifecycleScope.launch {
-                        repeatOnLifecycle(Lifecycle.State.STARTED) {
-                            userViewModel.allUsers.zip(profileViewModel.allProfiles) { allUsers, allProfiles ->
-                                if (userViewModel.isUsernameAndPasswordAvailable(username, password, allUsers)) {
-                                    if (userViewModel.userWithProfiles.first().profiles.isNotEmpty()) {
-                                        profileViewModel.onlineProfile.zip(dateFrameViewModel.unfinishedDateFrame) { onlineProfile, unfinishedDf ->
-                                            if (onlineProfile == null) {
-                                                findNavController().navigate(SigninFragmentDirections.actionGlobalOnBoardingProfileFragment())
-                                            } else {
-                                                if (unfinishedDf == null) {
-                                                    findNavController().navigate(SigninFragmentDirections.actionGlobalOnboardingSession())
-                                                } else {
-                                                    findNavController().navigate(SigninFragmentDirections.actionGlobalMainSession())
-                                                }
-                                            }
-                                        }
-                                    } else {
-                                        findNavController().navigate(SigninFragmentDirections.actionGlobalOnBoardingStartFragment())
-                                    }
-                                } else {
-                                    showErrorMessage("Username or password wrong!")
-                                }
-                            }.collect()
-                        }
-                    }
-                } else if (username.isEmpty() || password.isEmpty()) {
-                    showErrorMessage("All columns must be filled")
-                }
+//                if (username.isNotEmpty() && password.isNotEmpty()) {
+//                    viewLifecycleOwner.lifecycleScope.launch {
+//                        repeatOnLifecycle(Lifecycle.State.STARTED) {
+//                            userViewModel.allUsers.zip(profileViewModel.allProfiles) { allUsers, allProfiles ->
+//                                if (userViewModel.isUsernameAndPasswordAvailable(username, password, allUsers)) {
+//                                    if (userViewModel.userWithProfiles.first().profiles.isNotEmpty()) {
+//                                        profileViewModel.onlineProfile.zip(dateFrameViewModel.unfinishedDateFrame) { onlineProfile, unfinishedDf ->
+//                                            if (onlineProfile == null) {
+//                                                findNavController().navigate(SigninFragmentDirections.actionGlobalOnBoardingProfileFragment())
+//                                            } else {
+//                                                if (unfinishedDf == null) {
+//                                                    findNavController().navigate(SigninFragmentDirections.actionGlobalOnboardingSession())
+//                                                } else {
+//                                                    findNavController().navigate(SigninFragmentDirections.actionGlobalMainSession())
+//                                                }
+//                                            }
+//                                        }
+//                                    } else {
+//                                        findNavController().navigate(SigninFragmentDirections.actionGlobalOnBoardingStartFragment())
+//                                    }
+//                                } else {
+//                                    showErrorMessage("Username or password wrong!")
+//                                }
+//                            }.collect()
+//                        }
+//                    }
+//                } else if (username.isEmpty() || password.isEmpty()) {
+//                    showErrorMessage("All columns must be filled")
+//                }
             }
 
             ivPasswordToHideFragSignIn.setOnClickListener { changePasswordVisibility("hide") }

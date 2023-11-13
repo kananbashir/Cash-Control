@@ -18,8 +18,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.cashcontrol.R
-import com.example.cashcontrol.data.entity.income.BatchIncome
-import com.example.cashcontrol.data.entity.income.SingleIncome
 import com.example.cashcontrol.databinding.FragmentAddIncomeBinding
 import com.example.cashcontrol.ui.viewmodel.DateFrameViewModel
 import com.example.cashcontrol.ui.viewmodel.DateLimitViewModel
@@ -132,19 +130,19 @@ class AddIncomeFragment : Fragment() {
                     it.addOnPositiveButtonClickListener { selection ->
                         val selectedDate = Instant.ofEpochMilli(selection).atZone(ZoneId.systemDefault()).toLocalDate()
 
-                        dateFrameViewModel.unfinishedDateFrame.value?.let { unfinishedDf ->
-                            val startPointDate = LocalDate.parse(unfinishedDf.startPointDate, DateTimeFormatter.ofPattern(DATE_LIMIT_DATE_PATTERN))
-
-                            if (selectedDate > LocalDate.now()) {
-                                showErrorMessage("You cannot choose future dates..")
-                            } else if (selectedDate < startPointDate) {
-                                showErrorMessage("The chosen date must not be earlier than the start point (${unfinishedDf.startPointDate}) date!")
-                            } else {
-                                tvHyphenFragHome.visibility = View.VISIBLE
-                                tvSelectedDateFragAddIncome.visibility = View.VISIBLE
-                                tvSelectedDateFragAddIncome.text = selectedDate.format(DateTimeFormatter.ofPattern(DATE_LIMIT_DATE_PATTERN))
-                            }
-                        }
+//                        dateFrameViewModel.unfinishedDateFrame.value?.let { unfinishedDf ->
+//                            val startPointDate = LocalDate.parse(unfinishedDf.startPointDate, DateTimeFormatter.ofPattern(DATE_LIMIT_DATE_PATTERN))
+//
+//                            if (selectedDate > LocalDate.now()) {
+//                                showErrorMessage("You cannot choose future dates..")
+//                            } else if (selectedDate < startPointDate) {
+//                                showErrorMessage("The chosen date must not be earlier than the start point (${unfinishedDf.startPointDate}) date!")
+//                            } else {
+//                                tvHyphenFragHome.visibility = View.VISIBLE
+//                                tvSelectedDateFragAddIncome.visibility = View.VISIBLE
+//                                tvSelectedDateFragAddIncome.text = selectedDate.format(DateTimeFormatter.ofPattern(DATE_LIMIT_DATE_PATTERN))
+//                            }
+//                        }
                     }
                     it.show(childFragmentManager, "date_selection")
                 }
@@ -226,17 +224,17 @@ class AddIncomeFragment : Fragment() {
     }
 
     private fun setCacheCategoryDropDownList (autoCompleteTextView: AutoCompleteTextView) {
-        userViewModel.onlineUser.value?.let {  onlineUser ->
-            if (onlineUser.cachedIncomeCategories.isNotEmpty()) {
-                val cachedExpenseCategories = ArrayAdapter(requireContext(),
-                    R.layout.item_layout_cached_categories,
-                    R.id.tvCategoryName,
-                    onlineUser.cachedIncomeCategories.toTypedArray()
-                    )
-
-                autoCompleteTextView.setAdapter(cachedExpenseCategories)
-            }
-        }
+//        userViewModel.onlineUser.value?.let {  onlineUser ->
+//            if (onlineUser.cachedIncomeCategories.isNotEmpty()) {
+//                val cachedExpenseCategories = ArrayAdapter(requireContext(),
+//                    R.layout.item_layout_cached_categories,
+//                    R.id.tvCategoryName,
+//                    onlineUser.cachedIncomeCategories.toTypedArray()
+//                    )
+//
+//                autoCompleteTextView.setAdapter(cachedExpenseCategories)
+//            }
+//        }
     }
 
     private fun updateAddMoreButton () {

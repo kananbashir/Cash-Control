@@ -13,7 +13,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.cashcontrol.R
 import com.example.cashcontrol.adapter.ProfilesAdapter
-import com.example.cashcontrol.data.entity.Profile
+import com.example.cashcontrol.data.db.entity.Profile
 import com.example.cashcontrol.databinding.FragmentProfileBinding
 import com.example.cashcontrol.ui.viewmodel.ProfileViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -39,31 +39,31 @@ class ProfileFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
 
-        binding.apply {
-
-            btCreateNewProfileFragProfile.setOnClickListener {
-                profileViewModel.onlineProfile.value?.let {
-                    profileViewModel.setProfileOffline(it)
-                    findNavController().navigate(ProfileFragmentDirections.actionProfileFragmentToOnBoardingProfileFragment())
-                }
-            }
-
-            rvProfilesFragProfile.apply {
-                adapter = profilesAdapter
-                layoutManager = LinearLayoutManager(requireContext())
-            }
-
-            viewLifecycleOwner.lifecycleScope.launch {
-                repeatOnLifecycle(Lifecycle.State.STARTED) {
-                    profileViewModel.allProfiles.collect {
-                        if (it.isNotEmpty()) {
-                            profilesAdapter.differ.submitList(it)
-                        }
-                    }
-                }
-            }
-
-        }
+//        binding.apply {
+//
+//            btCreateNewProfileFragProfile.setOnClickListener {
+//                profileViewModel.onlineProfile.value?.let {
+//                    profileViewModel.setProfileOffline(it)
+//                    findNavController().navigate(ProfileFragmentDirections.actionProfileFragmentToOnBoardingProfileFragment())
+//                }
+//            }
+//
+//            rvProfilesFragProfile.apply {
+//                adapter = profilesAdapter
+//                layoutManager = LinearLayoutManager(requireContext())
+//            }
+//
+//            viewLifecycleOwner.lifecycleScope.launch {
+//                repeatOnLifecycle(Lifecycle.State.STARTED) {
+//                    profileViewModel.allProfiles.collect {
+//                        if (it.isNotEmpty()) {
+//                            profilesAdapter.differ.submitList(it)
+//                        }
+//                    }
+//                }
+//            }
+//
+//        }
 
         return binding.root
     }

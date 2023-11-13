@@ -1,9 +1,9 @@
-package com.example.cashcontrol.data.entity.relation
+package com.example.cashcontrol.data.db.entity.relation
 
 import androidx.room.Embedded
 import androidx.room.Relation
-import com.example.cashcontrol.data.entity.Profile
-import com.example.cashcontrol.data.entity.User
+import com.example.cashcontrol.data.db.entity.Profile
+import com.example.cashcontrol.data.db.entity.User
 
 data class UserWithProfiles(
     @Embedded var user: User,

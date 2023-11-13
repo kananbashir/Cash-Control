@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.cashcontrol.R
-import com.example.cashcontrol.data.entity.Transaction
+import com.example.cashcontrol.data.db.entity.Transaction
 import com.example.cashcontrol.databinding.ItemLayoutTransactionsBinding
 import com.example.cashcontrol.util.constant.TransactionConstant.TRANSACTION_TYPE_EXPENSE
 import com.example.cashcontrol.util.constant.TransactionConstant.TRANSACTION_TYPE_INCOME

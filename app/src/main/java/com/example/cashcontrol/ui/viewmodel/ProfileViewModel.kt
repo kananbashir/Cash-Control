@@ -1,21 +1,13 @@
 package com.example.cashcontrol.ui.viewmodel
 
-import android.util.Log
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.cashcontrol.data.repository.CashControlRepository
-import com.example.cashcontrol.data.entity.Profile
-import com.example.cashcontrol.data.entity.User
-import com.example.cashcontrol.data.entity.relation.ProfileWithDateFrames
-import com.example.cashcontrol.data.entity.relation.UserWithProfiles
+import com.example.cashcontrol.data.db.entity.Profile
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.emptyFlow
-import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -27,22 +19,6 @@ class ProfileViewModel @Inject constructor(
     private var _allProfiles: Flow<List<Profile>> = cashControlRepository.profileLocal.getAllProfilesFromDb()
     val allProfiles: Flow<List<Profile>> get() = _allProfiles
 
-    private var _onlineProfile: MutableStateFlow<Profile?> = MutableStateFlow(null)
-    val onlineProfile: StateFlow<Profile?> get() = _onlineProfile
-
-    private var _profileWithDateFrames: List<ProfileWithDateFrames> = listOf()
-    val profileWithDateFrames: List<ProfileWithDateFrames> get() = _profileWithDateFrames
-
-    init {
-        viewModelScope.launch {
-            onlineProfile.collect {
-                it?.let { onlineProfile ->
-                    _profileWithDateFrames = cashControlRepository.profileLocal.getProfileWithDateFrames(onlineProfile.profileId!!)
-                }
-            }
-        }
-    }
-
     fun upsertProfile (profile: Profile) = viewModelScope.launch {
         cashControlRepository.profileLocal.upsertProfile(profile)
     }
@@ -51,38 +27,24 @@ class ProfileViewModel @Inject constructor(
         cashControlRepository.profileLocal.deleteProfile(profile)
     }
 
-    fun checkOnlineProfile (userWithProfiles: UserWithProfiles, foundOnlineProfile: (Profile?) -> Unit) {
-        val onlineProfile = userWithProfiles.profiles.find { p -> p.isOnline }
-        onlineProfile?.let {
-            _onlineProfile.value = onlineProfile
+    suspend fun getOnlineProfileById (userId: Int): Profile? {
+        val profileList = cashControlRepository.profileLocal.getOnlineProfileById(userId)
+        if (profileList.isNotEmpty()) {
+            return profileList.first()
         }
-        foundOnlineProfile(onlineProfile)
+        return null
     }
 
-    fun updateOnlineProfile (userWithProfiles: UserWithProfiles) {
-        val onlineProfile = userWithProfiles.profiles.find { p -> p.isOnline }
-        _onlineProfile.value = onlineProfile
-    }
-
-    suspend fun updateOnlineProfile (onlineUserId: Int) {
-        val allProfilesList = allProfiles.firstOrNull()
-        allProfilesList?.let {
-            val foundProfile = it.find { p -> p.isOnline && p.userId == onlineUserId }
+    suspend fun getProfileOfUserByName (userId: Int, profileName: String): Profile? {
+        val profileList = cashControlRepository.profileLocal.getProfileOfUserByName(userId, profileName)
+        if (profileList.isNotEmpty()) {
+            return profileList.first()
         }
+        return null
     }
 
     fun setProfileOffline (profile: Profile) {
         profile.isOnline = false
         upsertProfile(profile)
-    }
-
-    fun checkProfileName (profileName: String, userWithProfiles: UserWithProfiles): Boolean {
-        val foundProfile = userWithProfiles.profiles.find { it.profileName == profileName }
-        return if (foundProfile == null) {
-            upsertProfile(Profile(profileName, true, userWithProfiles.user.userId!!))
-            true
-        } else {
-            false
-        }
     }
 }

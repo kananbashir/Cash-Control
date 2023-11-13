@@ -1,25 +1,21 @@
 package com.example.cashcontrol.ui.viewmodel
 
-import android.util.Log
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.navigation.NavArgs
+import com.example.cashcontrol.adapter.TransactionPair
 import com.example.cashcontrol.data.repository.CashControlRepository
-import com.example.cashcontrol.data.entity.DateFrame
-import com.example.cashcontrol.data.entity.Transaction
-import com.example.cashcontrol.data.entity.relation.DateFrameWithDateLimits
-import com.example.cashcontrol.data.entity.relation.DateFrameWithTransactions
-import com.example.cashcontrol.data.entity.relation.ProfileWithDateFrames
-import com.example.cashcontrol.ui.fragment.onboarding.OnBoardingFinishFragmentArgs
+import com.example.cashcontrol.data.db.entity.DateFrame
+import com.example.cashcontrol.data.db.entity.Transaction
+import com.example.cashcontrol.data.db.entity.relation.DateFrameWithDateLimits
+import com.example.cashcontrol.data.db.entity.relation.DateFrameWithTransactions
 import com.example.cashcontrol.util.constant.DateConstant.DATE_LIMIT_DATE_PATTERN
+import com.example.cashcontrol.util.extension.concatenateCategories
+import com.example.cashcontrol.util.extension.sortDateLimitsByDateDescending
+import com.example.cashcontrol.util.extension.sortTransactionsByDateDescending
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.emptyFlow
-import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -30,32 +26,14 @@ class DateFrameViewModel @Inject constructor(
     private val cashControlRepository: CashControlRepository
 ): ViewModel() {
 
-    val emittingComplete: MutableLiveData<Boolean> = MutableLiveData()
-
     private var _allDateFrames: Flow<List<DateFrame>> = cashControlRepository.dateFrameLocal.getAllDateFramesFromDb()
     val allDateFrames: Flow<List<DateFrame>> get() = _allDateFrames
 
-    private var _unfinishedDateFrame: MutableStateFlow<DateFrame?> = MutableStateFlow(null)
-    val unfinishedDateFrame: StateFlow<DateFrame?> get() = _unfinishedDateFrame
+    private var _allTransactionPairs: MutableStateFlow<List<TransactionPair>> = MutableStateFlow(listOf())
+    val allTransactionPairs: StateFlow<List<TransactionPair>> get() = _allTransactionPairs
 
-    private var _dateFrameWithDateLimits: List<DateFrameWithDateLimits> = listOf()
-    val dateFrameWithDateLimits: List<DateFrameWithDateLimits> get() = _dateFrameWithDateLimits
-
-    private var _dateFrameWithTransactions: List<DateFrameWithTransactions> = listOf()
-    val dateFrameWithTransactions: List<DateFrameWithTransactions> get() = _dateFrameWithTransactions
-
-    var uiAnimState: Boolean = false // while it is true, incrementing animations in UI will not work..
-
-    init {
-        viewModelScope.launch {
-            unfinishedDateFrame.collect {
-                it?.let { unfinishedDf ->
-                    _dateFrameWithDateLimits = cashControlRepository.dateFrameLocal.getDateFrameWithDateLimits(unfinishedDf.dateFrameId!!)
-                    _dateFrameWithTransactions = cashControlRepository.dateFrameLocal.getDateFrameWithTransactions(unfinishedDf.dateFrameId!!)
-                }
-            }
-        }
-    }
+    private var _selectedTransaction: Transaction? = null
+    val selectedTransaction: Transaction? get() = _selectedTransaction
 
     fun upsertDateFrame (dateFrame: DateFrame) = viewModelScope.launch {
         cashControlRepository.dateFrameLocal.upsertDateFrame(dateFrame)
@@ -65,34 +43,35 @@ class DateFrameViewModel @Inject constructor(
         cashControlRepository.dateFrameLocal.deleteDateFrame(dateFrame)
     }
 
-    fun checkUnfinishedDateFrame (profileWithDateFrames: ProfileWithDateFrames, foundUnfinishedDf: (DateFrame?) -> Unit) {
-        Log.i("TCPQQ","Checking unfinished date frame")
-        val found = profileWithDateFrames.dateFrames.find { df -> df.isUnfinished }
-        found?.let {
-            _unfinishedDateFrame.value = it
+    suspend fun getUnfinishedDateFrameByProfile (profileId: Int): DateFrame? {
+        val dateFrameList = cashControlRepository.dateFrameLocal.getUnfinishedDateFrameByProfile(profileId)
+        if (dateFrameList.isNotEmpty()) {
+            return dateFrameList.first()
         }
-
-        foundUnfinishedDf(found)
+        return null
     }
 
-    fun updateUnfinishedDateFrame (profileId: Int) = viewModelScope.launch {
-        val allDateFramesList = allDateFrames.firstOrNull()
-        allDateFramesList?.let {
-            if (it.isNotEmpty()) {
-                val foundDateFrame = it.find { df -> df.isUnfinished && df.profileId == profileId }
-                foundDateFrame?.let { unfinishedDf ->
-                    _unfinishedDateFrame.value = unfinishedDf
-                }
-            }
+    suspend fun getDateFrameOfProfileByDates (startPointDate: String, endPointDate: String, profileId: Int): DateFrame? {
+        val dateFrameList = cashControlRepository.dateFrameLocal.getDateFrameOfProfileByDates(startPointDate, endPointDate, profileId)
+        if (dateFrameList.isNotEmpty()) {
+            return dateFrameList.first()
         }
+        return null
     }
 
-    fun getPreviousDayLimitExceedValue (): Double {
-        if (dateFrameWithDateLimits.isNotEmpty()) {
+    suspend fun getDateFrameWithDateLimits (dateFrameId: Int): DateFrameWithDateLimits? {
+        val list = cashControlRepository.dateFrameLocal.getDateFrameWithDateLimits(dateFrameId)
+        if (list.isNotEmpty()) {
+            return list.first()
+        }
+        return null
+    }
+
+    fun getPreviousDayLimitExceedValue (dateFrameWithDateLimits: DateFrameWithDateLimits): Double {
+        val allDateLimits = dateFrameWithDateLimits.dateLimits
+        if (allDateLimits.isNotEmpty()) {
             val previousDay = LocalDate.now().minusDays(1).format(DateTimeFormatter.ofPattern(DATE_LIMIT_DATE_PATTERN))
-            val allDateLimits = dateFrameWithDateLimits.first().dateLimits
             val previousDayDateLimit = allDateLimits.find { dl -> dl.date == previousDay }
-
             previousDayDateLimit?.let {
                 return it.limitExceededValue
             }
@@ -101,46 +80,137 @@ class DateFrameViewModel @Inject constructor(
         return 0.0
     }
 
-    fun updateExpenseAmount (expenseAmount: Double) {
-        _unfinishedDateFrame.value?.let {
-            it.totalExpenseOfAll += expenseAmount
-            upsertDateFrame(it)
-        }
+    fun updateExpenseAmount (expenseAmount: Double, unfinishedDateFrame: DateFrame) {
+        unfinishedDateFrame.totalExpenseOfAll += expenseAmount
+        upsertDateFrame(unfinishedDateFrame)
     }
 
-    fun updateIncomeAmount (incomeAmount: Double) {
-        _unfinishedDateFrame.value?.let {
-            it.totalIncomeOfAll += incomeAmount
-            upsertDateFrame(it)
-        }
+    fun updateIncomeAmount (incomeAmount: Double, unfinishedDateFrame: DateFrame) {
+        unfinishedDateFrame.totalExpenseOfAll += incomeAmount
+        upsertDateFrame(unfinishedDateFrame)
     }
 
-    fun getSortedTransactions(): List<Transaction> {
-        val formatter = DateTimeFormatter.ofPattern(DATE_LIMIT_DATE_PATTERN)
-        val sortedTransactions = dateFrameWithTransactions.first().transactions.sortedByDescending {
-            LocalDate.parse(it.date, formatter)
+    suspend fun getDateFrameWithTransactions (dateFrameId: Int): DateFrameWithTransactions? {
+        val dateFrameWithTransactions = cashControlRepository.dateFrameLocal.getDateFrameWithTransactions(dateFrameId)
+        if (dateFrameWithTransactions.isNotEmpty()) {
+            return dateFrameWithTransactions.first()
         }
-
-        return sortedTransactions
+        return null
     }
 
-    fun checkDateFrames (profileWithDateFrames: ProfileWithDateFrames, navArgs: OnBoardingFinishFragmentArgs): Boolean {
-        for (dateFrame in profileWithDateFrames.dateFrames) {
-            if (dateFrame.startPointDate == navArgs.startPointDate && dateFrame.endPointDate == navArgs.endPointDate) {
-                return false
+    suspend fun getTransactionPairs (unfinishedDateFrame: DateFrame): List<TransactionPair> {
+        if (allTransactionPairs.value.isEmpty()) {
+            getDateFrameWithDateLimits(unfinishedDateFrame.dateFrameId!!)?.let { dateFrameWithDateLimits ->
+                val allDateLimits = dateFrameWithDateLimits.dateLimits.sortDateLimitsByDateDescending()
+                val allTransactionPairs = mutableListOf<TransactionPair>()
+                if (allDateLimits.isNotEmpty()) {
+                    for (dateLimit in allDateLimits) {
+                        val dateLimitWithTransactions =
+                            cashControlRepository.dateLimitLocal.getDateLimitWithTransactions(dateLimit.dateLimitId!!)
+                        if (dateLimitWithTransactions.isNotEmpty()) {
+                            val transactions = dateLimitWithTransactions.first().transactions
+                            if (transactions.isNotEmpty()) {
+                                val transactionPair = TransactionPair(dateLimit, transactions)
+                                allTransactionPairs.add(transactionPair)
+                                _allTransactionPairs.value = allTransactionPairs
+                            }
+                        }
+                    }
+                    return allTransactionPairs
+                }
             }
         }
-        upsertDateFrame(
-            DateFrame(
-                navArgs.startPointDate,
-                navArgs.endPointDate,
-                navArgs.budget.toDouble(),
-                navArgs.currency,
-                navArgs.saving.toDouble(),
-                true,
-                profileWithDateFrames.profile.profileId!!
-            )
-        )
-        return true
+
+        return allTransactionPairs.value
+    }
+
+    fun clearAllTransactionPairs () {
+        _allTransactionPairs.value = listOf()
+    }
+
+    fun setSelectionState (transaction: Transaction) {
+        var updatedPairList: List<TransactionPair>
+
+        if (selectedTransaction == null) {
+            updatedPairList = updateTransactionPairList(allTransactionPairs.value, transaction, true)
+        } else {
+            if (selectedTransaction?.transactionId == transaction.transactionId) {
+                updatedPairList = updateTransactionPairList(allTransactionPairs.value, selectedTransaction!!, false)
+            } else {
+
+                updatedPairList = updateTransactionPairList(
+                    updateTransactionPairList(allTransactionPairs.value, selectedTransaction!!, false),
+                    transaction,
+                    true)
+            }
+        }
+
+        _allTransactionPairs.value = updatedPairList
+    }
+
+    private fun updateTransactionPairList (transactionPairList: List<TransactionPair>, transaction: Transaction, state: Boolean): List<TransactionPair> {
+        var updatedPairList: List<TransactionPair>
+        val foundTransactionPair = transactionPairList.find { tr -> tr.dateLimit.date == transaction.date }
+        val transactionList = foundTransactionPair?.transactionList
+        val updatedTransactionList = updateTransactionListWith(state, transactionList!!, transaction)
+        if (state) {
+            _selectedTransaction = updatedTransactionList.find { t -> t.isSelected }
+        } else {
+            _selectedTransaction = null
+        }
+        val updatedPair = foundTransactionPair.copy(transactionList = updatedTransactionList)
+        updatedPairList = transactionPairList.map { transactionPair ->
+            if (transactionPair.dateLimit.date == updatedPair.dateLimit.date) {
+                updatedPair
+            } else {
+                transactionPair
+            }
+        }
+        return updatedPairList
+    }
+
+    private fun updateTransactionListWith (state: Boolean, transactionList: List<Transaction>, newTransaction: Transaction): List<Transaction> {
+        return transactionList.map { mappedTransaction ->
+            if (mappedTransaction.transactionId == newTransaction.transactionId) {
+                val updatedTransaction = Transaction().apply {
+                    transactionId = mappedTransaction.transactionId
+                    transactionAmount = mappedTransaction.transactionAmount
+                    transactionCurrency = mappedTransaction.transactionCurrency
+                    transactionCategory = mappedTransaction.transactionCategory
+                    transactionCategories = mappedTransaction.transactionCategories
+                    transactionSource = mappedTransaction.transactionSource
+                    transactionSources = mappedTransaction.transactionSources
+                    transactionDescription = mappedTransaction.transactionDescription
+                    date = mappedTransaction.date
+                    transactionType = mappedTransaction.transactionType
+                    isSelected = state
+                }
+                updatedTransaction
+            } else {
+                mappedTransaction
+            }
+        }
+    }
+
+    suspend fun getFilteredList (query: String, unfinishedDateFrame: DateFrame): List<TransactionPair> {
+        val foundTransactionPairsList = mutableListOf<TransactionPair>()
+        getDateFrameWithDateLimits(unfinishedDateFrame.dateFrameId!!)?.let { dateFrameWithDateLimits ->
+            for (transactionPair in allTransactionPairs.value) {
+                for (transaction in transactionPair.transactionList) {
+                    when {
+                        transaction.transactionCategory.contains(query, true) -> { foundTransactionPairsList.add(transactionPair) }
+                        transaction.transactionCategories.concatenateCategories().contains(query, true) -> { foundTransactionPairsList.add(transactionPair) }
+                        transaction.transactionSource.contains(query, true) -> { foundTransactionPairsList.add(transactionPair) }
+                        transaction.transactionSources.concatenateCategories().contains(query, true) -> { foundTransactionPairsList.add(transactionPair) }
+                        transaction.transactionAmount.toString().contains(query, true) -> { foundTransactionPairsList.add(transactionPair) }
+                        transaction.transactionDescription.contains(query, true) -> { foundTransactionPairsList.add(transactionPair) }
+                        transaction.transactionCurrency.contains(query, true) -> { foundTransactionPairsList.add(transactionPair) }
+                    }
+                }
+            }
+            return foundTransactionPairsList.toList()
+        }
+
+        return listOf()
     }
 }

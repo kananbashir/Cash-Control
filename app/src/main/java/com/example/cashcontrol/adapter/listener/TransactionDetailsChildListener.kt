@@ -1,6 +1,6 @@
 package com.example.cashcontrol.adapter.listener
 
-import com.example.cashcontrol.data.entity.Transaction
+import com.example.cashcontrol.data.db.entity.Transaction
 
 interface TransactionDetailsChildListener {
 

@@ -14,12 +14,14 @@ import android.widget.EditText
 import android.widget.ImageView
 import androidx.activity.OnBackPressedCallback
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.example.cashcontrol.R
-import com.example.cashcontrol.data.entity.expense.BatchExpense
-import com.example.cashcontrol.data.entity.expense.SingleExpense
+import com.example.cashcontrol.data.db.entity.DateFrame
+import com.example.cashcontrol.data.db.entity.expense.Expense
 import com.example.cashcontrol.databinding.FragmentAddExpenseBinding
 import com.example.cashcontrol.ui.viewmodel.DateFrameViewModel
 import com.example.cashcontrol.ui.viewmodel.DateLimitViewModel
@@ -36,8 +38,6 @@ import com.example.cashcontrol.util.constant.UIStateConstant.TRANSACTION_AMOUNT_
 import com.example.cashcontrol.util.constant.UIStateConstant.TRANSACTION_CURRENCY_KEY
 import com.example.cashcontrol.util.constant.UIStateConstant.TRANSACTION_DESCRIPTION_KEY
 import com.google.android.material.datepicker.MaterialDatePicker
-import com.google.android.material.snackbar.BaseTransientBottomBar
-import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.time.Instant
@@ -132,76 +132,92 @@ class AddExpenseFragment : Fragment() {
             }
 
             btSelectDateFragAddExpense.setOnClickListener {
-                showMaterialDatePickerDialog {
-                    it.addOnPositiveButtonClickListener { selection ->
-                        val selectedDate = Instant.ofEpochMilli(selection).atZone(ZoneId.systemDefault()).toLocalDate()
+                viewLifecycleOwner.lifecycleScope.launch {
+                    repeatOnLifecycle(Lifecycle.State.STARTED) {
+                        getUnfinishedDateFrame()?.let { unfinishedDateFrame ->
+                            showMaterialDatePickerDialog {
+                                it.addOnPositiveButtonClickListener { selection ->
+                                    val selectedDate = Instant.ofEpochMilli(selection).atZone(ZoneId.systemDefault()).toLocalDate()
 
-                        dateFrameViewModel.unfinishedDateFrame.value?.let { unfinishedDf ->
-                            val startPointDate = LocalDate.parse(unfinishedDf.startPointDate, DateTimeFormatter.ofPattern(DATE_LIMIT_DATE_PATTERN))
+                                    val startPointDate = LocalDate.parse(
+                                        unfinishedDateFrame.startPointDate,
+                                        DateTimeFormatter.ofPattern(DATE_LIMIT_DATE_PATTERN)
+                                    )
 
-                            if (selectedDate > LocalDate.now()) {
-                                showErrorMessage("You cannot choose future dates..", binding)
-                            } else if (selectedDate < startPointDate) {
-                                showErrorMessage("The chosen date must not be earlier than the start point (${unfinishedDf.startPointDate}) date!", binding)
-                            } else {
-                                tvHyphenFragAddExpense.visibility = View.VISIBLE
-                                tvSelectedDateFragAddExpense.visibility = View.VISIBLE
-                                tvSelectedDateFragAddExpense.text = selectedDate.format(DateTimeFormatter.ofPattern(DATE_LIMIT_DATE_PATTERN))
+                                    if (selectedDate > LocalDate.now()) {
+                                        showErrorMessage("You cannot choose future dates..", binding)
+                                    } else if (selectedDate < startPointDate) {
+                                        showErrorMessage(
+                                            "The chosen date must not be earlier than the start point (${unfinishedDateFrame.startPointDate}) date!",
+                                            binding
+                                        )
+                                    } else {
+                                        tvHyphenFragAddExpense.visibility = View.VISIBLE
+                                        tvSelectedDateFragAddExpense.visibility = View.VISIBLE
+                                        tvSelectedDateFragAddExpense.text =
+                                            selectedDate.format(DateTimeFormatter.ofPattern(DATE_LIMIT_DATE_PATTERN))
+                                    }
+
+                                }
+                                it.show(childFragmentManager, "date_selection")
                             }
                         }
-
                     }
-                    it.show(childFragmentManager, "date_selection")
                 }
+
             }
 
             btAddExpenseFragAddExpense.setOnClickListener {
-                lifecycleScope.launch {
-                    val expenseDate = if (rbCustomDateFragAddExpense.isChecked) {
-                        tvSelectedDateFragAddExpense.text.toString()
-                    } else {
-                        LocalDate.now().format(DateTimeFormatter.ofPattern(DATE_LIMIT_DATE_PATTERN))
-                    }
-
-                    if (checkForEmptyColumns()) {
-                        dateLimitViewModel.currentDateLimit.value?.let { currentDateLimit ->
-                            dateFrameViewModel.unfinishedDateFrame.value?.let { unfinishedDf ->
-                                if (isSingleExpense()) {
-                                    transactionViewModel.upsertTransaction(
-                                        SingleExpense(
-                                            etAmountFragAddExpense.text.toString().toDouble(),
-                                            actvCurrencyFragAddExpense.text.toString(),
-                                            etExpenseCategoryFragAddExpense.text.toString(),
-                                            etDescriptionFragAddExpense.text.toString(),
-                                            currentDateLimit.date,
-                                            currentDateLimit.dateLimitId!!,
-                                            unfinishedDf.dateFrameId!!
+                viewLifecycleOwner.lifecycleScope.launch {
+                    repeatOnLifecycle(Lifecycle.State.STARTED) {
+                        getUnfinishedDateFrame()?.let { unfinishedDateFrame ->
+                            dateLimitViewModel.getCurrentDateLimitByDateFrame(unfinishedDateFrame.dateFrameId!!)?.let { currentDateLimit ->
+                                val dateLimitIdForSelectedExpenseDate = when {
+                                    rbCustomDateFragAddExpense.isChecked -> {
+                                        dateLimitViewModel.getDateLimitOfDateFrameByDate(
+                                            unfinishedDateFrame.dateFrameId!!,
+                                            tvSelectedDateFragAddExpense.text.toString()
                                         )
-                                    )
-                                    userViewModel.cacheNewExpenseCategory(etExpenseCategoryFragAddExpense.text.toString())
-                                } else {
-                                    val expenseCategoryList = getAllExpenseCategoryList()
-                                    transactionViewModel.upsertTransaction(
-                                        BatchExpense(
-                                            etAmountFragAddExpense.text.toString().toDouble(),
-                                            actvCurrencyFragAddExpense.text.toString(),
-                                            expenseCategoryList,
-                                            etDescriptionFragAddExpense.text.toString(),
-                                            currentDateLimit.date,
-                                            currentDateLimit.dateLimitId!!,
-                                            unfinishedDf.dateFrameId!!
-                                        )
-                                    )
-                                    userViewModel.cacheNewExpenseCategory(expenseCategoryList)
+                                    }
+                                    else -> { currentDateLimit }
                                 }
-                                updateButtonToLoadingState()
-                                dateFrameViewModel.updateExpenseAmount(etAmountFragAddExpense.text.toString().toDouble())
-//                                dateLimitViewModel.setExpensesForDate()
-//                                profileViewModel.setProfileWithDateFrames()
-                                delay(1500) // JUST TO SIMULATE LOADING..
-                                dateFrameViewModel.uiAnimState = false
-                                dateLimitViewModel.uiAnimState = false
-                                findNavController().navigate(AddExpenseFragmentDirections.actionAddExpenseFragmentToMainSession())
+
+                                if (checkForEmptyColumns()) {
+                                    if (isSingleExpense()) {
+                                        transactionViewModel.upsertTransaction(
+                                            Expense(
+                                                etAmountFragAddExpense.text.toString().toDouble(),
+                                                actvCurrencyFragAddExpense.text.toString(),
+                                                etExpenseCategoryFragAddExpense.text.toString(),
+                                                mutableListOf(),
+                                                etDescriptionFragAddExpense.text.toString(),
+                                                dateLimitIdForSelectedExpenseDate?.dateLimitId!!,
+                                                dateLimitIdForSelectedExpenseDate.date,
+                                                unfinishedDateFrame.dateFrameId!!
+                                            )
+                                        )
+                                        userViewModel.cacheNewExpenseCategory(etExpenseCategoryFragAddExpense.text.toString())
+                                    } else {
+                                        val expenseCategoryList = getAllExpenseCategoryList()
+                                        transactionViewModel.upsertTransaction(
+                                            Expense(
+                                                etAmountFragAddExpense.text.toString().toDouble(),
+                                                actvCurrencyFragAddExpense.text.toString(),
+                                                "",
+                                                expenseCategoryList,
+                                                etDescriptionFragAddExpense.text.toString(),
+                                                dateLimitIdForSelectedExpenseDate?.dateLimitId!!,
+                                                dateLimitIdForSelectedExpenseDate.date,
+                                                unfinishedDateFrame.dateFrameId!!
+                                            )
+                                        )
+                                        userViewModel.cacheNewExpenseCategory(expenseCategoryList)
+                                    }
+                                    updateButtonToLoadingState()
+                                    dateFrameViewModel.updateExpenseAmount(etAmountFragAddExpense.text.toString().toDouble(), unfinishedDateFrame)
+                                    delay(1500) // JUST TO SIMULATE LOADING..
+                                    findNavController().navigate(AddExpenseFragmentDirections.actionAddExpenseFragmentToMainSession())
+                                }
                             }
                         }
                     }
@@ -239,6 +255,17 @@ class AddExpenseFragment : Fragment() {
 
             }
         }
+    }
+
+    private suspend fun getUnfinishedDateFrame(): DateFrame? {
+        userViewModel.getOnlineUser()?.let { onlineUser ->
+            profileViewModel.getOnlineProfileById(onlineUser.userId!!)?.let { onlineProfile ->
+                dateFrameViewModel.getUnfinishedDateFrameByProfile(onlineProfile.profileId!!)?.let { unfinishedDateFrame ->
+                    return unfinishedDateFrame
+                }
+            }
+        }
+        return null
     }
 
     private fun updateAddMoreButton () {
@@ -334,14 +361,13 @@ class AddExpenseFragment : Fragment() {
         return expenseCategoryList
     }
 
-    private fun setCacheCategoryDropDownList (autoCompleteTextView: AutoCompleteTextView) {
-        userViewModel.onlineUser.value?.let { onlineUser ->
-            if (onlineUser.cachedExpenseCategories.isNotEmpty()) {
-                val cachedCategoriesListAdapter = ArrayAdapter(
-                    requireContext(),
-                    R.layout.item_layout_cached_categories, R.id.tvCategoryName, onlineUser.cachedExpenseCategories.toTypedArray())
-                autoCompleteTextView.setAdapter(cachedCategoriesListAdapter)
-            }
+    private fun setCacheCategoryDropDownList(autoCompleteTextView: AutoCompleteTextView) {
+        if (userViewModel.cachedExpenseCategories.isNotEmpty()) {
+            val cachedCategoriesListAdapter = ArrayAdapter(
+                requireContext(),
+                R.layout.item_layout_cached_categories, R.id.tvCategoryName, userViewModel.cachedExpenseCategories.toTypedArray()
+            )
+            autoCompleteTextView.setAdapter(cachedCategoriesListAdapter)
         }
     }
 
@@ -399,11 +425,4 @@ class AddExpenseFragment : Fragment() {
             ltLoadingFragAddExpense.visibility = View.VISIBLE
         }
     }
-
-//    private fun showErrorMessage (message: String) {
-//        Snackbar.make(binding.root,message, Snackbar.LENGTH_SHORT)
-//            .setAnimationMode(BaseTransientBottomBar.ANIMATION_MODE_FADE)
-//            .setBackgroundTint(resources.getColor(R.color.bittersweet_red, null))
-//            .show()
-//    }
 }

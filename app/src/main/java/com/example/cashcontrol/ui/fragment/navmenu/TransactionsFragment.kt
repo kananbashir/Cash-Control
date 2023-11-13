@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.cashcontrol.R
 import com.example.cashcontrol.adapter.DateFramesAdapter
 import com.example.cashcontrol.adapter.listener.DateFramesClickListener
-import com.example.cashcontrol.data.entity.DateFrame
+import com.example.cashcontrol.data.db.entity.DateFrame
 import com.example.cashcontrol.databinding.FragmentTransactionsBinding
 import com.example.cashcontrol.ui.viewmodel.DateFrameViewModel
 import com.example.cashcontrol.ui.viewmodel.ProfileViewModel

@@ -1,8 +1,8 @@
 package com.example.cashcontrol.adapter
 
 import androidx.recyclerview.widget.DiffUtil
-import com.example.cashcontrol.data.entity.DateLimit
-import com.example.cashcontrol.data.entity.Transaction
+import com.example.cashcontrol.data.db.entity.DateLimit
+import com.example.cashcontrol.data.db.entity.Transaction
 
 class TransactionDetailsParentDiffUtil(
     private val oldList: List<Pair<DateLimit, List<Transaction>>>,

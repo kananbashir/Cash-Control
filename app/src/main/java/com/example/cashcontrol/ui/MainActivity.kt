@@ -5,7 +5,10 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
@@ -18,6 +21,7 @@ import com.example.cashcontrol.ui.viewmodel.ProfileViewModel
 import com.example.cashcontrol.ui.viewmodel.TransactionViewModel
 import com.example.cashcontrol.ui.viewmodel.UserViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -43,31 +47,27 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        userViewModel.checkOnlineUser {
-            if (it != null) {
-                if (userViewModel.userWithProfiles.isNotEmpty()) {
-                    profileViewModel.checkOnlineProfile(userViewModel.userWithProfiles.first()) { onlineProfile ->
-                        if (onlineProfile != null) {
-                            if (profileViewModel.profileWithDateFrames.isNotEmpty()) {
-                                dateFrameViewModel.checkUnfinishedDateFrame(profileViewModel.profileWithDateFrames.first()) { unfinishedDf ->
-                                    if (unfinishedDf != null) {
-                                        setNavigationGraph(R.id.main_session)
-                                    } else {
-                                        setNavigationGraph(R.id.onboarding_session)
-                                    }
-                                }
-                            } else {
-                                setNavigationGraph(R.id.onboarding_session)
-                            }
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                val onlineUser = userViewModel.getOnlineUser()
+                if (onlineUser != null) {
+                    userViewModel.updateCachedCategories(onlineUser)
+                    binding.tvHelloUserActivityMain.text = resources.getString(R.string.placeholder_text_hello, onlineUser.username)
+                    val onlineProfile = profileViewModel.getOnlineProfileById(onlineUser.userId!!)
+                    if (onlineProfile != null) {
+                        binding.tvProfileNameActivityMain.text = onlineProfile.profileName
+                        val unfinishedDateFrame = dateFrameViewModel.getUnfinishedDateFrameByProfile(onlineProfile.profileId!!)
+                        if (unfinishedDateFrame != null) {
+                            setNavigationGraph(R.id.main_session)
                         } else {
-                            setNavigationGraph(R.id.onBoardingProfileFragment)
+                            setNavigationGraph(R.id.onboarding_session)
                         }
+                    } else {
+                        setNavigationGraph(R.id.onBoardingStartFragment)
                     }
                 } else {
-                    setNavigationGraph(R.id.onBoardingProfileFragment)
+                    setNavigationGraph(R.id.login_session)
                 }
-            } else {
-                setNavigationGraph(R.id.login_session)
             }
         }
 
