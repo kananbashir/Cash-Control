@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/ScreenBackground"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.fragment.navmenu.CurrencyConverterFragment">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout"
+        style="@style/CurrencyResultLayoutBackgroundColor"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:minHeight="180dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0">
+
+        <TextView
+            android:id="@+id/tvConvertingFromFragCurrencyConverter"
+            style="@style/MainText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="10dp"
+            android:fontFamily="@font/open_sans"
+            android:text="@string/placeholder_currency_converting_from"
+            android:textSize="24sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <TextView
+            android:id="@+id/tvConvertingToFragCurrencyConverter"
+            style="@style/MainText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="20dp"
+            android:fontFamily="@font/open_sans_bold"
+            android:text="@string/placeholder_currency_converting_to"
+            android:textSize="24sp"
+            app:layout_constraintBottom_toBottomOf="@+id/tvConvertingFromFragCurrencyConverter"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toEndOf="@+id/tvConvertingFromFragCurrencyConverter"
+            app:layout_constraintTop_toTopOf="@+id/tvConvertingFromFragCurrencyConverter" />
+
+        <TextView
+            android:id="@+id/tvConversionRate1FragCurrencyConverter"
+            style="@style/MainText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="8dp"
+            android:fontFamily="@font/open_sans"
+            android:text="@string/placeholder_currency_converting_rate"
+            android:textSize="13sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvConvertingFromFragCurrencyConverter"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <TextView
+            android:id="@+id/tvConversionRate2FragCurrencyConverter"
+            style="@style/MainText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:fontFamily="@font/open_sans"
+            android:text="@string/placeholder_currency_converting_rate_2"
+            android:textSize="13sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/tvConversionRate1FragCurrencyConverter"
+            app:layout_constraintTop_toBottomOf="@+id/tvConversionRate1FragCurrencyConverter"
+            app:layout_constraintVertical_bias="0.0" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    <TextView
+        android:id="@+id/tvAmountFragCurrencyConverter"
+        style="@style/MainText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="4dp"
+        android:fontFamily="@font/open_sans"
+        android:text="@string/text_amount"
+        android:textAlignment="center"
+        android:textSize="11sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/etAmountFragCurrencyConverter"
+        app:layout_constraintStart_toStartOf="@+id/etAmountFragCurrencyConverter" />
+
+    <EditText
+        android:id="@+id/etAmountFragCurrencyConverter"
+        style="@style/UserInput"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="70dp"
+        android:layout_marginEnd="30dp"
+        android:fontFamily="@font/open_sans"
+        android:hint="@string/hint_amount"
+        android:includeFontPadding="false"
+        android:inputType="number"
+        android:padding="13dp"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <TextView
+        android:id="@+id/tvCurrencyFromFragCurrencyConverter"
+        style="@style/MainText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="4dp"
+        android:fontFamily="@font/open_sans"
+        android:text="@string/text_currency_from"
+        android:textAlignment="center"
+        android:textSize="11sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/tiyCurrencyFromFragCurrencyConverter"
+        app:layout_constraintStart_toStartOf="@+id/tiyCurrencyFromFragCurrencyConverter" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tiyCurrencyFromFragCurrencyConverter"
+        style="@style/DropDownBoxColor"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="40dp"
+        app:boxCornerRadiusBottomEnd="13dp"
+        app:boxCornerRadiusBottomStart="13dp"
+        app:boxCornerRadiusTopEnd="13dp"
+        app:boxCornerRadiusTopStart="13dp"
+        app:boxStrokeWidth="0dp"
+        app:boxStrokeWidthFocused="0dp"
+        app:hintEnabled="false"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/etAmountFragCurrencyConverter"
+        app:layout_constraintVertical_bias="0.0">
+
+        <AutoCompleteTextView
+            android:id="@+id/actvCurrencyFromFragAddExpense"
+            style="@style/DropDownTextColor"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawablePadding="-10dp"
+            android:hint="@string/text_usd"
+            android:inputType="none"
+            android:textSize="18sp" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <ImageView
+        style="@style/IconColorNonClickable"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_convert"
+        app:layout_constraintBottom_toBottomOf="@+id/tiyCurrencyFromFragCurrencyConverter"
+        app:layout_constraintEnd_toStartOf="@+id/tiyCurrencyToFragCurrencyConverter"
+        app:layout_constraintStart_toEndOf="@+id/tiyCurrencyFromFragCurrencyConverter"
+        app:layout_constraintTop_toTopOf="@+id/tiyCurrencyFromFragCurrencyConverter" />
+
+    <TextView
+        android:id="@+id/tvCurrencyToFragCurrencyConverter"
+        style="@style/MainText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="4dp"
+        android:fontFamily="@font/open_sans"
+        android:text="@string/text_currency_to"
+        android:textAlignment="center"
+        android:textSize="11sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/tiyCurrencyToFragCurrencyConverter"
+        app:layout_constraintStart_toStartOf="@+id/tiyCurrencyToFragCurrencyConverter" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tiyCurrencyToFragCurrencyConverter"
+        style="@style/DropDownBoxColor"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:layout_marginEnd="30dp"
+        app:boxCornerRadiusBottomEnd="13dp"
+        app:boxCornerRadiusBottomStart="13dp"
+        app:boxCornerRadiusTopEnd="13dp"
+        app:boxCornerRadiusTopStart="13dp"
+        app:boxStrokeWidth="0dp"
+        app:boxStrokeWidthFocused="0dp"
+        app:hintEnabled="false"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/etAmountFragCurrencyConverter"
+        app:layout_constraintVertical_bias="0.0">
+
+        <AutoCompleteTextView
+            android:id="@+id/actvCurrencyToFragAddExpense"
+            style="@style/DropDownTextColor"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawablePadding="-10dp"
+            android:hint="@string/placeholder_text_profile_settings_menu_main_currency"
+            android:inputType="none"
+            android:textSize="18sp" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btConvertFragAddExpense"
+        style="@style/ButtonColor"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="30dp"
+        android:layout_marginEnd="30dp"
+        android:layout_marginBottom="30dp"
+        android:layout_marginTop="40dp"
+        android:fontFamily="@font/open_sans_bold"
+        android:text="@string/text_button_convert"
+        android:textSize="32sp"
+        app:cornerRadius="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

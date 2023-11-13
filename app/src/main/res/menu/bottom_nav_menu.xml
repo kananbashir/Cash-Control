@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/homeFragment"
+        android:enabled="true"
+        android:title="@string/text_menu_home"
+        android:icon="@drawable/ic_home"/>
+
+    <item
+        android:id="@+id/analyticsFragment"
+        android:title="@string/text_menu_analytics"
+        android:icon="@drawable/ic_analytics"/>
+
+    <item
+        android:id="@+id/expenseFragment"
+        android:title="@string/text_menu_transactions"
+        android:icon="@drawable/ic_transactions"/>
+
+    <item
+        android:id="@+id/newsFragment"
+        android:title="@string/text_menu_news"
+        android:icon="@drawable/ic_news"/>
+
+<!--Unfortunately, there is no free currency converter API-->
+<!--    <item-->
+<!--        android:id="@+id/currencyConverterFragment"-->
+<!--        android:title="@string/text_menu_converter"-->
+<!--        android:icon="@drawable/ic_currency"/>-->
+</menu>

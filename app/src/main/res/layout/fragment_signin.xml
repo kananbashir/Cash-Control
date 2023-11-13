@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/ScreenBackground"
+    android:theme="@style/Theme.Material3.DayNight"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.fragment.login.SigninFragment">
+
+        <TextView
+            android:id="@+id/tvSignInFragSignIn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/open_sans_bold"
+            android:text="@string/text_sign_in"
+            android:textSize="46sp"
+            style="@style/MainText"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.19" />
+
+        <TextView
+            android:id="@+id/tvUsernameFragSignIn"
+            style="@style/MainText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginBottom="2dp"
+            android:fontFamily="@font/open_sans"
+            android:text="@string/text_username"
+            android:textSize="11sp"
+            app:layout_constraintBottom_toTopOf="@+id/etUsernameFragSignIn"
+            app:layout_constraintStart_toStartOf="@+id/etUsernameFragSignIn" />
+
+        <EditText
+            android:id="@+id/etUsernameFragSignIn"
+            style="@style/UserInput"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="40dp"
+            android:layout_marginEnd="40dp"
+            android:fontFamily="@font/open_sans"
+            android:includeFontPadding="false"
+            android:inputType="text"
+            android:hint="@string/hint_username"
+            android:padding="13dp"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvSignInFragSignIn"
+            app:layout_constraintVertical_bias="0.1" />
+
+
+        <TextView
+            android:id="@+id/tvPasswordFragSignIn"
+            style="@style/MainText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginBottom="2dp"
+            android:fontFamily="@font/open_sans"
+            android:text="@string/text_password"
+            android:textSize="11sp"
+            app:layout_constraintBottom_toTopOf="@+id/etPasswordFragSignIn"
+            app:layout_constraintStart_toStartOf="@+id/etPasswordFragSignIn" />
+
+        <EditText
+            android:id="@+id/etPasswordFragSignIn"
+            style="@style/UserInput"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="40dp"
+            android:layout_marginEnd="10dp"
+            android:fontFamily="@font/open_sans"
+            android:includeFontPadding="false"
+            android:hint="@string/hint_password"
+            android:inputType="textPassword"
+            android:padding="13dp"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/ivPasswordToShowFragSignIn"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/etUsernameFragSignIn"
+            app:layout_constraintVertical_bias="0.1" />
+
+        <ImageView
+            android:id="@+id/ivPasswordToShowFragSignIn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="50dp"
+            style="@style/IconColorClickable"
+            android:src="@drawable/ic_password_to_show"
+            app:layout_constraintBottom_toBottomOf="@+id/etPasswordFragSignIn"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/etPasswordFragSignIn" />
+
+        <ImageView
+            android:id="@+id/ivPasswordToHideFragSignIn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="50dp"
+            android:visibility="invisible"
+            style="@style/IconColorClickable"
+            android:src="@drawable/ic_password_to_hide"
+            app:layout_constraintBottom_toBottomOf="@+id/etPasswordFragSignIn"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/etPasswordFragSignIn" />
+
+        <TextView
+            android:id="@+id/tvDontHaveAnAccFragSignIn"
+            style="@style/MainText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:fontFamily="@font/open_sans"
+            android:text="@string/text_dont_have_an_account"
+            android:textSize="11sp"
+            app:layout_constraintStart_toStartOf="@+id/etPasswordFragSignIn"
+            app:layout_constraintTop_toBottomOf="@+id/etPasswordFragSignIn" />
+
+        <TextView
+            android:id="@+id/tvSignUpFragSignIn"
+            style="@style/MainText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="3dp"
+            android:fontFamily="@font/open_sans_bold"
+            android:text="@string/text_sign_up"
+            android:textSize="11sp"
+            app:layout_constraintBottom_toBottomOf="@+id/tvDontHaveAnAccFragSignIn"
+            app:layout_constraintStart_toEndOf="@+id/tvDontHaveAnAccFragSignIn"
+            app:layout_constraintTop_toTopOf="@+id/tvDontHaveAnAccFragSignIn" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btSignInFragSignIn"
+            style="@style/ButtonColor"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:layout_marginEnd="32dp"
+            android:layout_marginBottom="24dp"
+            android:clickable="false"
+            android:fontFamily="@font/open_sans_bold"
+            android:text="@string/text_sign_in"
+            android:textSize="32sp"
+            app:cornerRadius="16dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvSignUpFragSignIn"
+            app:layout_constraintVertical_bias="1.0" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

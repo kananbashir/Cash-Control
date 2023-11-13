@@ -1,0 +1,319 @@
+<resources>
+    <string name="app_name">Cash Control</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="text_sign_in">Sign in</string>
+    <string name="text_sign_up">Sign up</string>
+    <string name="text_username">Username</string>
+    <string name="text_password">Password</string>
+    <string name="text_reenter_password">Reenter password</string>
+    <string name="text_already_have_an_account">Already have an account? - </string>
+    <string name="text_dont_have_an_account">Don’t have an account? - </string>
+    <string name="text_onboarding_start">We need to learn a little bit about your spending habits and budget.</string>
+    <string name="text_onboarding_profile">Let’s create a new profile (don\'t worry, you can change your profile name afterwards)</string>
+    <string name="text_onboarding_date_frame">Let\'s choose a starting and ending point.\nThese points represent the dates that you anticipate using to keep track of your expenses (don\'t worry, you can adjust the dates afterwards)</string>
+    <string name="text_onboarding_budget">Given the dates, let\'s determine your spending limit and main currency for this time frame (don\'t worry, you can adjust your budget afterwards).</string>
+    <string name="text_onboarding_savings">Do you want to make some savings during this time? (This step can be omitted)</string>
+    <string name="text_onboarding_finish">We now know that you have a budget of $2,000 for the period of October 1 to October 31 and that you intend to save $100.</string>
+    <string name="text_profile_name">Profile name</string>
+    <string name="text_give_it_a_name">Give it a name</string>
+    <string name="text_how_much_to_save">How much do you want to save?</string>
+    <string name="text_step_1">Step 1</string>
+    <string name="text_step_2">Step 2</string>
+    <string name="text_step_3">Step 3</string>
+    <string name="text_next">Next</string>
+    <string name="text_previous">Previous</string>
+    <string name="text_usd">USD</string>
+    <string name="text_income">Income</string>
+    <string name="text_expense">Expense</string>
+    <string name="text_savings">Savings</string>
+    <string name="text_last_transactions">Last transactions</string>
+    <string name="text_see_all">See all</string>
+    <string name="text_see_details">See details</string>
+    <string name="text_add_an_expense">Add an expense</string>
+    <string name="text_add_an_income">Add an income</string>
+    <string name="text_amount">Amount</string>
+    <string name="text_currency">Currency</string>
+    <string name="text_today">Today</string>
+    <string name="text_custom_date">Custom date</string>
+    <string name="text_expenses_made_for">Expense made for</string>
+    <string name="text_income_coming_from">Income coming from</string>
+    <string name="text_description">Description (optional)</string>
+    <string name="text_edit">Edit</string>
+    <string name="text_transactions">Transactions</string>
+    <string name="text_profiles">Profiles</string>
+    <string name="text_app_settings">App settings</string>
+    <string name="text_profile_settings">Profile settings</string>
+    <string name="text_total_budget">Total budget</string>
+    <string name="text_total_expenses">Total expenses</string>
+    <string name="text_total_income">Total income</string>
+    <string name="text_total_saved">Total saved</string>
+    <string name="text_log_out">Log out</string>
+    <string name="text_currency_from">From</string>
+    <string name="text_currency_to">To</string>
+    <string name="text_bulk">Bulk</string>
+    <string name="text_budget">Budget</string>
+    <string name="placeholder_text_hello">Hello, <b>%1$s</b></string>
+    <string name="text_onboarding_finish_header_1">Now we know that you have a budget of %1$s %2$s for the period of %3$s to %4$s and you intend to save %5$s %6$s</string>
+    <string name="text_no_data">No data</string>
+
+    <string name="text_menu_home">Home</string>
+    <string name="text_menu_analytics">Analytics</string>
+    <string name="text_menu_transactions">Transactions</string>
+    <string name="text_menu_news">News</string>
+    <string name="text_menu_converter">Converter</string>
+
+    <string name="text_app_settings_menu_language">Language</string>
+    <string name="text_app_settings_menu_theme">Theme</string>
+    <string name="text_profile_settings_menu_profile_name">Profile name</string>
+    <string name="text_profile_settings_menu_main_currency">Main currency</string>
+    <string name="text_profile_settings_menu_end_point">End point</string>
+    <string name="text_profile_settings_menu_savings">Savings</string>
+    <string name="text_profile_settings_menu_clear_category_history">Clear category history</string>
+
+    <string name="placeholder_text_app_settings_menu_language">English</string>
+    <string name="placeholder_text_app_settings_menu_theme">Light</string>
+    <string name="placeholder_text_profile_settings_menu_profile_name">Profile 1</string>
+    <string name="placeholder_text_profile_settings_menu_main_currency">AZN</string>
+    <string name="placeholder_text_profile_settings_menu_end_point">31 October 2023</string>
+    <string name="placeholder_text_profile_settings_menu_savings">200 AZN</string>
+    <string name="placeholder_text_profile_settings_clear_category_history">* From all profiles</string>
+
+
+    <string name="text_button_continue">Continue</string>
+    <string name="text_button_select_start_point">Select start point</string>
+    <string name="text_button_select_end_point">Select end point</string>
+    <string name="text_button_start_tracking">Start tracking</string>
+    <string name="text_button_add_more">Add more</string>
+    <string name="text_button_add">Add</string>
+    <string name="text_button_select_a_date">Select a date</string>
+    <string name="text_button_save">Save</string>
+    <string name="text_button_create_new_profile">Create new profile</string>
+    <string name="text_button_change">Change</string>
+    <string name="text_button_clear">Clear</string>
+    <string name="text_button_convert">Convert</string>
+    <string name="text_button_edit">Edit</string>
+    <string name="text_button_delete">Delete</string>
+    <string name="text_button_return_home">Return home</string>
+
+    <string name="placeholder_text_daily_limit_number">0</string>
+    <string name="placeholder_text_currency_AZN">₼</string>
+    <string name="placeholder_text_start_point_date">1 October 2023</string>
+    <string name="placeholder_text_end_point_date">31 October 2023</string>
+    <string name="placeholder_text_current_date">10 October 2023</string>
+    <string name="placeholder_text_income">0₼</string>
+    <string name="placeholder_text_income_2">342₼</string>
+    <string name="placeholder_text_expense">0₼</string>
+    <string name="placeholder_text_savings">0₼</string>
+    <string name="placeholder_you_have_spent">142</string>
+    <string name="placeholder_selected_date">8 October 2023</string>
+    <string name="placeholder_currency_converting_from">10 US Dollars =</string>
+    <string name="placeholder_currency_converting_to">17 AZN</string>
+    <string name="placeholder_currency_converting_rate">1 USD = 1.70196 AZN</string>
+    <string name="placeholder_currency_converting_rate_2">1 AZN = 0.587556 USD</string>
+    <string name="placeholder_text_last_expenses">Restaurant</string>
+    <string name="placeholder_text_last_expense_expense">-50₼</string>
+    <string name="placeholder_text_date_frame">%1$s to %2$s</string>
+    <string name="placeholder_text_description">- Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</string>
+    <string name="placeholder_text_bulk_categories">- Friend\n- Pub</string>
+    <string name="placeholder_text_article_title">This trade is where big investors are hiding out amid choppy markets, Goldman Sachs says</string>
+    <string name="placeholder_text_author">Author</string>
+    <string name="placeholder_text_publish_date">Publish date</string>
+    <string name="placeholder_text_profile_name">Profile 1</string>
+
+    <string name="hint_username">Username</string>
+    <string name="hint_password">Password</string>
+    <string name="hint_budget">Budget</string>
+    <string name="hint_saving">200..</string>
+    <string name="hint_amount">Amount</string>
+    <string name="hint_expense_category">Groceries..</string>
+    <string name="hint_income_category">Friend..</string>
+    <string name="hint_expense_description">Snacks, butter..</string>
+    <string name="hint_income_description">Dept..</string>
+    <string name="hint_dots">...</string>
+    <string name="hint_search">Search..</string>
+    <string name="content_description_delete_icon_item_layout">Delete icon for expense and income category item layout</string>
+
+    <string-array name="currencies"> // Unfortunately, there is no free currency converter API, so I decided to only support AZN..
+<!--        <item>AED - د.إ</item>-->
+<!--        <item>AFN - ؋</item>-->
+<!--        <item>ALL - L</item>-->
+<!--        <item>AMD - ֏</item>-->
+<!--        <item>ANG - ƒ</item>-->
+<!--        <item>AOA - Kz</item>-->
+<!--        <item>ARS - $</item>-->
+<!--        <item>AUD - $</item>-->
+<!--        <item>AWG - ƒ</item>-->
+        <item>AZN - ₼</item>
+<!--        <item>BAM - КМ</item>-->
+<!--        <item>BBD - $</item>-->
+<!--        <item>BDT - ৳</item>-->
+<!--        <item>BGN - лв</item>-->
+<!--        <item>BHD - .د.ب</item>-->
+<!--        <item>BIF - FBu</item>-->
+<!--        <item>BMD - $</item>-->
+<!--        <item>BND - $</item>-->
+<!--        <item>BOB - Bs.</item>-->
+<!--        <item>BRL - R$</item>-->
+<!--        <item>BSD - $</item>-->
+<!--        <item>BTN - Nu.</item>-->
+<!--        <item>BWP - P</item>-->
+<!--        <item>BYN - Br</item>-->
+<!--        <item>BYR - Br</item>-->
+<!--        <item>BZD - BZ$</item>-->
+<!--        <item>CAD - $</item>-->
+<!--        <item>CDF - FC</item>-->
+<!--        <item>CHF - Fr</item>-->
+<!--        <item>CLF - UF</item>-->
+<!--        <item>CLP - $</item>-->
+<!--        <item>CNY - ¥</item>-->
+<!--        <item>COP - $</item>-->
+<!--        <item>CRC - ₡</item>-->
+<!--        <item>CUC - CUC$</item>-->
+<!--        <item>CUP - ₱</item>-->
+<!--        <item>CVE - Esc</item>-->
+<!--        <item>CZK - Kč</item>-->
+<!--        <item>DJF - Fdj</item>-->
+<!--        <item>DKK - kr</item>-->
+<!--        <item>DOP - RD$</item>-->
+<!--        <item>DZD - DA</item>-->
+<!--        <item>EGP - £</item>-->
+<!--        <item>ERN - Nfk</item>-->
+<!--        <item>ETB - Br</item>-->
+<!--        <item>EUR - €</item>-->
+<!--        <item>FJD - $</item>-->
+<!--        <item>FKP - £</item>-->
+<!--        <item>GBP - £</item>-->
+<!--        <item>GEL - ₾</item>-->
+<!--        <item>GGP - £</item>-->
+<!--        <item>GHS - ₵</item>-->
+<!--        <item>GIP - £</item>-->
+<!--        <item>GMD - D</item>-->
+<!--        <item>GNF - FG</item>-->
+<!--        <item>GTQ - Q</item>-->
+<!--        <item>GYD - $</item>-->
+<!--        <item>HKD - $</item>-->
+<!--        <item>HNL - L</item>-->
+<!--        <item>HRK - kn</item>-->
+<!--        <item>HTG - G</item>-->
+<!--        <item>HUF - Ft</item>-->
+<!--        <item>IDR - Rp</item>-->
+<!--        <item>ILS - ₪</item>-->
+<!--        <item>IMP - £</item>-->
+<!--        <item>INR - ₹</item>-->
+<!--        <item>IQD - ع.د</item>-->
+<!--        <item>IRR - ﷼</item>-->
+<!--        <item>ISK - kr</item>-->
+<!--        <item>JEP - £</item>-->
+<!--        <item>JMD - J$</item>-->
+<!--        <item>JOD - د.ا</item>-->
+<!--        <item>JPY - ¥</item>-->
+<!--        <item>KES - KSh</item>-->
+<!--        <item>KGS - с</item>-->
+<!--        <item>KHR - ៛</item>-->
+<!--        <item>KMF - CF</item>-->
+<!--        <item>KPW - ₩</item>-->
+<!--        <item>KRW - ₩</item>-->
+<!--        <item>KWD - د.ك</item>-->
+<!--        <item>KYD - $</item>-->
+<!--        <item>KZT - ₸</item>-->
+<!--        <item>LAK - ₭</item>-->
+<!--        <item>LBP - ل.ل</item>-->
+<!--        <item>LKR - Rs</item>-->
+<!--        <item>LRD - $</item>-->
+<!--        <item>LSL - L</item>-->
+<!--        <item>LTL - Lt</item>-->
+<!--        <item>LVL - Ls</item>-->
+<!--        <item>LYD - ل.د</item>-->
+<!--        <item>MAD - د.م.</item>-->
+<!--        <item>MDL - L</item>-->
+<!--        <item>MGA - Ar</item>-->
+<!--        <item>MKD - ден</item>-->
+<!--        <item>MMK - Ks</item>-->
+<!--        <item>MNT - ₮</item>-->
+<!--        <item>MOP - P</item>-->
+<!--        <item>MRO - UM</item>-->
+<!--        <item>MUR - ₨</item>-->
+<!--        <item>MVR - Rf</item>-->
+<!--        <item>MWK - MK</item>-->
+<!--        <item>MXN - $</item>-->
+<!--        <item>MYR - RM</item>-->
+<!--        <item>MZN - MT</item>-->
+<!--        <item>NAD - N$</item>-->
+<!--        <item>NGN - ₦</item>-->
+<!--        <item>NIO - C$</item>-->
+<!--        <item>NOK - kr</item>-->
+<!--        <item>NPR - रू</item>-->
+<!--        <item>NZD - $</item>-->
+<!--        <item>OMR - ر.ع.</item>-->
+<!--        <item>PAB - B/.</item>-->
+<!--        <item>PEN - S/.</item>-->
+<!--        <item>PGK - K</item>-->
+<!--        <item>PHP - ₱</item>-->
+<!--        <item>PKR - Rs</item>-->
+<!--        <item>PLN - zł</item>-->
+<!--        <item>PYG - ₲</item>-->
+<!--        <item>QAR - ر.ق</item>-->
+<!--        <item>RON - lei</item>-->
+<!--        <item>RSD - din.</item>-->
+<!--        <item>RUB - ₽</item>-->
+<!--        <item>RWF - FRw</item>-->
+<!--        <item>SAR - ر.س</item>-->
+<!--        <item>SBD - $</item>-->
+<!--        <item>SCR - ₨</item>-->
+<!--        <item>SDG - ج.س.</item>-->
+<!--        <item>SEK - kr</item>-->
+<!--        <item>SGD - $</item>-->
+<!--        <item>SHP - £</item>-->
+<!--        <item>SLL - Le</item>-->
+<!--        <item>SOS - Sh.So.</item>-->
+<!--        <item>SRD - $</item>-->
+<!--        <item>STD - Db</item>-->
+<!--        <item>SVC - $</item>-->
+<!--        <item>SYP - £</item>-->
+<!--        <item>SZL - E</item>-->
+<!--        <item>THB - ฿</item>-->
+<!--        <item>TJS - ЅМ</item>-->
+<!--        <item>TMT - T</item>-->
+<!--        <item>TND - د.ت</item>-->
+<!--        <item>TOP - T$</item>-->
+<!--        <item>TRY - ₺</item>-->
+<!--        <item>TTD - TT$</item>-->
+<!--        <item>TWD - $</item>-->
+<!--        <item>TZS - Sh</item>-->
+<!--        <item>UAH - ₴</item>-->
+<!--        <item>UGX - USh</item>-->
+<!--        <item>USD - $</item>-->
+<!--        <item>UYU - $U</item>-->
+<!--        <item>UZS - сўм</item>-->
+<!--        <item>VEF - Bs.S.</item>-->
+<!--        <item>VND - ₫</item>-->
+<!--        <item>VUV - Vt</item>-->
+<!--        <item>WST - T</item>-->
+<!--        <item>XAF - FCFA</item>-->
+<!--        <item>XAG</item>-->
+<!--        <item>XAU -</item>-->
+<!--        <item>XCD - $</item>-->
+<!--        <item>XDR</item>-->
+<!--        <item>XOF - CFA</item>-->
+<!--        <item>XPF - Fr</item>-->
+<!--        <item>YER - ﷼</item>-->
+<!--        <item>ZAR - R</item>-->
+<!--        <item>ZMK - ZK</item>-->
+<!--        <item>ZMW - ZK</item>-->
+<!--        <item>ZWL - Z$</item>-->
+<!--        <item>XPT</item>-->
+<!--        <item>XPD</item>-->
+<!--        <item>BTC - ₿</item>-->
+<!--        <item>ETH - Ξ</item>-->
+<!--        <item>BNB</item>-->
+<!--        <item>XRP</item>-->
+<!--        <item>SOL</item>-->
+<!--        <item>DOT</item>-->
+<!--        <item>AVAX</item>-->
+<!--        <item>MATIC</item>-->
+<!--        <item>LTC - Ł</item>-->
+<!--        <item>ADA - ₳</item>-->
+    </string-array>
+</resources>

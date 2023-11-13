@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="midnight_green">#043333</color>
+    <color name="light_midnight_green">#064E4E</color>
+    <color name="caribbean_current">#3E6A6A</color>
+    <color name="mantis_green">#81D67F</color>
+    <color name="bittersweet_red">#F45E5E</color>
+    <color name="straw_yellow">#E4E07C</color>
+    <color name="golden_brown">#95620D</color>
+
+    // Light mode
+    <color name="ash_gray">#A5B4B4</color> // main circle
+    <color name="dark_slate_gray">#336060</color> // main circle
+    <color name="teal">#238585</color> // main circle
+    <color name="white_smoke_gray">#F3F3F3</color> // "see all/details" background, if button non-clickable
+    <color name="cadet_gray">#729494</color> // "see all/details" text
+    <color name="anti_flash_white">#E7ECEC</color> // last expenses rv background
+    <color name="brunswick_green">#1B5454</color> // bottom nav menu icon and text non-selected color
+
+
+    // Dark mode
+    <color name="verdigris">#83BBBB</color> // main circle
+    <color name="myrtle_green">#387979</color> // main circle
+    <color name="tiffany_blue">#88C2C2</color> // main circle
+    <color name="castleton_green">#0B6060</color> // "see all/details" background, if button non-clickable
+    <color name="dartmouth_current">#0A6565</color> // last expenses rv background
+</resources>

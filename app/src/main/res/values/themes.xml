@@ -1,0 +1,302 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <style name="Base.Theme.CashControl" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="android:statusBarColor">@color/white</item>
+        <item name="android:windowLightStatusBar">true</item>
+    </style>
+
+    <style name="Theme.CashControl" parent="Base.Theme.CashControl" />
+
+    <style name="ScreenBackground">
+        <item name="android:background">@color/white</item>
+    </style>
+
+
+    // Texts
+    <style name="MainText">
+        <item name="android:textColor">@color/midnight_green</item>
+    </style>
+
+    <style name="Text">
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="SeeAllDetailsDetailsText">
+        <item name="android:textColor">@color/cadet_gray</item>
+    </style>
+
+
+    // Input views
+    <style name="UserInput">
+        <item name="android:background">@drawable/selector_user_input_light_mode</item>
+        <item name="fontFamily">@font/open_sans</item>
+        <item name="android:textColor">@color/midnight_green</item>
+        <item name="android:textColorHint">@color/ash_gray</item>
+    </style>
+
+    <style name="UserInputStrokeColorError">
+        <item name="android:background">@drawable/selector_user_input_error_light_mode</item>
+        <item name="fontFamily">@font/open_sans</item>
+        <item name="android:textColor">@color/bittersweet_red</item>
+        <item name="android:textColorHint">@color/ash_gray</item>
+    </style>
+
+    <style name="SearchInput">
+        <item name="android:background">@drawable/selector_user_input_light_mode</item>
+        <item name="fontFamily">@font/open_sans</item>
+        <item name="android:textColor">@color/midnight_green</item>
+        <item name="android:textColorHint">@color/ash_gray</item>
+    </style>
+
+
+    // Icons
+    <style name="IconColorClickable">
+        <item name="android:tint">@color/midnight_green</item>
+        <item name="android:background">?attr/selectableItemBackground</item>
+        <item name="android:clickable">true</item>
+    </style>
+
+    <style name="IconColorNonClickable">
+        <item name="android:tint">@color/midnight_green</item>
+    </style>
+
+    <style name="IconColorNonClickableReverse">
+        <item name="android:tint">@color/white</item>
+    </style>
+
+
+    // Buttons
+    <style name="ButtonColor">
+        <item name="android:backgroundTint">@color/midnight_green</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="ButtonColorIfNonClickable">
+        <item name="android:backgroundTint">@color/white_smoke_gray</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="TextButton">
+        <item name="android:textColor">@color/midnight_green</item>
+    </style>
+
+
+    // DropDown box
+    <style name="DropDownBoxColor" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu">
+        <item name="endIconTint">@color/white</item>
+        <item name="boxBackgroundColor">@color/midnight_green</item>
+    </style>
+
+
+    // Dropdown box texts
+    <style name="DropDownTextColor">
+        <item name="android:textColorHint">@color/white</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="dropDownBackgroundTint">@color/midnight_green</item>
+    </style>
+
+    <style name="DropDownTextItemColour">
+        <item name="android:background">@color/midnight_green</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+
+    // Main circles
+    <style name="MainCircleFirst">
+        <item name="cardBackgroundColor">@color/midnight_green</item>
+    </style>
+
+    <style name="MainCircleSecond">
+        <item name="cardBackgroundColor">@color/teal</item>
+    </style>
+
+    <style name="MainCircleThird">
+        <item name="cardBackgroundColor">@color/light_midnight_green</item>
+    </style>
+
+    <style name="MainCircleForth">
+        <item name="cardBackgroundColor">@color/dark_slate_gray</item>
+    </style>
+
+
+    // Cards
+    <style name="DateCardBackgroundColor">
+        <item name="cardBackgroundColor">@color/midnight_green</item>
+    </style>
+
+    <style name="SeeAllDetailsDetailsCardBackgroundColor">
+        <item name="cardBackgroundColor">@color/white_smoke_gray</item>
+    </style>
+
+    <style name="TextCardBackgroundColor">
+        <item name="cardBackgroundColor">@color/white</item>
+    </style>
+
+    <style name="SingleTransactionsCardItemLayoutColor">
+        <item name="cardBackgroundColor">@color/anti_flash_white</item>
+    </style>
+
+    <style name="BulkTransactionsCardItemLayoutColor">
+        <item name="cardBackgroundColor">@color/midnight_green</item>
+    </style>
+
+    <style name="DateFrameCardItemLayoutColor">
+        <item name="cardBackgroundColor">@color/midnight_green</item>
+    </style>
+
+    <style name="DateFrameInsideCardItemLayoutColor">
+        <item name="cardBackgroundColor">@color/white</item>
+        <item name="strokeColor">@color/midnight_green</item>
+        <item name="strokeWidth">1dp</item>
+    </style>
+
+
+    // Progress indicators
+    <style name="ProgressIndicatorColor">
+        <item name="indicatorColor">@color/bittersweet_red</item>
+        <item name="trackColor">@color/anti_flash_white</item>
+    </style>
+    
+    
+    // Fab
+    <style name="FabShapeOverlay">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50%</item>
+    </style>
+
+    <style name="FabPlusShapeColor">
+        <item name="shapeAppearanceOverlay">@style/FabShapeOverlay</item>
+        <item name="tint">@color/white</item>
+        <item name="android:backgroundTint">@color/midnight_green</item>
+    </style>
+
+    <style name="FabExpenseShapeOverlay">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50%</item>
+    </style>
+
+    <style name="FabExpenseShapeColor">
+        <item name="shapeAppearanceOverlay">@style/FabShapeOverlay</item>
+        <item name="tint">@color/white</item>
+        <item name="backgroundTint">@color/bittersweet_red</item>
+    </style>
+
+    <style name="FabIncomeShapeOverlay">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50%</item>
+    </style>
+
+    <style name="FabIncomeShapeColor">
+        <item name="shapeAppearanceOverlay">@style/FabShapeOverlay</item>
+        <item name="tint">@color/white</item>
+        <item name="backgroundTint">@color/mantis_green</item>
+    </style>
+
+
+    // Selection fab
+    <style name="SelectionFabOverlay">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50%</item>
+    </style>
+
+    <style name="SelectionFabShapeColor">
+        <item name="shapeAppearanceOverlay">@style/SelectionFabOverlay</item>
+        <item name="tint">@color/white</item>
+        <item name="android:backgroundTint">@color/midnight_green</item>
+    </style>
+    
+    
+    // Checkboxes
+    <style name="RadioButtonColor">
+        <item name="android:background">@drawable/selector_radio_button_light_mode</item>
+        <item name="android:textColor">@color/color_selector_radio_button_light_mode</item>
+    </style>
+
+
+    // Tab layout
+    <style name="TabLayoutColor">
+        <item name="tabBackground">@color/white</item>
+        <item name="tabIndicatorColor">@color/midnight_green</item>
+        <item name="tabIconTint">@color/color_selector_tab_layout_light_mode</item>
+        <item name="tabSelectedTextColor">@color/midnight_green</item>
+        <item name="tabTextColor">@color/cadet_gray</item>
+    </style>
+
+
+    // Settings menu
+    <style name="SettingMenuBackgroundColor">
+        <item name="android:background">@color/midnight_green</item>
+    </style>
+
+
+    // Currency result background
+    <style name="CurrencyResultLayoutBackgroundColor">
+        <item name="android:background">@color/white_smoke_gray</item>
+    </style>
+
+
+    // Dividers
+    <style name="DateLineDividerBackgroundColor">
+        <item name="dividerColor">@color/midnight_green</item>
+    </style>
+
+
+    // Layout backgrounds
+    <style name="ProfileItemLayoutSelectedBackgroundColor">
+        <item name="android:background">@color/midnight_green</item>
+    </style>
+    
+    
+    // Bottom nav menu
+    <style name="BottomNavMenuColors">
+        <item name="backgroundTint">@color/midnight_green</item>
+        <item name="itemIconTint">@color/color_selector_bottom_nav_menu_icon_light_mode</item>
+        <item name="itemTextColor">@color/color_selector_bottom_nav_menu_icon_light_mode</item>
+    </style>
+    
+
+    // SplashScreen
+    <style name="Theme.App.SplashScreen" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/bittersweet_red</item>
+        <item name="postSplashScreenTheme">@style/Base.Theme.CashControl</item>
+    </style>
+
+
+    // Loading indicator
+    <style name="LottieLoadingIndicatorColor">
+        <item name="lottie_colorFilter">@color/midnight_green</item>
+    </style>
+
+    <style name="LottieLoadingIndicatorColorViseVersa">
+        <item name="lottie_colorFilter">@color/white</item>
+    </style>
+
+
+    // Cached categories
+    <style name="CachedCategoriesBackground">
+        <item name="android:background">@color/white_smoke_gray</item>
+    </style>
+
+    <style name="CachedCategoriesIconColor">
+        <item name="android:backgroundTint">@color/ash_gray</item>
+    </style>
+
+    <style name="CachedCategoriesTextColor">
+        <item name="android:textColor">@color/ash_gray</item>
+    </style>
+
+    <style name="CachedCategoriesUserInput">
+        <item name="android:background">@drawable/selector_user_input_light_mode</item>
+        <item name="fontFamily">@font/open_sans</item>
+        <item name="android:textColor">@color/midnight_green</item>
+        <item name="android:textColorHint">@color/ash_gray</item>
+        <item name="android:dropDownSelector">@color/midnight_green</item>
+    </style>
+
+
+    // Transaction detail selection
+    <style name="TransactionDetailsSelectionColor">
+        <item name="android:background">@color/midnight_green</item>
+    </style>
+
+
+</resources>

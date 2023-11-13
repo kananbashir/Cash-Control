@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@android:color/transparent"
+    android:layout_marginTop="5dp"
+    android:layout_marginBottom="5dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/ivPhotoItemLayoutArticleSearchAndSaved"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:maxWidth="152dp"
+        android:maxHeight="85dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0"
+        tools:srcCompat="@tools:sample/avatars[0]" />
+
+    <TextView
+        android:id="@+id/tvTitleItemLayoutArticleSearchAndSaved"
+        style="@style/MainText"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="15dp"
+        android:fontFamily="@font/open_sans_bold"
+        android:ellipsize="end"
+        app:autoSizeTextType="uniform"
+        app:autoSizeMaxTextSize="23sp"
+        app:autoSizeMinTextSize="16sp"
+        android:text="@string/placeholder_text_article_title"
+        app:layout_constraintBottom_toBottomOf="@+id/ivPhotoItemLayoutArticleSearchAndSaved"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/ivPhotoItemLayoutArticleSearchAndSaved"
+        app:layout_constraintTop_toTopOf="@+id/ivPhotoItemLayoutArticleSearchAndSaved" />
+
+    <TextView
+        android:id="@+id/tvAuthorItemLayoutArticleSearchAndSaved"
+        style="@style/MainText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:fontFamily="@font/open_sans"
+        android:text="@string/placeholder_text_author"
+        android:textSize="14sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ivPhotoItemLayoutArticleSearchAndSaved" />
+
+    <TextView
+        android:id="@+id/tvPublishDateItemLayoutArticleSearchAndSaved"
+        style="@style/MainText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:fontFamily="@font/open_sans"
+        android:text="@string/placeholder_text_publish_date"
+        android:textSize="14sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvAuthorItemLayoutArticleSearchAndSaved" />
+
+    <com.google.android.material.divider.MaterialDivider
+        style="@style/DateLineDividerBackgroundColor"
+        android:layout_width="match_parent"
+        android:layout_height="0.3dp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvPublishDateItemLayoutArticleSearchAndSaved" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@android:color/transparent"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/tvDateFrameItemLayoutDateFrames"
+        style="@style/MainText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="7dp"
+        android:ellipsize="end"
+        android:fontFamily="@font/open_sans_bold"
+        android:lines="1"
+        android:text="@string/placeholder_text_date_frame"
+        android:textSize="13sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <ImageView
+        android:id="@+id/imageView"
+        style="@style/IconColorNonClickable"
+        android:layout_width="6dp"
+        android:layout_height="10dp"
+        android:src="@drawable/ic_bold_arrow_down"
+        app:layout_constraintStart_toStartOf="@+id/tvDateFrameItemLayoutDateFrames"
+        app:layout_constraintTop_toBottomOf="@+id/tvDateFrameItemLayoutDateFrames" />
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/materialCardView8"
+        style="@style/DateFrameInsideCardItemLayoutColor"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="12dp"
+        app:contentPaddingBottom="5dp"
+        app:contentPaddingLeft="15dp"
+        app:contentPaddingRight="15dp"
+        app:contentPaddingTop="5dp"
+        app:layout_constraintBottom_toBottomOf="@+id/cvBudgetItemLayoutDateFrames"
+        app:layout_constraintStart_toStartOf="@+id/cvBudgetItemLayoutDateFrames"
+        app:layout_constraintTop_toTopOf="@+id/cvBudgetItemLayoutDateFrames">
+
+        <TextView
+            android:id="@+id/tvTotalBudgetItemLayoutDateFrames"
+            style="@style/MainText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="75dp"
+            android:ellipsize="end"
+            android:fontFamily="@font/open_sans"
+            android:includeFontPadding="false"
+            android:lines="1"
+            android:text="@string/placeholder_text_income"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </com.google.android.material.card.MaterialCardView>
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/cvBudgetItemLayoutDateFrames"
+        style="@style/DateFrameCardItemLayoutColor"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        app:cardCornerRadius="12dp"
+        app:contentPaddingBottom="5dp"
+        app:contentPaddingLeft="15dp"
+        app:contentPaddingRight="15dp"
+        app:contentPaddingTop="5dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView"
+        app:layout_constraintVertical_bias="0.0"
+        app:strokeWidth="0dp">
+
+        <TextView
+            style="@style/Text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:fontFamily="@font/open_sans_bold"
+            android:includeFontPadding="false"
+            android:lines="1"
+            android:text="@string/text_budget"
+            android:textSize="14sp"/>
+    </com.google.android.material.card.MaterialCardView>
+
+
+    <com.google.android.material.card.MaterialCardView
+        style="@style/DateFrameInsideCardItemLayoutColor"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="12dp"
+        app:contentPaddingBottom="5dp"
+        app:contentPaddingLeft="15dp"
+        app:contentPaddingRight="15dp"
+        app:contentPaddingTop="5dp"
+        app:layout_constraintBottom_toBottomOf="@+id/cvTotalIncomeItemLayoutDateFrames"
+        app:layout_constraintStart_toStartOf="@+id/cvTotalIncomeItemLayoutDateFrames"
+        app:layout_constraintTop_toTopOf="@+id/cvTotalIncomeItemLayoutDateFrames">
+
+        <TextView
+            android:id="@+id/tvTotalIncomeItemLayoutDateFrames"
+            style="@style/MainText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="113dp"
+            android:ellipsize="end"
+            android:fontFamily="@font/open_sans"
+            android:includeFontPadding="false"
+            android:lines="1"
+            android:text="@string/placeholder_text_income_2"
+            android:textSize="14sp" />
+
+    </com.google.android.material.card.MaterialCardView>
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/cvTotalIncomeItemLayoutDateFrames"
+        style="@style/DateFrameCardItemLayoutColor"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="7dp"
+        app:cardCornerRadius="12dp"
+        app:contentPaddingBottom="5dp"
+        app:contentPaddingLeft="15dp"
+        app:contentPaddingRight="15dp"
+        app:contentPaddingTop="5dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cvBudgetItemLayoutDateFrames"
+        app:layout_constraintVertical_bias="0.0"
+        app:strokeWidth="0dp">
+
+        <TextView
+            style="@style/Text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:fontFamily="@font/open_sans_bold"
+            android:includeFontPadding="false"
+            android:lines="1"
+            android:text="@string/text_total_income"
+            android:textSize="14sp" />
+
+    </com.google.android.material.card.MaterialCardView>
+
+
+    <com.google.android.material.card.MaterialCardView
+        style="@style/DateFrameInsideCardItemLayoutColor"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="12dp"
+        app:contentPaddingBottom="5dp"
+        app:contentPaddingLeft="15dp"
+        app:contentPaddingRight="15dp"
+        app:contentPaddingTop="5dp"
+        app:layout_constraintBottom_toBottomOf="@+id/cvTotalExpenseItemLayoutDateFrames"
+        app:layout_constraintStart_toStartOf="@+id/cvTotalExpenseItemLayoutDateFrames"
+        app:layout_constraintTop_toTopOf="@+id/cvTotalExpenseItemLayoutDateFrames">
+
+        <TextView
+            android:id="@+id/tvTotalExpenseItemLayoutDateFrames"
+            style="@style/MainText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="127dp"
+            android:ellipsize="end"
+            android:fontFamily="@font/open_sans"
+            android:includeFontPadding="false"
+            android:lines="1"
+            android:text="@string/placeholder_text_expense"
+            android:textSize="14sp" />
+
+    </com.google.android.material.card.MaterialCardView>
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/cvTotalExpenseItemLayoutDateFrames"
+        style="@style/DateFrameCardItemLayoutColor"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="7dp"
+        app:cardCornerRadius="12dp"
+        app:contentPaddingBottom="5dp"
+        app:contentPaddingLeft="15dp"
+        app:contentPaddingRight="15dp"
+        app:contentPaddingTop="5dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cvTotalIncomeItemLayoutDateFrames"
+        app:layout_constraintVertical_bias="0.0"
+        app:strokeWidth="0dp">
+
+        <TextView
+            style="@style/Text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:fontFamily="@font/open_sans_bold"
+            android:includeFontPadding="false"
+            android:lines="1"
+            android:text="@string/text_total_expenses"
+            android:textSize="14sp" />
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/cvSeeDetailsItemLayoutDateFrames"
+        style="@style/SeeAllDetailsDetailsCardBackgroundColor"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:contentPaddingBottom="5dp"
+        app:contentPaddingLeft="13dp"
+        app:contentPaddingRight="13dp"
+        app:contentPaddingTop="5dp"
+        app:layout_constraintBottom_toBottomOf="@+id/cvTotalExpenseItemLayoutDateFrames"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/cvTotalExpenseItemLayoutDateFrames"
+        app:strokeWidth="0dp">
+
+        <TextView
+            style="@style/SeeAllDetailsDetailsText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/open_sans"
+            android:includeFontPadding="false"
+            android:text="@string/text_see_details"
+            android:textSize="9sp" />
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <com.google.android.material.divider.MaterialDivider
+        style="@style/DateLineDividerBackgroundColor"
+        android:layout_width="match_parent"
+        android:layout_height="0.3dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="14dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="7dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cvTotalExpenseItemLayoutDateFrames" />
+
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

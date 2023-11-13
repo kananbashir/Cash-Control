@@ -1,0 +1,409 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/login_session">
+
+    <navigation android:id="@+id/main_session"
+        app:startDestination="@id/homeFragment">
+        <fragment
+            android:id="@+id/currencyConverterFragment"
+            android:name="com.example.cashcontrol.ui.fragment.navmenu.CurrencyConverterFragment"
+            android:label="fragment_currency_converter"
+            tools:layout="@layout/fragment_currency_converter" />
+        <fragment
+            android:id="@+id/homeFragment"
+            android:name="com.example.cashcontrol.ui.fragment.navmenu.HomeFragment"
+            android:label="fragment_home"
+            tools:layout="@layout/fragment_home" />
+        <fragment
+            android:id="@+id/expenseFragment"
+            android:name="com.example.cashcontrol.ui.fragment.navmenu.TransactionsFragment"
+            android:label="fragment_expense"
+            tools:layout="@layout/fragment_transactions" />
+        <fragment
+            android:id="@+id/analyticsFragment"
+            android:name="com.example.cashcontrol.ui.fragment.navmenu.AnalyticsFragment"
+            android:label="fragment_analytics"
+            tools:layout="@layout/fragment_analytics" />
+        <fragment
+            android:id="@+id/newsFragment"
+            android:name="com.example.cashcontrol.ui.fragment.navmenu.NewsFragment"
+            android:label="fragment_news"
+            tools:layout="@layout/fragment_news" />
+        <action
+            android:id="@+id/action_global_addExpenseFragment"
+            app:destination="@id/addExpenseFragment"
+            app:enterAnim="@anim/slide_in_from_right"
+            app:exitAnim="@anim/slide_out_to_left"
+            app:popEnterAnim="@anim/slide_in_from_left"
+            app:popExitAnim="@anim/slide_out_to_right" />
+        <action
+            android:id="@+id/action_global_addIncomeFragment"
+            app:destination="@id/addIncomeFragment"
+            app:enterAnim="@anim/slide_in_from_right"
+            app:popEnterAnim="@anim/slide_in_from_right"
+            app:popExitAnim="@anim/slide_out_to_right"/>
+        <action
+            android:id="@+id/action_global_expensesDetailFragment2"
+            app:destination="@id/transactionsDetailFragment"
+            app:enterAnim="@anim/slide_in_from_right"
+            app:popEnterAnim="@anim/slide_in_from_right"
+            app:popExitAnim="@anim/slide_out_to_right" />
+    </navigation>
+    <navigation android:id="@+id/onboarding_session"
+        app:startDestination="@id/onBoardingDateFrameFragment">
+            <fragment
+                android:id="@+id/onBoardingDateFrameFragment"
+                android:name="com.example.cashcontrol.ui.fragment.onboarding.OnBoardingDateFrameFragment"
+                android:label="fragment_on_boarding_date_frame"
+                tools:layout="@layout/fragment_on_boarding_date_frame" >
+                <action
+                    android:id="@+id/action_onBoardingDateFrameFragment_to_onBoardingBudgetFragment"
+                    app:destination="@id/onBoardingBudgetFragment"
+                    app:enterAnim="@anim/slide_in_from_right"
+                    app:popExitAnim="@anim/slide_out_to_right"/>
+            </fragment>
+            <fragment
+                android:id="@+id/onBoardingBudgetFragment"
+                android:name="com.example.cashcontrol.ui.fragment.onboarding.OnBoardingBudgetFragment"
+                android:label="fragment_on_boarding_budget"
+                tools:layout="@layout/fragment_on_boarding_budget">
+                <action
+                    android:id="@+id/action_onBoardingBudgetFragment_to_onBoardingSavingsFragment"
+                    app:destination="@id/onBoardingSavingsFragment"
+                    app:enterAnim="@anim/slide_in_from_right"
+                    app:popExitAnim="@anim/slide_out_to_right" />
+                <action
+                    android:id="@+id/action_onBoardingBudgetFragment_to_onBoardingDateFrameFragment"
+                    app:destination="@id/onBoardingDateFrameFragment"
+                    app:popUpTo="@id/onBoardingDateFrameFragment"
+                    app:popUpToInclusive="true"
+                    app:popExitAnim="@anim/slide_out_to_right" />
+                <argument
+                    android:name="startPointDate"
+                    app:argType="string" />
+                <argument
+                    android:name="endPointDate"
+                    app:argType="string" />
+            </fragment>
+            <fragment
+                android:id="@+id/onBoardingSavingsFragment"
+                android:name="com.example.cashcontrol.ui.fragment.onboarding.OnBoardingSavingsFragment"
+                android:label="fragment_on_boarding_savings"
+                tools:layout="@layout/fragment_on_boarding_savings">
+                <action
+                    android:id="@+id/action_onBoardingSavingsFragment_to_onBoardingFinishFragment"
+                    app:destination="@id/onBoardingFinishFragment"
+                    app:enterAnim="@anim/slide_in_from_right"
+                    app:popExitAnim="@anim/slide_out_to_right" />
+                <action
+                    android:id="@+id/action_onBoardingSavingsFragment_to_onBoardingBudgetFragment"
+                    app:destination="@id/onBoardingBudgetFragment"
+                    app:popUpTo="@id/onBoardingBudgetFragment"
+                    app:popUpToInclusive="true"
+                    app:popExitAnim="@anim/slide_out_to_right" />
+                <argument
+                    android:name="startPointDate"
+                    app:argType="string" />
+                <argument
+                    android:name="endPointDate"
+                    app:argType="string" />
+                <argument
+                    android:name="budget"
+                    app:argType="string" />
+                <argument
+                    android:name="currency"
+                    app:argType="string" />
+            </fragment>
+            <fragment
+                android:id="@+id/onBoardingFinishFragment"
+                android:name="com.example.cashcontrol.ui.fragment.onboarding.OnBoardingFinishFragment"
+                android:label="fragment_on_boarding_finish"
+                tools:layout="@layout/fragment_on_boarding_finish">
+                <action
+                    android:id="@+id/action_onBoardingFinishFragment_to_onBoardingSavingsFragment"
+                    app:destination="@id/onBoardingSavingsFragment"
+                    app:popUpTo="@id/onBoardingSavingsFragment"
+                    app:popUpToInclusive="true"
+                    app:popExitAnim="@anim/slide_out_to_right" />
+                <argument
+                    android:name="startPointDate"
+                    app:argType="string" />
+                <argument
+                    android:name="endPointDate"
+                    app:argType="string" />
+                <argument
+                    android:name="budget"
+                    app:argType="string" />
+                <argument
+                    android:name="currency"
+                    app:argType="string" />
+                <argument
+                    android:name="saving"
+                    app:argType="string" />
+            </fragment>
+        <action
+            android:id="@+id/action_global_main_session2"
+            app:destination="@id/main_session"
+            app:enterAnim="@anim/slide_in_from_right"
+            app:popExitAnim="@anim/slide_out_to_right"/>
+    </navigation>
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.example.cashcontrol.ui.fragment.drawers.ProfileFragment"
+        android:label="fragment_profile"
+        tools:layout="@layout/fragment_profile" >
+        <action
+            android:id="@+id/action_profileFragment_to_main_session"
+            app:destination="@id/main_session"
+            app:enterAnim="@anim/slide_in_from_right"
+            app:popEnterAnim="@anim/slide_in_from_right"
+            app:popExitAnim="@anim/slide_out_to_right"/>
+        <action
+            android:id="@+id/action_profileFragment_to_onboarding_session"
+            app:destination="@id/onboarding_session"
+            app:enterAnim="@anim/slide_in_from_right"
+            app:popEnterAnim="@anim/slide_in_from_right"
+            app:popExitAnim="@anim/slide_out_to_right"/>
+        <action
+            android:id="@+id/action_profileFragment_to_onBoardingProfileFragment"
+            app:destination="@id/onBoardingProfileFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/onBoardingProfileFragment"
+        android:name="com.example.cashcontrol.ui.fragment.onboarding.OnBoardingProfileFragment"
+        android:label="fragment_on_boarding_profile"
+        tools:layout="@layout/fragment_on_boarding_profile" >
+        <action
+            android:id="@+id/action_onBoardingProfileFragment_to_onboarding_session"
+            app:destination="@id/onboarding_session"
+            app:enterAnim="@anim/slide_in_from_right"
+            app:popEnterAnim="@anim/slide_in_from_right"
+            app:popExitAnim="@anim/slide_out_to_right"/>
+    </fragment>
+    <fragment
+        android:id="@+id/onBoardingStartFragment"
+        android:name="com.example.cashcontrol.ui.fragment.onboarding.OnBoardingStartFragment"
+        android:label="fragment_on_boarding_start"
+        tools:layout="@layout/fragment_on_boarding_start" >
+        <action
+            android:id="@+id/action_onBoardingStartFragment_to_onBoardingProfileFragment"
+            app:destination="@id/onBoardingProfileFragment"
+            app:enterAnim="@anim/slide_in_from_right"
+            app:popEnterAnim="@anim/slide_in_from_right"
+            app:popExitAnim="@anim/slide_out_to_right"/>
+        <action
+            android:id="@+id/action_onBoardingStartFragment_to_main_session"
+            app:destination="@id/main_session" />
+    </fragment>
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="com.example.cashcontrol.ui.fragment.drawers.SettingsFragment"
+        android:label="fragment_settings"
+        tools:layout="@layout/fragment_settings" >
+        <action
+            android:id="@+id/action_settingsFragment_to_main_session2"
+            app:destination="@id/main_session"
+            app:enterAnim="@anim/slide_in_from_right"
+            app:popEnterAnim="@anim/slide_in_from_right"
+            app:popExitAnim="@anim/slide_out_to_right"/>
+        <action
+            android:id="@+id/action_settingsFragment_to_login_session"
+            app:destination="@id/login_session"
+            app:enterAnim="@anim/slide_in_from_right"
+            app:popEnterAnim="@anim/slide_in_from_right"
+            app:popExitAnim="@anim/slide_out_to_right"/>
+    </fragment>
+    <navigation android:id="@+id/login_session"
+        app:startDestination="@id/signinFragment">
+        <fragment
+            android:id="@+id/signinFragment"
+            android:name="com.example.cashcontrol.ui.fragment.login.SigninFragment"
+            android:label="fragment_signin"
+            tools:layout="@layout/fragment_signin" >
+            <action
+                android:id="@+id/action_signinFragment_to_signupFragment"
+                app:destination="@id/signupFragment"
+                app:enterAnim="@anim/slide_in_from_right"
+                app:popExitAnim="@anim/slide_out_to_right"/>
+        </fragment>
+        <fragment
+            android:id="@+id/signupFragment"
+            android:name="com.example.cashcontrol.ui.fragment.login.SignupFragment"
+            android:label="fragment_signup"
+            tools:layout="@layout/fragment_signup" >
+            <action
+                android:id="@+id/action_signupFragment_to_signinFragment"
+                app:destination="@id/signinFragment"
+                app:popUpTo="@id/signinFragment"
+                app:popUpToInclusive="true"
+                app:popExitAnim="@anim/slide_out_to_right"/>
+        </fragment>
+        <action
+            android:id="@+id/action_global_onboarding_session"
+            app:destination="@id/onboarding_session"
+            app:enterAnim="@anim/slide_in_from_right"
+            app:popEnterAnim="@anim/slide_in_from_right"
+            app:popExitAnim="@anim/slide_out_to_right"/>
+        <action
+            android:id="@+id/action_global_main_session"
+            app:destination="@id/main_session"
+            app:enterAnim="@anim/slide_in_from_right"
+            app:popEnterAnim="@anim/slide_in_from_right"
+            app:popExitAnim="@anim/slide_out_to_right"/>
+        <action
+            android:id="@+id/action_global_onBoardingStartFragment"
+            app:destination="@id/onBoardingStartFragment"
+            app:enterAnim="@anim/slide_in_from_right"
+            app:popEnterAnim="@anim/slide_in_from_right"
+            app:popExitAnim="@anim/slide_out_to_right"/>
+        <action
+            android:id="@+id/action_global_onBoardingProfileFragment"
+            app:destination="@id/onBoardingProfileFragment"
+            app:enterAnim="@anim/slide_in_from_right"
+            app:popEnterAnim="@anim/slide_in_from_right"
+            app:popExitAnim="@anim/slide_out_to_right"/>
+    </navigation>
+    <fragment
+        android:id="@+id/addExpenseFragment"
+        android:name="com.example.cashcontrol.ui.fragment.transactions.AddExpenseFragment"
+        android:label="fragment_add_expense"
+        tools:layout="@layout/fragment_add_expense" >
+        <action
+            android:id="@+id/action_addExpenseFragment_to_main_session"
+            app:destination="@id/main_session"
+            app:enterAnim="@anim/slide_in_from_right"
+            app:exitAnim="@anim/slide_out_to_left"
+            app:popEnterAnim="@anim/slide_in_from_left"
+            app:popExitAnim="@anim/slide_out_to_right" />
+    </fragment>
+    <fragment
+        android:id="@+id/addIncomeFragment"
+        android:name="com.example.cashcontrol.ui.fragment.transactions.AddIncomeFragment"
+        android:label="fragment_add_income"
+        tools:layout="@layout/fragment_add_income" >
+        <action
+            android:id="@+id/action_addIncomeFragment_to_main_session"
+            app:destination="@id/main_session"
+            app:enterAnim="@anim/slide_in_from_right"
+            app:popEnterAnim="@anim/slide_in_from_right"
+            app:popExitAnim="@anim/slide_out_to_right"/>
+    </fragment>
+    <fragment
+        android:id="@+id/editExpenseFragment"
+        android:name="com.example.cashcontrol.ui.fragment.transactions.EditExpenseFragment"
+        android:label="fragment_edit_expense"
+        tools:layout="@layout/fragment_edit_expense" >
+        <action
+            android:id="@+id/action_editExpenseFragment_to_transactionsDetailFragment"
+            app:destination="@id/transactionsDetailFragment"
+            app:enterAnim="@anim/slide_in_from_right"
+            app:popEnterAnim="@anim/slide_in_from_right"
+            app:popExitAnim="@anim/slide_out_to_right"
+            app:popUpTo="@id/transactionsDetailFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/editIncomeFragment"
+        android:name="com.example.cashcontrol.ui.fragment.transactions.EditIncomeFragment"
+        android:label="fragment_edit_income"
+        tools:layout="@layout/fragment_edit_income" >
+        <action
+            android:id="@+id/action_editIncomeFragment_to_transactionsDetailFragment"
+            app:destination="@id/transactionsDetailFragment"
+            app:enterAnim="@anim/slide_in_from_right"
+            app:popEnterAnim="@anim/slide_in_from_right"
+            app:popExitAnim="@anim/slide_out_to_right"
+            app:popUpTo="@id/transactionsDetailFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/allArticlesFragment"
+        android:name="com.example.cashcontrol.ui.fragment.news.AllArticlesFragment"
+        android:label="fragment_all_articles"
+        tools:layout="@layout/fragment_all_articles" >
+        <action
+            android:id="@+id/action_allArticlesFragment_to_articleFragment"
+            app:destination="@id/articleFragment"
+            app:enterAnim="@anim/slide_in_from_right"
+            app:popEnterAnim="@anim/slide_in_from_right"
+            app:popExitAnim="@anim/slide_out_to_right"/>
+    </fragment>
+    <fragment
+        android:id="@+id/articleFragment"
+        android:name="com.example.cashcontrol.ui.fragment.news.ArticleFragment"
+        android:label="fragment_article"
+        tools:layout="@layout/fragment_article" >
+        <action
+            android:id="@+id/action_articleFragment_to_allArticlesFragment"
+            app:destination="@id/allArticlesFragment"
+            app:enterAnim="@anim/slide_in_from_right"
+            app:popEnterAnim="@anim/slide_in_from_right"
+            app:popExitAnim="@anim/slide_out_to_right"/>
+        <action
+            android:id="@+id/action_articleFragment_to_articleSavedFragment"
+            app:destination="@id/articleSavedFragment"
+            app:enterAnim="@anim/slide_in_from_right"
+            app:popEnterAnim="@anim/slide_in_from_right"
+            app:popExitAnim="@anim/slide_out_to_right"/>
+        <action
+            android:id="@+id/action_articleFragment_to_articleSearchFragment"
+            app:destination="@id/articleSearchFragment"
+            app:enterAnim="@anim/slide_in_from_right"
+            app:popEnterAnim="@anim/slide_in_from_right"
+            app:popExitAnim="@anim/slide_out_to_right"/>
+    </fragment>
+    <fragment
+        android:id="@+id/articleSavedFragment"
+        android:name="com.example.cashcontrol.ui.fragment.news.ArticleSavedFragment"
+        android:label="fragment_article_saved"
+        tools:layout="@layout/fragment_article_saved" >
+        <action
+            android:id="@+id/action_articleSavedFragment_to_articleFragment"
+            app:destination="@id/articleFragment"
+            app:enterAnim="@anim/slide_in_from_right"
+            app:popEnterAnim="@anim/slide_in_from_right"
+            app:popExitAnim="@anim/slide_out_to_right"/>
+    </fragment>
+    <fragment
+        android:id="@+id/articleSearchFragment"
+        android:name="com.example.cashcontrol.ui.fragment.news.ArticleSearchFragment"
+        android:label="fragment_article_search"
+        tools:layout="@layout/fragment_article_search" >
+        <action
+            android:id="@+id/action_articleSearchFragment_to_articleFragment"
+            app:destination="@id/articleFragment"
+            app:enterAnim="@anim/slide_in_from_right"
+            app:popEnterAnim="@anim/slide_in_from_right"
+            app:popExitAnim="@anim/slide_out_to_right"/>
+    </fragment>
+    <fragment
+        android:id="@+id/transactionsDetailFragment"
+        android:name="com.example.cashcontrol.ui.fragment.transactions.details.TransactionsDetailFragment"
+        android:label="fragment_expenses_detail"
+        tools:layout="@layout/fragment_transactions_detail" >
+        <action
+            android:id="@+id/action_expensesDetailFragment_to_main_session"
+            app:destination="@id/main_session"
+            app:enterAnim="@anim/slide_in_from_right"
+            app:popEnterAnim="@anim/slide_in_from_right"
+            app:popExitAnim="@anim/slide_out_to_right"
+            app:popUpTo="@id/main_session"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_expensesDetailFragment_to_editExpenseFragment"
+            app:destination="@id/editExpenseFragment"
+            app:enterAnim="@anim/slide_in_from_right"
+            app:popEnterAnim="@anim/slide_in_from_right"
+            app:popExitAnim="@anim/slide_out_to_right"/>
+        <action
+            android:id="@+id/action_expensesDetailFragment_to_editIncomeFragment"
+            app:destination="@id/editIncomeFragment"
+            app:enterAnim="@anim/slide_in_from_right"
+            app:popEnterAnim="@anim/slide_in_from_right"
+            app:popExitAnim="@anim/slide_out_to_right"/>
+    </fragment>
+</navigation>

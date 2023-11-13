@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/ScreenBackground"
+    android:theme="@style/Theme.Material3.DayNight"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.fragment.login.SignupFragment">
+
+    <TextView
+        android:id="@+id/tvSignUpFragSignUp"
+        style="@style/MainText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/open_sans_bold"
+        android:text="@string/text_sign_up"
+        android:textSize="46sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.1" />
+
+    <TextView
+        android:id="@+id/tvUsernameFragSignUp"
+        style="@style/MainText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginBottom="2dp"
+        android:fontFamily="@font/open_sans"
+        android:text="@string/text_username"
+        android:textSize="11sp"
+        app:layout_constraintBottom_toTopOf="@+id/etUsernameFragSignUp"
+        app:layout_constraintStart_toStartOf="@+id/etUsernameFragSignUp" />
+
+    <EditText
+        android:id="@+id/etUsernameFragSignUp"
+        style="@style/UserInput"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="40dp"
+        android:layout_marginEnd="40dp"
+        android:fontFamily="@font/open_sans"
+        android:hint="@string/hint_username"
+        android:maxLines="1"
+        android:maxLength="25"
+        android:inputType="text"
+        android:includeFontPadding="false"
+        android:padding="13dp"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvSignUpFragSignUp"
+        app:layout_constraintVertical_bias="0.1" />
+
+
+    <TextView
+        android:id="@+id/tvPasswordFragSignUp"
+        style="@style/MainText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginBottom="2dp"
+        android:fontFamily="@font/open_sans"
+        android:text="@string/text_password"
+        android:textSize="11sp"
+        app:layout_constraintBottom_toTopOf="@+id/etPasswordFragSignUp"
+        app:layout_constraintStart_toStartOf="@+id/etPasswordFragSignUp" />
+
+    <EditText
+        android:id="@+id/etPasswordFragSignUp"
+        style="@style/UserInput"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="40dp"
+        android:layout_marginEnd="10dp"
+        android:fontFamily="@font/open_sans"
+        android:includeFontPadding="false"
+        android:hint="@string/hint_password"
+        android:inputType="textPassword"
+        android:maxLines="1"
+        android:padding="13dp"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/ivPasswordToShowFragSignUp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/etUsernameFragSignUp"
+        app:layout_constraintVertical_bias="0.1" />
+
+    <TextView
+        android:id="@+id/tvReenterPasswordFragSignUp"
+        style="@style/MainText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginBottom="2dp"
+        android:fontFamily="@font/open_sans"
+        android:text="@string/text_reenter_password"
+        android:textSize="11sp"
+        app:layout_constraintBottom_toTopOf="@+id/etReenterPasswordFragSignUp"
+        app:layout_constraintStart_toStartOf="@+id/etReenterPasswordFragSignUp" />
+
+    <EditText
+        android:id="@+id/etReenterPasswordFragSignUp"
+        style="@style/UserInput"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="40dp"
+        android:layout_marginEnd="10dp"
+        android:fontFamily="@font/open_sans"
+        android:includeFontPadding="false"
+        android:hint="@string/hint_password"
+        android:inputType="textPassword"
+        android:padding="13dp"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/ivPasswordToShowFragSignUp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/etPasswordFragSignUp"
+        app:layout_constraintVertical_bias="0.1" />
+
+    <ImageView
+        android:id="@+id/ivPasswordToShowFragSignUp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="50dp"
+        style="@style/IconColorClickable"
+        android:src="@drawable/ic_password_to_show"
+        app:layout_constraintBottom_toBottomOf="@+id/etPasswordFragSignUp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/etPasswordFragSignUp" />
+
+    <ImageView
+        android:id="@+id/ivPasswordToHideFragSignUp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="50dp"
+        android:visibility="invisible"
+        style="@style/IconColorClickable"
+        android:src="@drawable/ic_password_to_hide"
+        app:layout_constraintBottom_toBottomOf="@+id/etPasswordFragSignUp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/etPasswordFragSignUp" />
+
+    <TextView
+        android:id="@+id/tvAlreadyHaveAnAccFragSignUp"
+        style="@style/MainText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:fontFamily="@font/open_sans"
+        android:text="@string/text_already_have_an_account"
+        android:textSize="11sp"
+        app:layout_constraintStart_toStartOf="@+id/etReenterPasswordFragSignUp"
+        app:layout_constraintTop_toBottomOf="@+id/etReenterPasswordFragSignUp" />
+
+    <TextView
+        android:id="@+id/tvSignInFragSignUp"
+        style="@style/MainText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="3dp"
+        android:fontFamily="@font/open_sans_bold"
+        android:text="@string/text_sign_in"
+        android:textSize="11sp"
+        app:layout_constraintBottom_toBottomOf="@+id/tvAlreadyHaveAnAccFragSignUp"
+        app:layout_constraintStart_toEndOf="@+id/tvAlreadyHaveAnAccFragSignUp"
+        app:layout_constraintTop_toTopOf="@+id/tvAlreadyHaveAnAccFragSignUp" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btSignUpFragSignUp"
+        style="@style/ButtonColor"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="24dp"
+        android:fontFamily="@font/open_sans_bold"
+        android:text="@string/text_sign_up"
+        android:textSize="32sp"
+        app:cornerRadius="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvSignInFragSignUp"
+        app:layout_constraintVertical_bias="1.0" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@android:color/transparent"
+    android:theme="@style/Theme.Material3.DayNight"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <AutoCompleteTextView
+        android:id="@+id/etCategoryItemLayoutExpenseAndIncomeCategory"
+        style="@style/UserInput"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="7dp"
+        android:completionThreshold="1"
+        android:dropDownVerticalOffset="8dp"
+        android:fontFamily="@font/open_sans"
+        android:hint="@string/hint_dots"
+        android:includeFontPadding="false"
+        android:inputType="text"
+        android:maxLength="30"
+        android:maxLines="1"
+        android:padding="13dp"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/ivDeleteItemLayoutExpenseAndIncomeCategory"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <ImageView
+        android:id="@+id/ivDeleteItemLayoutExpenseAndIncomeCategory"
+        style="@style/IconColorClickable"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/content_description_delete_icon_item_layout"
+        android:padding="10dp"
+        android:src="@drawable/ic_delete_without_background"
+        app:layout_constraintBottom_toBottomOf="@+id/etCategoryItemLayoutExpenseAndIncomeCategory"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/etCategoryItemLayoutExpenseAndIncomeCategory" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

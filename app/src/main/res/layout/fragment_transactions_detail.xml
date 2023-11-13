@@ -1,0 +1,513 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/ScreenBackground"
+    android:theme="@style/Theme.Material3.DayNight"
+    android:animateLayoutChanges="true"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.fragment.transactions.details.TransactionsDetailFragment">
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fabDeleteFragTransactionsDetail"
+        style="@style/SelectionFabShapeColor"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:clickable="false"
+        android:elevation="20dp"
+        android:focusable="true"
+        app:fabCustomSize="56dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:srcCompat="@drawable/ic_recycler_bin" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fabEditFragTransactionsDetail"
+        style="@style/SelectionFabShapeColor"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:layout_marginEnd="16dp"
+        android:clickable="false"
+        android:elevation="20dp"
+        android:focusable="true"
+        app:fabCustomSize="56dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/fabDeleteFragTransactionsDetail"
+        app:srcCompat="@drawable/ic_edit" />
+
+    <ImageView
+        android:id="@+id/ivReturnBackFragTransactionsDetail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="24dp"
+        style="@style/IconColorClickable"
+        android:src="@drawable/ic_return_back"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <TextView
+        android:id="@+id/tvExpensesFragTransactionsDetail"
+        style="@style/MainText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:fontFamily="@font/open_sans_bold"
+        android:text="@string/text_transactions"
+        android:textAlignment="center"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/ivReturnBackFragTransactionsDetail"
+        app:layout_constraintStart_toEndOf="@+id/ivReturnBackFragTransactionsDetail"
+        app:layout_constraintTop_toTopOf="@+id/ivReturnBackFragTransactionsDetail" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvExpensesFragTransactionsDetail"
+        app:layout_constraintVertical_bias="0.0">
+
+        <com.google.android.material.divider.MaterialDivider
+            android:id="@+id/dividerMiddleLine"
+            style="@style/DateLineDividerBackgroundColor"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginStart="60dp"
+            android:layout_marginEnd="60dp"
+            app:dividerThickness="1dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/leftDotFragTransactionsDetail"
+            style="@style/DateCardBackgroundColor"
+            android:layout_width="10dp"
+            android:layout_height="10dp"
+            app:cardCornerRadius="5dp"
+            app:layout_constraintBottom_toBottomOf="@+id/dividerMiddleLine"
+            app:layout_constraintEnd_toStartOf="@+id/dividerMiddleLine"
+            app:layout_constraintTop_toTopOf="@+id/dividerMiddleLine"
+            app:strokeWidth="0dp" />
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/rightDotFragTransactionsDetail"
+            style="@style/DateCardBackgroundColor"
+            android:layout_width="10dp"
+            android:layout_height="10dp"
+            app:cardCornerRadius="5dp"
+            app:layout_constraintBottom_toBottomOf="@+id/dividerMiddleLine"
+            app:layout_constraintStart_toEndOf="@+id/dividerMiddleLine"
+            app:layout_constraintTop_toTopOf="@+id/dividerMiddleLine"
+            app:strokeWidth="0dp" />
+
+        <TextView
+            android:id="@+id/tvStartPointDateFragTransactionsDetail"
+            style="@style/TextButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="3dp"
+            android:fontFamily="@font/open_sans"
+            android:text="@string/placeholder_text_start_point_date"
+            android:textAlignment="center"
+            android:textSize="8sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@+id/leftDotFragTransactionsDetail"
+            app:layout_constraintEnd_toStartOf="@+id/dividerMiddleLine"
+            app:layout_constraintStart_toStartOf="@+id/leftDotFragTransactionsDetail"
+            tools:ignore="SmallSp" />
+
+        <TextView
+            android:id="@+id/tvEndPointDateTransactionsDetail"
+            style="@style/TextButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="3dp"
+            android:fontFamily="@font/open_sans"
+            android:text="@string/placeholder_text_end_point_date"
+            android:textAlignment="center"
+            android:textSize="8sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@+id/rightDotFragTransactionsDetail"
+            app:layout_constraintEnd_toEndOf="@+id/rightDotFragTransactionsDetail"
+            app:layout_constraintStart_toEndOf="@+id/dividerMiddleLine"
+            tools:ignore="SmallSp" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="30dp"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout"
+        app:layout_constraintVertical_bias="0.0">
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cvWidgetTotalBudgetFragTransactionsDetail"
+            style="@style/DateCardBackgroundColor"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginEnd="15dp"
+            android:layout_weight="1"
+            app:cardCornerRadius="12dp"
+            app:contentPadding="7dp"
+            app:strokeWidth="0dp"
+            tools:layout_editor_absoluteX="38dp"
+            tools:layout_editor_absoluteY="183dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <ImageView
+                    style="@style/IconColorNonClickableReverse"
+                    android:layout_width="17dp"
+                    android:layout_height="17dp"
+                    android:layout_gravity="center_horizontal"
+                    android:src="@drawable/ic_budget" />
+
+                <TextView
+                    style="@style/Text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:fontFamily="@font/open_sans"
+                    android:text="@string/text_total_budget"
+                    android:textAlignment="center"
+                    android:textSize="6sp"
+                    app:layout_constraintBottom_toBottomOf="@+id/ivReturnBackFragTransactionsDetail"
+                    app:layout_constraintStart_toEndOf="@+id/ivReturnBackFragTransactionsDetail"
+                    app:layout_constraintTop_toTopOf="@+id/ivReturnBackFragTransactionsDetail" />
+
+                <com.google.android.material.card.MaterialCardView
+                    style="@style/TextCardBackgroundColor"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    app:cardCornerRadius="8dp"
+                    app:contentPadding="2dp"
+                    app:strokeWidth="0dp">
+
+                    <TextView
+                        android:id="@+id/tvTotalBudgetFragTransactionsDetail"
+                        style="@style/MainText"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:fontFamily="@font/open_sans_bold"
+                        android:includeFontPadding="false"
+                        android:lines="1"
+                        android:text="@string/placeholder_text_income"
+                        android:textAlignment="center"
+                        app:autoSizeMaxTextSize="12sp"
+                        app:autoSizeMinTextSize="8sp"
+                        app:autoSizeTextType="uniform"
+                        app:layout_constraintBottom_toBottomOf="@+id/ivReturnBackFragTransactionsDetail"
+                        app:layout_constraintStart_toEndOf="@+id/ivReturnBackFragTransactionsDetail"
+                        app:layout_constraintTop_toTopOf="@+id/ivReturnBackFragTransactionsDetail" />
+
+                </com.google.android.material.card.MaterialCardView>
+
+            </LinearLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cvWidgetTotalExpensesFragTransactionsDetail"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="15dp"
+            android:layout_weight="1"
+            app:cardBackgroundColor="@color/bittersweet_red"
+            app:cardCornerRadius="12dp"
+            app:contentPadding="7dp"
+            app:strokeWidth="0dp"
+            tools:layout_editor_absoluteX="38dp"
+            tools:layout_editor_absoluteY="183dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <ImageView
+                    style="@style/IconColorNonClickableReverse"
+                    android:layout_width="17dp"
+                    android:layout_height="17dp"
+                    android:layout_gravity="center_horizontal"
+                    android:src="@drawable/ic_expense" />
+
+                <TextView
+                    style="@style/Text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:fontFamily="@font/open_sans"
+                    android:text="@string/text_total_expenses"
+                    android:textAlignment="center"
+                    android:textSize="6sp"
+                    app:layout_constraintBottom_toBottomOf="@+id/ivReturnBackFragTransactionsDetail"
+                    app:layout_constraintStart_toEndOf="@+id/ivReturnBackFragTransactionsDetail"
+                    app:layout_constraintTop_toTopOf="@+id/ivReturnBackFragTransactionsDetail" />
+
+                <com.google.android.material.card.MaterialCardView
+                    style="@style/TextCardBackgroundColor"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    app:cardCornerRadius="8dp"
+                    app:contentPadding="2dp"
+                    app:strokeWidth="0dp">
+
+                    <TextView
+                        android:id="@+id/tvTotalExpensesFragTransactionsDetail"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:fontFamily="@font/open_sans_bold"
+                        android:includeFontPadding="false"
+                        android:lines="1"
+                        android:text="@string/placeholder_text_expense"
+                        android:textAlignment="center"
+                        android:textColor="@color/bittersweet_red"
+                        app:autoSizeMaxTextSize="12sp"
+                        app:autoSizeMinTextSize="8sp"
+                        app:autoSizeTextType="uniform"
+                        app:layout_constraintBottom_toBottomOf="@+id/ivReturnBackFragTransactionsDetail"
+                        app:layout_constraintStart_toEndOf="@+id/ivReturnBackFragTransactionsDetail"
+                        app:layout_constraintTop_toTopOf="@+id/ivReturnBackFragTransactionsDetail" />
+
+                </com.google.android.material.card.MaterialCardView>
+
+            </LinearLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cvWidgetTotalIncomeFragTransactionsDetail"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="15dp"
+            android:layout_weight="1"
+            app:cardBackgroundColor="@color/mantis_green"
+            app:cardCornerRadius="12dp"
+            app:contentPadding="7dp"
+            app:strokeWidth="0dp"
+            tools:layout_editor_absoluteX="38dp"
+            tools:layout_editor_absoluteY="183dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <ImageView
+                    style="@style/IconColorNonClickableReverse"
+                    android:layout_width="17dp"
+                    android:layout_height="17dp"
+                    android:layout_gravity="center_horizontal"
+                    android:src="@drawable/ic_income" />
+
+                <TextView
+                    style="@style/Text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:fontFamily="@font/open_sans"
+                    android:text="@string/text_total_income"
+                    android:textAlignment="center"
+                    android:textSize="6sp"
+                    app:layout_constraintBottom_toBottomOf="@+id/ivReturnBackFragTransactionsDetail"
+                    app:layout_constraintStart_toEndOf="@+id/ivReturnBackFragTransactionsDetail"
+                    app:layout_constraintTop_toTopOf="@+id/ivReturnBackFragTransactionsDetail" />
+
+                <com.google.android.material.card.MaterialCardView
+                    style="@style/TextCardBackgroundColor"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    app:cardCornerRadius="8dp"
+                    app:contentPadding="2dp"
+                    app:strokeWidth="0dp">
+
+                    <TextView
+                        android:id="@+id/tvTotalIncomeFragTransactionsDetail"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:fontFamily="@font/open_sans_bold"
+                        android:includeFontPadding="false"
+                        android:lines="1"
+                        android:text="@string/placeholder_text_income_2"
+                        android:textAlignment="center"
+                        android:textColor="@color/mantis_green"
+                        app:autoSizeMaxTextSize="12sp"
+                        app:autoSizeMinTextSize="8sp"
+                        app:autoSizeTextType="uniform"
+                        app:layout_constraintBottom_toBottomOf="@+id/ivReturnBackFragTransactionsDetail"
+                        app:layout_constraintStart_toEndOf="@+id/ivReturnBackFragTransactionsDetail"
+                        app:layout_constraintTop_toTopOf="@+id/ivReturnBackFragTransactionsDetail" />
+
+                </com.google.android.material.card.MaterialCardView>
+
+            </LinearLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cvWidgetTotalSavedFragTransactionsDetail"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            app:cardBackgroundColor="@color/straw_yellow"
+            app:cardCornerRadius="12dp"
+            app:contentPadding="7dp"
+            app:strokeWidth="0dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <ImageView
+                    style="@style/IconColorNonClickableReverse"
+                    android:layout_width="17dp"
+                    android:layout_height="17dp"
+                    android:layout_gravity="center_horizontal"
+                    android:src="@drawable/ic_savings" />
+
+                <TextView
+                    style="@style/Text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:fontFamily="@font/open_sans"
+                    android:text="@string/text_total_saved"
+                    android:textAlignment="center"
+                    android:textSize="6sp"
+                    app:layout_constraintBottom_toBottomOf="@+id/ivReturnBackFragTransactionsDetail"
+                    app:layout_constraintStart_toEndOf="@+id/ivReturnBackFragTransactionsDetail"
+                    app:layout_constraintTop_toTopOf="@+id/ivReturnBackFragTransactionsDetail" />
+
+                <com.google.android.material.card.MaterialCardView
+                    style="@style/TextCardBackgroundColor"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    app:cardCornerRadius="8dp"
+                    app:contentPadding="2dp"
+                    app:strokeWidth="0dp">
+
+                    <TextView
+                        android:id="@+id/tvTotalSavedFragTransactionsDetail"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:fontFamily="@font/open_sans_bold"
+                        android:includeFontPadding="false"
+                        android:lines="1"
+                        android:text="@string/placeholder_text_savings"
+                        android:textAlignment="center"
+                        android:textColor="@color/straw_yellow"
+                        app:autoSizeMaxTextSize="12sp"
+                        app:autoSizeMinTextSize="8sp"
+                        app:autoSizeTextType="uniform"
+                        app:layout_constraintBottom_toBottomOf="@+id/ivReturnBackFragTransactionsDetail"
+                        app:layout_constraintStart_toEndOf="@+id/ivReturnBackFragTransactionsDetail"
+                        app:layout_constraintTop_toTopOf="@+id/ivReturnBackFragTransactionsDetail" />
+
+                </com.google.android.material.card.MaterialCardView>
+
+            </LinearLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+    </LinearLayout>
+
+    <androidx.appcompat.widget.SearchView
+        android:id="@+id/svSearchFragTransactionsDetail"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="30dp"
+        android:layout_marginEnd="30dp"
+        android:layout_marginTop="20dp"
+        style="@style/SearchInput"
+        app:queryHint="@string/hint_search"
+        app:iconifiedByDefault="false"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout"
+        app:layout_constraintVertical_bias="0.0" />
+
+
+    <com.google.android.material.divider.MaterialDivider
+        android:id="@+id/materialDivider"
+        style="@style/DateLineDividerBackgroundColor"
+        android:layout_width="match_parent"
+        android:layout_height="0.4dp"
+        android:layout_marginTop="20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/svSearchFragTransactionsDetail"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/ltLoadingFragTransactionsDetail"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="16dp"
+        android:visibility="visible"
+        style="@style/LottieLoadingIndicatorColor"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/materialDivider"
+        app:layout_constraintVertical_bias="0.0"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="true"
+        app:lottie_rawRes="@raw/lottie_loading" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvFragTransactionsDetail"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/materialDivider" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvSearchFragTransactionsDetail"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/materialDivider" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

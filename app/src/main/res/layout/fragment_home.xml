@@ -1,0 +1,687 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/ScreenBackground"
+    android:theme="@style/Theme.Material3.DayNight"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.fragment.navmenu.HomeFragment">
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fabPlusFragHome"
+        style="@style/FabPlusShapeColor"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:clickable="true"
+        android:elevation="40dp"
+        android:focusable="true"
+        app:fabCustomSize="56dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:srcCompat="@drawable/ic_add" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fabCreateNewSessionFragHome"
+        style="@style/FabPlusShapeColor"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="24dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@+id/fabPlusFragHome"
+        app:layout_constraintEnd_toEndOf="@+id/fabPlusFragHome"
+        app:layout_constraintStart_toStartOf="@+id/fabPlusFragHome"
+        app:srcCompat="@drawable/ic_new_calendar" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fabAddExpenseFragHome"
+        style="@style/FabExpenseShapeColor"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:clickable="true"
+        android:elevation="20dp"
+        android:focusable="true"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@+id/fabCreateNewSessionFragHome"
+        app:layout_constraintEnd_toEndOf="@+id/fabCreateNewSessionFragHome"
+        app:layout_constraintStart_toStartOf="@+id/fabCreateNewSessionFragHome"
+        app:srcCompat="@drawable/ic_expense" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fabAddIncomeFragHome"
+        style="@style/FabIncomeShapeColor"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:clickable="true"
+        android:elevation="20dp"
+        android:focusable="true"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@+id/fabAddExpenseFragHome"
+        app:layout_constraintEnd_toEndOf="@+id/fabAddExpenseFragHome"
+        app:layout_constraintStart_toStartOf="@+id/fabAddExpenseFragHome"
+        app:srcCompat="@drawable/ic_income" />
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/nestedScrollView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/materialCardView"
+                style="@style/MainCircleForth"
+                android:layout_width="200dp"
+                android:layout_height="200dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="20dp"
+                app:cardCornerRadius="100dp"
+                app:layout_constraintBottom_toBottomOf="@+id/materialCardView_first"
+                app:layout_constraintEnd_toEndOf="@+id/materialCardView_first"
+                app:layout_constraintStart_toStartOf="@+id/materialCardView_first"
+                app:layout_constraintTop_toTopOf="@+id/materialCardView_first"
+                app:strokeWidth="0dp" />
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/materialCardView2"
+                style="@style/MainCircleThird"
+                android:layout_width="200dp"
+                android:layout_height="200dp"
+                android:layout_marginEnd="40dp"
+                android:layout_marginBottom="8dp"
+                app:cardCornerRadius="100dp"
+                app:layout_constraintBottom_toBottomOf="@+id/materialCardView_first"
+                app:layout_constraintEnd_toEndOf="@+id/materialCardView_first"
+                app:layout_constraintStart_toStartOf="@+id/materialCardView_first"
+                app:layout_constraintTop_toTopOf="@+id/materialCardView_first"
+                app:strokeWidth="0dp" />
+
+            <com.google.android.material.card.MaterialCardView
+                style="@style/MainCircleSecond"
+                android:layout_width="200dp"
+                android:layout_height="200dp"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="16dp"
+                app:cardCornerRadius="100dp"
+                app:layout_constraintBottom_toBottomOf="@+id/materialCardView_first"
+                app:layout_constraintEnd_toEndOf="@+id/materialCardView_first"
+                app:layout_constraintStart_toStartOf="@+id/materialCardView_first"
+                app:layout_constraintTop_toTopOf="@+id/materialCardView_first"
+                app:strokeWidth="0dp" />
+
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/materialCardView_first"
+                style="@style/MainCircleFirst"
+                android:layout_width="200dp"
+                android:layout_height="200dp"
+                app:cardCornerRadius="100dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.05"
+                app:strokeWidth="0dp">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="40dp"
+                    android:layout_marginEnd="20dp"
+                    android:layout_marginBottom="40dp"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+
+                    <com.airbnb.lottie.LottieAnimationView
+                        android:id="@+id/ltLoadingDailyLimitFragHome"
+                        style="@style/LottieLoadingIndicatorColorViseVersa"
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        android:visibility="visible"
+                        app:lottie_autoPlay="true"
+                        app:lottie_loop="true"
+                        app:lottie_rawRes="@raw/lottie_loading" />
+
+
+                    <TextView
+                        android:id="@+id/tvDailyLimitFragHome"
+                        style="@style/Text"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:fontFamily="@font/open_sans_extrabold"
+                        android:gravity="center"
+                        android:includeFontPadding="false"
+                        android:maxLines="1"
+                        android:text="@string/placeholder_text_daily_limit_number"
+                        android:visibility="invisible"
+                        app:autoSizeMinTextSize="10sp"
+                        app:autoSizeTextType="uniform"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toStartOf="parent" />
+
+                    <ImageView
+                        android:id="@+id/ivDecreaseFragHome"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_decrease"
+                        android:visibility="invisible"
+                        app:layout_constraintStart_toStartOf="@+id/tvDailyLimitFragHome"
+                        app:layout_constraintTop_toTopOf="@+id/tvDailyLimitFragHome" />
+
+                    <ImageView
+                        android:id="@+id/ivIncreaseFragHome"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_increase"
+                        android:visibility="invisible"
+                        app:layout_constraintStart_toStartOf="@+id/tvDailyLimitFragHome"
+                        app:layout_constraintTop_toTopOf="@+id/tvDailyLimitFragHome" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/constraintLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/materialCardView_first"
+                app:layout_constraintVertical_bias="0.0">
+
+                <com.google.android.material.divider.MaterialDivider
+                    android:id="@+id/dividerMiddleLine"
+                    style="@style/DateLineDividerBackgroundColor"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="60dp"
+                    android:layout_marginEnd="60dp"
+                    app:dividerThickness="1dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/materialCardView4"
+                    style="@style/DateCardBackgroundColor"
+                    android:layout_width="10dp"
+                    android:layout_height="10dp"
+                    app:cardCornerRadius="5dp"
+                    app:layout_constraintBottom_toBottomOf="@+id/dividerMiddleLine"
+                    app:layout_constraintEnd_toStartOf="@+id/dividerMiddleLine"
+                    app:layout_constraintTop_toTopOf="@+id/dividerMiddleLine"
+                    app:strokeWidth="0dp" />
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/materialCardView5"
+                    style="@style/DateCardBackgroundColor"
+                    android:layout_width="10dp"
+                    android:layout_height="10dp"
+                    app:cardCornerRadius="5dp"
+                    app:layout_constraintBottom_toBottomOf="@+id/dividerMiddleLine"
+                    app:layout_constraintStart_toEndOf="@+id/dividerMiddleLine"
+                    app:layout_constraintTop_toTopOf="@+id/dividerMiddleLine"
+                    app:strokeWidth="0dp" />
+
+                <TextView
+                    android:id="@+id/tvStartPointDateFragHome"
+                    style="@style/TextButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="3dp"
+                    android:fontFamily="@font/open_sans"
+                    android:text="@string/placeholder_text_start_point_date"
+                    android:textAlignment="center"
+                    android:textSize="8sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toTopOf="@+id/materialCardView4"
+                    app:layout_constraintEnd_toStartOf="@+id/dividerMiddleLine"
+                    app:layout_constraintStart_toStartOf="@+id/materialCardView4"
+                    tools:ignore="SmallSp" />
+
+                <TextView
+                    android:id="@+id/tvEndPointDateFragHome"
+                    style="@style/TextButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="3dp"
+                    android:fontFamily="@font/open_sans"
+                    android:text="@string/placeholder_text_end_point_date"
+                    android:textAlignment="center"
+                    android:textSize="8sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toTopOf="@+id/materialCardView5"
+                    app:layout_constraintEnd_toEndOf="@+id/materialCardView5"
+                    app:layout_constraintStart_toEndOf="@+id/dividerMiddleLine"
+                    tools:ignore="SmallSp" />
+
+                <ImageView
+                    android:id="@+id/imageView2"
+                    style="@style/IconColorClickable"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="-1dp"
+                    android:src="@drawable/ic_bold_arrow_down"
+                    app:layout_constraintEnd_toStartOf="@+id/materialCardView5"
+                    app:layout_constraintStart_toEndOf="@+id/materialCardView4"
+                    app:layout_constraintTop_toBottomOf="@+id/dividerMiddleLine" />
+
+                <TextView
+                    android:id="@+id/tvCurrentDateFragHome"
+                    style="@style/TextButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="3dp"
+                    android:fontFamily="@font/open_sans_bold"
+                    android:text="@string/placeholder_text_current_date"
+                    android:textAlignment="center"
+                    android:textSize="17sp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="@+id/imageView2"
+                    app:layout_constraintStart_toStartOf="@+id/imageView2"
+                    app:layout_constraintTop_toBottomOf="@+id/imageView2" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <LinearLayout
+                android:id="@+id/lyWidgetsIncomeAndExpenseFragHome"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="30dp"
+                android:layout_marginTop="40dp"
+                android:layout_marginEnd="30dp"
+                android:orientation="horizontal"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/progressBarExpenseFragHome"
+                app:layout_constraintVertical_bias="0.0">
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/cvWidgetIncomeFragHome"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="10dp"
+                    android:layout_weight="1"
+                    app:cardBackgroundColor="@color/mantis_green"
+                    app:cardCornerRadius="28dp"
+                    app:contentPadding="15dp"
+                    app:strokeWidth="0dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal">
+
+                        <com.google.android.material.card.MaterialCardView
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"
+                            app:cardBackgroundColor="@color/white"
+                            app:cardCornerRadius="16dp"
+                            app:contentPadding="10dp"
+                            app:strokeWidth="0dp">
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:src="@drawable/ic_income" />
+                        </com.google.android.material.card.MaterialCardView>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="10dp"
+                                android:fontFamily="@font/open_sans_bold"
+                                android:text="@string/text_income"
+                                android:textColor="@color/white"
+                                android:textSize="14sp" />
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:id="@+id/tvWidgetIncomeNumberFragHome"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_marginStart="10dp"
+                                    android:fontFamily="@font/open_sans_bold"
+                                    android:text="@string/placeholder_text_income"
+                                    android:textColor="@color/white"
+                                    app:autoSizeMaxTextSize="23sp"
+                                    app:autoSizeMinTextSize="14sp"
+                                    app:autoSizeTextType="uniform" />
+
+                            </LinearLayout>
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                </com.google.android.material.card.MaterialCardView>
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/cvWidgetExpenseFragHome"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    app:cardBackgroundColor="@color/bittersweet_red"
+                    app:cardCornerRadius="28dp"
+                    app:contentPadding="15dp"
+                    app:strokeWidth="0dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal">
+
+                        <com.google.android.material.card.MaterialCardView
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"
+                            app:cardBackgroundColor="@color/white"
+                            app:cardCornerRadius="16dp"
+                            app:contentPadding="10dp"
+                            app:strokeWidth="0dp">
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:src="@drawable/ic_expense" />
+                        </com.google.android.material.card.MaterialCardView>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="10dp"
+                                android:fontFamily="@font/open_sans_bold"
+                                android:text="@string/text_expense"
+                                android:textColor="@color/white"
+                                android:textSize="14sp" />
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:id="@+id/tvWidgetExpenseNumberFragHome"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_marginStart="10dp"
+                                    android:fontFamily="@font/open_sans_bold"
+                                    android:text="@string/placeholder_text_expense"
+                                    android:textColor="@color/white"
+                                    app:autoSizeMaxTextSize="23sp"
+                                    app:autoSizeMinTextSize="14sp"
+                                    app:autoSizeTextType="uniform" />
+
+                            </LinearLayout>
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                </com.google.android.material.card.MaterialCardView>
+
+            </LinearLayout>
+
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cvWidgetSavingsFragHome"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                app:cardBackgroundColor="@color/straw_yellow"
+                app:cardCornerRadius="28dp"
+                app:contentPadding="15dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/lyWidgetsIncomeAndExpenseFragHome"
+                app:layout_constraintStart_toStartOf="@+id/lyWidgetsIncomeAndExpenseFragHome"
+                app:layout_constraintTop_toBottomOf="@+id/lyWidgetsIncomeAndExpenseFragHome"
+                app:layout_constraintVertical_bias="0.0"
+                app:strokeWidth="0dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        app:cardBackgroundColor="@color/white"
+                        app:cardCornerRadius="16dp"
+                        app:contentPadding="10dp"
+                        app:strokeWidth="0dp">
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:src="@drawable/ic_savings" />
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="10dp"
+                            android:fontFamily="@font/open_sans_bold"
+                            android:text="@string/text_savings"
+                            android:textColor="@color/white"
+                            android:textSize="14sp" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:id="@+id/tvWidgetSavingsNumberFragHome"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_marginStart="10dp"
+                                android:fontFamily="@font/open_sans_bold"
+                                android:text="@string/placeholder_text_savings"
+                                android:textColor="@color/white"
+                                app:autoSizeMaxTextSize="23sp"
+                                app:autoSizeMinTextSize="14sp"
+                                app:autoSizeTextType="uniform" />
+                        </LinearLayout>
+                    </LinearLayout>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_expense"
+                app:layout_constraintBottom_toTopOf="@+id/tvSpentMoneyFragHome"
+                app:layout_constraintEnd_toEndOf="@+id/tvSpentMoneyFragHome"
+                app:layout_constraintStart_toStartOf="@+id/tvSpentMoneyFragHome"
+                app:layout_constraintTop_toTopOf="@+id/progressBarExpenseFragHome"
+                app:layout_constraintVertical_bias="1.0" />
+
+            <TextView
+                android:id="@+id/tvSpentMoneyFragHome"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginStart="50dp"
+                android:layout_marginTop="70dp"
+                android:layout_marginEnd="50dp"
+                android:layout_marginBottom="70dp"
+                android:autoSizeMaxTextSize="100sp"
+                android:autoSizeTextType="uniform"
+                android:visibility="invisible"
+                android:fontFamily="@font/open_sans_extrabold"
+                android:gravity="center"
+                android:includeFontPadding="false"
+                android:lines="1"
+                android:text="@string/placeholder_you_have_spent"
+                android:textAlignment="center"
+                android:textColor="@color/bittersweet_red"
+                android:textSize="100sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@+id/progressBarExpenseFragHome"
+                app:layout_constraintEnd_toEndOf="@+id/progressBarExpenseFragHome"
+                app:layout_constraintStart_toStartOf="@+id/progressBarExpenseFragHome"
+                app:layout_constraintTop_toTopOf="@+id/progressBarExpenseFragHome" />
+
+            <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/ltLoadingSpentMoneyFragHome"
+                style="@style/LottieLoadingIndicatorColor"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:visibility="visible"
+                app:layout_constraintBottom_toBottomOf="@+id/progressBarExpenseFragHome"
+                app:layout_constraintEnd_toEndOf="@+id/progressBarExpenseFragHome"
+                app:layout_constraintStart_toStartOf="@+id/progressBarExpenseFragHome"
+                app:layout_constraintTop_toTopOf="@+id/progressBarExpenseFragHome"
+                app:lottie_autoPlay="true"
+                app:lottie_loop="true"
+                app:lottie_rawRes="@raw/lottie_loading" />
+
+            <com.google.android.material.progressindicator.CircularProgressIndicator
+                android:id="@+id/progressBarExpenseFragHome"
+                style="@style/ProgressIndicatorColor"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="30dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginEnd="30dp"
+                android:indeterminate="false"
+                app:indicatorDirectionCircular="clockwise"
+                app:indicatorSize="230dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/constraintLayout"
+                app:layout_constraintVertical_bias="0.0"
+                app:trackCornerRadius="20dp"
+                app:trackThickness="20dp" />
+
+            <TextView
+                android:id="@+id/tvLastExpensesFragHome"
+                style="@style/MainText"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="50dp"
+                android:layout_marginBottom="15dp"
+                android:fontFamily="@font/open_sans_bold"
+                android:text="@string/text_last_transactions"
+                android:textAlignment="center"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/cvWidgetSavingsFragHome"
+                app:layout_constraintVertical_bias="0.0" />
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cvSeeAllFragHome"
+                style="@style/SeeAllDetailsDetailsCardBackgroundColor"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="20dp"
+                app:contentPaddingBottom="5dp"
+                app:contentPaddingLeft="13dp"
+                app:contentPaddingRight="13dp"
+                app:contentPaddingTop="5dp"
+                android:clickable="false"
+                app:layout_constraintBottom_toBottomOf="@+id/tvLastExpensesFragHome"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/tvLastExpensesFragHome"
+                app:strokeWidth="0dp">
+
+                <TextView
+                    style="@style/SeeAllDetailsDetailsText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/lexend"
+                    android:includeFontPadding="false"
+                    android:text="@string/text_see_all"
+                    android:textSize="14sp" />
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <TextView
+                android:id="@+id/tvNoExpenseDataFragHome"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="20dp"
+                android:fontFamily="@font/lexend"
+                android:text="@string/text_no_data"
+                android:textAlignment="center"
+                android:textColor="@color/anti_flash_white"
+                android:visibility="visible"
+                android:textSize="18sp"
+                android:textStyle="italic"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/tvLastExpensesFragHome"
+                app:layout_constraintTop_toBottomOf="@+id/tvLastExpensesFragHome" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvLastTransactionsFragHome"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="30dp"
+                android:layout_marginEnd="30dp"
+                android:layout_marginBottom="88dp"
+                android:layout_marginTop="10dp"
+                android:visibility="gone"
+                android:nestedScrollingEnabled="false"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvLastExpensesFragHome" />
+
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>

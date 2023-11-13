@@ -1,0 +1,336 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/ScreenBackground"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.fragment.transactions.EditIncomeFragment">
+
+    <ImageView
+        android:id="@+id/ivReturnBackFragEditIncome"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="24dp"
+        style="@style/IconColorClickable"
+        android:src="@drawable/ic_return_back"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tvEditFragEditIncome"
+        style="@style/MainText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:fontFamily="@font/open_sans_bold"
+        android:text="@string/text_edit"
+        android:textAlignment="center"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/ivReturnBackFragEditIncome"
+        app:layout_constraintStart_toEndOf="@+id/ivReturnBackFragEditIncome"
+        app:layout_constraintTop_toTopOf="@+id/ivReturnBackFragEditIncome" />
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/nestedScrollView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="24dp"
+        android:fillViewport="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvEditFragEditIncome"
+        app:layout_constraintVertical_bias="0.0">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/tvAmountFragEditIncome"
+                style="@style/MainText"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="30dp"
+                android:layout_marginTop="20dp"
+                android:fontFamily="@font/open_sans"
+                android:text="@string/text_amount"
+                android:textAlignment="center"
+                android:textSize="11sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.0" />
+
+            <EditText
+                android:id="@+id/etAmountFragEditIncome"
+                style="@style/UserInput"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="30dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="10dp"
+                android:fontFamily="@font/open_sans"
+                android:hint="@string/hint_amount"
+                android:includeFontPadding="false"
+                android:inputType="numberDecimal"
+                android:padding="13dp"
+                android:textSize="18sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/tiyCurrencyFragEditIncome"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvAmountFragEditIncome"
+                app:layout_constraintVertical_bias="0.0" />
+
+            <TextView
+                android:id="@+id/tvCurrencyFragEditIncome"
+                style="@style/MainText"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/open_sans"
+                android:text="@string/text_currency"
+                android:textAlignment="center"
+                android:textSize="11sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@+id/tvAmountFragEditIncome"
+                app:layout_constraintStart_toStartOf="@+id/tiyCurrencyFragEditIncome"
+                app:layout_constraintTop_toTopOf="@+id/tvAmountFragEditIncome" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tiyCurrencyFragEditIncome"
+                style="@style/DropDownBoxColor"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="30dp"
+                app:boxCornerRadiusBottomEnd="13dp"
+                app:boxCornerRadiusBottomStart="13dp"
+                app:boxCornerRadiusTopEnd="13dp"
+                app:boxCornerRadiusTopStart="13dp"
+                app:boxStrokeWidth="0dp"
+                app:boxStrokeWidthFocused="0dp"
+                app:hintEnabled="false"
+                app:layout_constraintBottom_toBottomOf="@+id/etAmountFragEditIncome"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/etAmountFragEditIncome">
+
+                <AutoCompleteTextView
+                    android:id="@+id/actvCurrencyFragEditIncome"
+                    style="@style/DropDownTextColor"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawablePadding="-10dp"
+                    android:hint=" -    "
+                    android:inputType="none"
+                    android:textSize="18sp" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btSelectDateFragEditIncome"
+                style="@style/ButtonColor"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="30dp"
+                android:layout_marginTop="10dp"
+                android:fontFamily="@font/open_sans_bold"
+                android:minHeight="0dp"
+                android:paddingStart="10dp"
+                android:paddingTop="6dp"
+                android:paddingEnd="10dp"
+                android:paddingBottom="7dp"
+                android:text="@string/text_button_select_a_date"
+                android:textSize="14sp"
+                app:cornerRadius="16dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/etAmountFragEditIncome"
+                app:layout_constraintVertical_bias="0.0" />
+
+
+            <TextView
+                android:id="@+id/tvSelectedDateFragEditIncome"
+                style="@style/MainText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:fontFamily="@font/open_sans"
+                android:text="@string/placeholder_selected_date"
+                android:textAlignment="center"
+                android:textSize="13sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@+id/tvHyphenFragEditIncome"
+                app:layout_constraintStart_toEndOf="@+id/tvHyphenFragEditIncome"
+                app:layout_constraintTop_toTopOf="@+id/tvHyphenFragEditIncome" />
+
+            <TextView
+                android:id="@+id/tvHyphenFragEditIncome"
+                style="@style/MainText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/open_sans"
+                android:layout_marginStart="5dp"
+                android:text="-"
+                android:textAlignment="center"
+                android:textSize="13sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@+id/btSelectDateFragEditIncome"
+                app:layout_constraintStart_toEndOf="@+id/btSelectDateFragEditIncome"
+                app:layout_constraintTop_toTopOf="@+id/btSelectDateFragEditIncome" />
+
+
+            <TextView
+                android:id="@+id/tvExpenseMadeForFragEditIncome"
+                style="@style/MainText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="30dp"
+                android:layout_marginTop="30dp"
+                android:fontFamily="@font/open_sans"
+                android:text="@string/text_income_coming_from"
+                android:textAlignment="center"
+                android:textSize="11sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/btSelectDateFragEditIncome"
+                app:layout_constraintVertical_bias="0.0" />
+
+            <ScrollView
+                android:id="@+id/scrollView2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="60dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvExpenseMadeForFragEditIncome"
+                app:layout_constraintVertical_bias="0.0">
+
+                <LinearLayout
+                    android:id="@+id/parentContainerLayoutFragEditIncome"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:animateLayoutChanges="true"
+                    android:paddingTop="4dp"
+                    android:paddingStart="30dp"
+                    android:paddingEnd="30dp"
+                    android:clipChildren="false"
+                    android:orientation="vertical">
+
+                    <AutoCompleteTextView
+                        android:id="@+id/etIncomeCategoryFragEditIncome"
+                        style="@style/UserInput"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="7dp"
+                        android:fontFamily="@font/open_sans"
+                        android:completionThreshold="1"
+                        android:dropDownVerticalOffset="8dp"
+                        android:hint="@string/hint_income_category"
+                        android:includeFontPadding="false"
+                        android:inputType="text"
+                        android:maxLines="1"
+                        android:maxLength="35"
+                        android:padding="13dp"
+                        android:textSize="18sp" />
+                </LinearLayout>
+
+            </ScrollView>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btAddMoreFragEditIncome"
+                style="@style/ButtonColor"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/open_sans"
+                android:layout_marginStart="30dp"
+                android:minHeight="0dp"
+                android:paddingTop="6dp"
+                android:paddingBottom="7dp"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
+                android:text="@string/text_button_add_more"
+                android:textSize="14sp"
+                app:cornerRadius="16dp"
+                app:icon="@drawable/ic_down_arrow"
+                app:iconSize="13dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/scrollView2" />
+
+            <TextView
+                android:id="@+id/tvDescriptionFragEditIncome"
+                style="@style/MainText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="30dp"
+                android:fontFamily="@font/open_sans"
+                android:text="@string/text_description"
+                android:textAlignment="center"
+                android:textSize="11sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toTopOf="@+id/etDescriptionFragEditIncome"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <EditText
+                android:id="@+id/etDescriptionFragEditIncome"
+                style="@style/UserInput"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginStart="30dp"
+                android:layout_marginEnd="30dp"
+                android:layout_marginTop="70dp"
+                android:fontFamily="@font/open_sans"
+                android:gravity="top"
+                android:hint="@string/hint_income_description"
+                android:includeFontPadding="false"
+                android:inputType="textMultiLine"
+                android:minHeight="200dp"
+                android:padding="13dp"
+                android:textSize="18sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/scrollView2" />
+
+            <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/ltLoadingFragEditIncome"
+                style="@style/LottieLoadingIndicatorColor"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="@+id/btSaveFragEditIncome"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/btSaveFragEditIncome"
+                app:lottie_autoPlay="true"
+                app:lottie_loop="true"
+                app:lottie_rawRes="@raw/lottie_loading" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btSaveFragEditIncome"
+                style="@style/ButtonColor"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="30dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="30dp"
+                android:layout_marginBottom="10dp"
+                android:fontFamily="@font/open_sans_bold"
+                android:text="@string/text_button_save"
+                android:textSize="32sp"
+                app:cornerRadius="16dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/etDescriptionFragEditIncome"
+                app:layout_constraintVertical_bias="1.0" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
