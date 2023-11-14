@@ -126,6 +126,7 @@ class DateFrameViewModel @Inject constructor(
 
     fun clearAllTransactionPairs () {
         _allTransactionPairs.value = listOf()
+        _selectedTransaction = null
     }
 
     fun setSelectionState (transaction: Transaction) {
@@ -134,15 +135,15 @@ class DateFrameViewModel @Inject constructor(
         if (selectedTransaction == null) {
             updatedPairList = updateTransactionPairList(allTransactionPairs.value, transaction, true)
         } else {
-            if (selectedTransaction?.transactionId == transaction.transactionId) {
-                updatedPairList = updateTransactionPairList(allTransactionPairs.value, selectedTransaction!!, false)
-            } else {
+//            if (selectedTransaction?.transactionId == transaction.transactionId) {
+//                updatedPairList = updateTransactionPairList(allTransactionPairs.value, selectedTransaction!!, false)
+//            } else {
 
                 updatedPairList = updateTransactionPairList(
                     updateTransactionPairList(allTransactionPairs.value, selectedTransaction!!, false),
                     transaction,
                     true)
-            }
+//            }
         }
 
         _allTransactionPairs.value = updatedPairList
@@ -153,11 +154,11 @@ class DateFrameViewModel @Inject constructor(
         val foundTransactionPair = transactionPairList.find { tr -> tr.dateLimit.date == transaction.date }
         val transactionList = foundTransactionPair?.transactionList
         val updatedTransactionList = updateTransactionListWith(state, transactionList!!, transaction)
-        if (state) {
+//        if (state) {
             _selectedTransaction = updatedTransactionList.find { t -> t.isSelected }
-        } else {
-            _selectedTransaction = null
-        }
+//        } else {
+//            _selectedTransaction = null
+//        }
         val updatedPair = foundTransactionPair.copy(transactionList = updatedTransactionList)
         updatedPairList = transactionPairList.map { transactionPair ->
             if (transactionPair.dateLimit.date == updatedPair.dateLimit.date) {
@@ -183,6 +184,8 @@ class DateFrameViewModel @Inject constructor(
                     transactionDescription = mappedTransaction.transactionDescription
                     date = mappedTransaction.date
                     transactionType = mappedTransaction.transactionType
+                    dateFrameId = mappedTransaction.dateFrameId
+                    dateLimitId = mappedTransaction.dateLimitId
                     isSelected = state
                 }
                 updatedTransaction

@@ -14,16 +14,21 @@ import android.widget.EditText
 import android.widget.ImageView
 import androidx.activity.OnBackPressedCallback
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.example.cashcontrol.R
+import com.example.cashcontrol.data.db.entity.DateFrame
+import com.example.cashcontrol.data.db.entity.income.Income
 import com.example.cashcontrol.databinding.FragmentAddIncomeBinding
 import com.example.cashcontrol.ui.viewmodel.DateFrameViewModel
 import com.example.cashcontrol.ui.viewmodel.DateLimitViewModel
 import com.example.cashcontrol.ui.viewmodel.ProfileViewModel
 import com.example.cashcontrol.ui.viewmodel.TransactionViewModel
 import com.example.cashcontrol.ui.viewmodel.UserViewModel
+import com.example.cashcontrol.util.MessageUtil.showErrorMessage
 import com.example.cashcontrol.util.constant.DateConstant.DATE_LIMIT_DATE_PATTERN
 import com.example.cashcontrol.util.constant.UIStateConstant.ADDITIONAL_TRANSACTION_CATEGORY_LIST_KEY
 import com.example.cashcontrol.util.constant.UIStateConstant.CUSTOM_TRANSACTION_DATE_KEY
@@ -33,8 +38,6 @@ import com.example.cashcontrol.util.constant.UIStateConstant.TRANSACTION_AMOUNT_
 import com.example.cashcontrol.util.constant.UIStateConstant.TRANSACTION_CURRENCY_KEY
 import com.example.cashcontrol.util.constant.UIStateConstant.TRANSACTION_DESCRIPTION_KEY
 import com.google.android.material.datepicker.MaterialDatePicker
-import com.google.android.material.snackbar.BaseTransientBottomBar
-import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.time.Instant
@@ -63,6 +66,8 @@ class AddIncomeFragment : Fragment() {
         val currencyArrayAdapter = ArrayAdapter(requireContext(), R.layout.app_dropdown_item, resources.getStringArray(R.array.currencies))
         binding.actvCurrencyFragAddIncome.setAdapter(currencyArrayAdapter)
 
+        setCacheCategoryDropDownList(binding.etIncomeSourceFragAddIncome)
+
         requireActivity().onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true){
             override fun handleOnBackPressed() {
                 findNavController().popBackStack()
@@ -81,7 +86,7 @@ class AddIncomeFragment : Fragment() {
                     tvSelectedDateFragAddIncome.text = bundle.getString(CUSTOM_TRANSACTION_DATE_KEY)
                 }
 
-                etIncomeCategoryFragAddIncome.setText(bundle.getString(INITIAL_TRANSACTION_CATEGORY_KEY))
+                etIncomeSourceFragAddIncome.setText(bundle.getString(INITIAL_TRANSACTION_CATEGORY_KEY))
                 etDescriptionFragAddIncome.setText(bundle.getString(TRANSACTION_DESCRIPTION_KEY))
 
                 val additionalExpenseCategoryList = bundle.getStringArrayList(ADDITIONAL_TRANSACTION_CATEGORY_LIST_KEY)?.toList()
@@ -126,66 +131,86 @@ class AddIncomeFragment : Fragment() {
             }
 
             btSelectDateFragAddIncome.setOnClickListener {
-                showMaterialDatePickerDialog {
-                    it.addOnPositiveButtonClickListener { selection ->
-                        val selectedDate = Instant.ofEpochMilli(selection).atZone(ZoneId.systemDefault()).toLocalDate()
+                viewLifecycleOwner.lifecycleScope.launch {
+                    repeatOnLifecycle(Lifecycle.State.STARTED) {
+                        getUnfinishedDateFrame()?.let { unfinishedDateFrame ->
+                            showMaterialDatePickerDialog {
+                                it.addOnPositiveButtonClickListener { selection ->
+                                    val selectedDate = Instant.ofEpochMilli(selection).atZone(ZoneId.systemDefault()).toLocalDate()
 
-//                        dateFrameViewModel.unfinishedDateFrame.value?.let { unfinishedDf ->
-//                            val startPointDate = LocalDate.parse(unfinishedDf.startPointDate, DateTimeFormatter.ofPattern(DATE_LIMIT_DATE_PATTERN))
-//
-//                            if (selectedDate > LocalDate.now()) {
-//                                showErrorMessage("You cannot choose future dates..")
-//                            } else if (selectedDate < startPointDate) {
-//                                showErrorMessage("The chosen date must not be earlier than the start point (${unfinishedDf.startPointDate}) date!")
-//                            } else {
-//                                tvHyphenFragHome.visibility = View.VISIBLE
-//                                tvSelectedDateFragAddIncome.visibility = View.VISIBLE
-//                                tvSelectedDateFragAddIncome.text = selectedDate.format(DateTimeFormatter.ofPattern(DATE_LIMIT_DATE_PATTERN))
-//                            }
-//                        }
+                                    val startPointDate = LocalDate.parse(unfinishedDateFrame.startPointDate, DateTimeFormatter.ofPattern(DATE_LIMIT_DATE_PATTERN))
+
+                                    if (selectedDate > LocalDate.now()) {
+                                        showErrorMessage("You cannot choose future dates..", binding)
+                                    } else if (selectedDate < startPointDate) {
+                                        showErrorMessage("The chosen date must not be earlier than the start point (${unfinishedDateFrame.startPointDate}) date!", binding)
+                                    } else {
+                                        tvHyphenFragHome.visibility = View.VISIBLE
+                                        tvSelectedDateFragAddIncome.visibility = View.VISIBLE
+                                        tvSelectedDateFragAddIncome.text = selectedDate.format(DateTimeFormatter.ofPattern(DATE_LIMIT_DATE_PATTERN))
+                                    }
+                                }
+                                it.show(childFragmentManager, "date_selection")
+                            }
+                        }
                     }
-                    it.show(childFragmentManager, "date_selection")
                 }
             }
 
             btAddIncomeFragAddIncome.setOnClickListener {
-                lifecycleScope.launch {
-                    val expenseDate = if (rbCustomDateFragAddIncome.isChecked) {
-                        tvSelectedDateFragAddIncome.text.toString()
-                    } else {
-                        LocalDate.now().format(DateTimeFormatter.ofPattern(DATE_LIMIT_DATE_PATTERN))
-                    }
+                viewLifecycleOwner.lifecycleScope.launch {
+                    repeatOnLifecycle(Lifecycle.State.STARTED) {
+                        getUnfinishedDateFrame()?.let { unfinishedDateFrame ->
+                            dateLimitViewModel.getCurrentDateLimitByDateFrame(unfinishedDateFrame.dateFrameId!!)?.let { currentDateLimit ->
+                                val dateLimitIdForSelectedExpenseDate = when {
+                                    rbCustomDateFragAddIncome.isChecked -> {
+                                        dateLimitViewModel.getDateLimitOfDateFrameByDate(
+                                            unfinishedDateFrame.dateFrameId!!,
+                                            tvSelectedDateFragAddIncome.text.toString()
+                                        )
+                                    }
+                                    else -> { currentDateLimit }
+                                }
 
-//                    if (checkForEmptyColumns()) {
-//                        dateLimitViewModel.currentDateLimit.value?.let {
-//                            if (isSingleIncome()) {
-//                                transactionViewModel.upsertTransaction(SingleIncome(
-//                                    etAmountFragAddIncome.text.toString().toDouble(),
-//                                    actvCurrencyFragAddIncome.text.toString(),
-//                                    etIncomeCategoryFragAddIncome.text.toString(),
-//                                    etDescriptionFragAddIncome.text.toString(),
-//                                    expenseDate))
-//                                userViewModel.cacheNewIncomeCategory(etIncomeCategoryFragAddIncome.text.toString())
-//                            } else {
-//                                val incomeCategoryList = getAllIncomeCategoryList()
-//                                transactionViewModel.upsertTransaction(BatchIncome(
-//                                    etAmountFragAddIncome.text.toString().toDouble(),
-//                                    actvCurrencyFragAddIncome.text.toString(),
-//                                    incomeCategoryList,
-//                                    etDescriptionFragAddIncome.text.toString(),
-//                                    expenseDate))
-//                                userViewModel.cacheNewIncomeCategory(incomeCategoryList)
-//                            }
-//                            updateButtonToLoadingState()
-//                            dateFrameViewModel.updateIncomeAmount(etAmountFragAddIncome.text.toString().toDouble())
-//                            dateLimitViewModel.setIncomesForDate()
-//                            profileViewModel.setProfileWithDateFrames()
-//                            delay(1500) // JUST TO SIMULATE LOADING..
-//                            dateFrameViewModel.uiAnimState = false
-//                            dateLimitViewModel.uiAnimState = false
-//                            findNavController().navigate(AddIncomeFragmentDirections.actionAddIncomeFragmentToMainSession())
-//                        }
-//                    }
+                                if (checkForEmptyColumns()) {
+                                    if (isSingleExpense()) {
+                                        transactionViewModel.upsertTransaction(
+                                            Income(
+                                                etAmountFragAddIncome.text.toString().toDouble(),
+                                                actvCurrencyFragAddIncome.text.toString(),
+                                                etIncomeSourceFragAddIncome.text.toString(),
+                                                mutableListOf(),
+                                                etDescriptionFragAddIncome.text.toString(),
+                                                dateLimitIdForSelectedExpenseDate?.dateLimitId!!,
+                                                dateLimitIdForSelectedExpenseDate.date,
+                                                unfinishedDateFrame.dateFrameId!!
+                                            )
+                                        )
+                                        userViewModel.cacheNewIncomeSource(etIncomeSourceFragAddIncome.text.toString())
+                                    } else {
+                                        val incomeSourceList = getAllIncomeSourceList()
+                                        transactionViewModel.upsertTransaction(
+                                            Income(
+                                                etAmountFragAddIncome.text.toString().toDouble(),
+                                                actvCurrencyFragAddIncome.text.toString(),
+                                                "",
+                                                incomeSourceList,
+                                                etDescriptionFragAddIncome.text.toString(),
+                                                dateLimitIdForSelectedExpenseDate?.dateLimitId!!,
+                                                dateLimitIdForSelectedExpenseDate.date,
+                                                unfinishedDateFrame.dateFrameId!!
+                                            )
+                                        )
+                                        userViewModel.cacheNewIncomeSource(incomeSourceList)
+                                    }
+                                    updateButtonToLoadingState()
+                                    dateFrameViewModel.updateIncomeAmount(etAmountFragAddIncome.text.toString().toDouble(), unfinishedDateFrame)
+                                    delay(1500) // JUST TO SIMULATE LOADING..
+                                    findNavController().navigate(AddIncomeFragmentDirections.actionAddIncomeFragmentToMainSession())
+                                }
+                            }
+                        }
+                    }
                 }
             }
 
@@ -223,18 +248,26 @@ class AddIncomeFragment : Fragment() {
         }
     }
 
+    private suspend fun getUnfinishedDateFrame(): DateFrame? {
+        userViewModel.getOnlineUser()?.let { onlineUser ->
+            profileViewModel.getOnlineProfileById(onlineUser.userId!!)?.let { onlineProfile ->
+                dateFrameViewModel.getUnfinishedDateFrameByProfile(onlineProfile.profileId!!)?.let { unfinishedDateFrame ->
+                    return unfinishedDateFrame
+                }
+            }
+        }
+
+        return null
+    }
+
     private fun setCacheCategoryDropDownList (autoCompleteTextView: AutoCompleteTextView) {
-//        userViewModel.onlineUser.value?.let {  onlineUser ->
-//            if (onlineUser.cachedIncomeCategories.isNotEmpty()) {
-//                val cachedExpenseCategories = ArrayAdapter(requireContext(),
-//                    R.layout.item_layout_cached_categories,
-//                    R.id.tvCategoryName,
-//                    onlineUser.cachedIncomeCategories.toTypedArray()
-//                    )
-//
-//                autoCompleteTextView.setAdapter(cachedExpenseCategories)
-//            }
-//        }
+        if (userViewModel.cachedIncomeSources.isNotEmpty()) {
+            val cachedCategoriesListAdapter = ArrayAdapter(
+                requireContext(),
+                R.layout.item_layout_cached_categories, R.id.tvCategoryName, userViewModel.cachedIncomeSources.toTypedArray()
+            )
+            autoCompleteTextView.setAdapter(cachedCategoriesListAdapter)
+        }
     }
 
     private fun updateAddMoreButton () {
@@ -246,7 +279,7 @@ class AddIncomeFragment : Fragment() {
         val expenseAmount = binding.etAmountFragAddIncome.text.toString()
         val currency = binding.actvCurrencyFragAddIncome.text.toString()
 
-        val initialExpenseCategory = binding.etIncomeCategoryFragAddIncome.text.toString()
+        val initialExpenseCategory = binding.etIncomeSourceFragAddIncome.text.toString()
         var isAdditionalExpenseCategoriesNotEmpty = true
 
         val parentLayout = binding.parentContainerLayoutFragAddIncome
@@ -263,25 +296,25 @@ class AddIncomeFragment : Fragment() {
 
         when {
             expenseAmount.isEmpty() -> {
-                showErrorMessage("Consider adding expense amount..")
+                showErrorMessage("Consider adding expense amount..", binding)
                 isReady = false
             }
             currency.isEmpty() -> {
-                showErrorMessage("Please select currency..")
+                showErrorMessage("Please select currency..", binding)
                 isReady = false
             }
             initialExpenseCategory.isEmpty() -> {
-                showErrorMessage("Please write at least one expense category..")
+                showErrorMessage("Please write at least one expense category..", binding)
                 isReady = false
             }
             !isAdditionalExpenseCategoriesNotEmpty -> {
-                showErrorMessage("Please fill additionally added expense categories or delete unused ones..")
+                showErrorMessage("Please fill additionally added expense categories or delete unused ones..", binding)
                 isReady = false
             }
             else -> {
                 if (binding.rgDateSelectionFragAddIncome.checkedRadioButtonId == binding.rbCustomDateFragAddIncome.id) {
                     if (binding.tvSelectedDateFragAddIncome.text.isEmpty()) {
-                        showErrorMessage("Please select an expense date..")
+                        showErrorMessage("Please select an expense date..", binding)
                         isReady = false
                     } else {
                         isReady = true
@@ -295,7 +328,7 @@ class AddIncomeFragment : Fragment() {
         return isReady
     }
 
-    private fun getAdditionalExpenseCategoryList (): MutableList<String> {
+    private fun getAdditionalIncomeSourceList (): MutableList<String> {
         val parentLayout = binding.parentContainerLayoutFragAddIncome
         val expenseCategoryList: MutableList<String> = mutableListOf()
 
@@ -309,11 +342,11 @@ class AddIncomeFragment : Fragment() {
         return expenseCategoryList
     }
 
-    private fun getAllIncomeCategoryList (): MutableList<String> {
+    private fun getAllIncomeSourceList (): MutableList<String> {
         val parentLayout = binding.parentContainerLayoutFragAddIncome
         val expenseCategoryList: MutableList<String> = mutableListOf()
 
-        expenseCategoryList.add(binding.etIncomeCategoryFragAddIncome.text.toString())
+        expenseCategoryList.add(binding.etIncomeSourceFragAddIncome.text.toString())
 
         for (i in 1 until parentLayout.childCount) {
             val childView = parentLayout.getChildAt(i) as ConstraintLayout
@@ -330,7 +363,7 @@ class AddIncomeFragment : Fragment() {
 
         binding.apply {
             outState.putString(TRANSACTION_AMOUNT_KEY, etAmountFragAddIncome.text.toString())
-            outState.putString(INITIAL_TRANSACTION_CATEGORY_KEY, etIncomeCategoryFragAddIncome.text.toString())
+            outState.putString(INITIAL_TRANSACTION_CATEGORY_KEY, etIncomeSourceFragAddIncome.text.toString())
             outState.putString(TRANSACTION_DESCRIPTION_KEY, etDescriptionFragAddIncome.text.toString())
 
             if (tvSelectedDateFragAddIncome.text.toString().isNotEmpty()) {
@@ -340,7 +373,7 @@ class AddIncomeFragment : Fragment() {
             }
 
             if (parentContainerLayoutFragAddIncome.childCount > 1) {
-                outState.putStringArrayList(ADDITIONAL_TRANSACTION_CATEGORY_LIST_KEY, ArrayList(getAdditionalExpenseCategoryList()))
+                outState.putStringArrayList(ADDITIONAL_TRANSACTION_CATEGORY_LIST_KEY, ArrayList(getAdditionalIncomeSourceList()))
             } else {
                 outState.putStringArrayList(ADDITIONAL_TRANSACTION_CATEGORY_LIST_KEY, ArrayList(listOf()))
             }
@@ -359,7 +392,7 @@ class AddIncomeFragment : Fragment() {
 
     }
 
-    private fun isSingleIncome (): Boolean {
+    private fun isSingleExpense (): Boolean {
         val parentLayout = binding.parentContainerLayoutFragAddIncome
         return parentLayout.childCount == 1
     }
@@ -383,12 +416,4 @@ class AddIncomeFragment : Fragment() {
             ltLoadingFragAddIncome.visibility = View.VISIBLE
         }
     }
-
-    private fun showErrorMessage (message: String) {
-        Snackbar.make(binding.root,message, Snackbar.LENGTH_SHORT)
-            .setAnimationMode(BaseTransientBottomBar.ANIMATION_MODE_FADE)
-            .setBackgroundTint(resources.getColor(R.color.bittersweet_red, null))
-            .show()
-    }
-
 }

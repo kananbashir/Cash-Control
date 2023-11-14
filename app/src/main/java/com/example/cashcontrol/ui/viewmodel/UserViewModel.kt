@@ -18,7 +18,7 @@ class UserViewModel @Inject constructor(
     val allUsers: Flow<List<User>> get() = _allUsers
 
     var cachedExpenseCategories: Set<String> = setOf()
-    var cachedIncomeCategories: Set<String> = setOf()
+    var cachedIncomeSources: Set<String> = setOf()
 
     fun upsertUser (user: User) = viewModelScope.launch {
         cashControlRepository.userLocal.upsertUser(user)
@@ -58,7 +58,7 @@ class UserViewModel @Inject constructor(
 
     fun updateCachedCategories(onlineUser: User) {
         cachedExpenseCategories = onlineUser.cachedExpenseCategories
-        cachedIncomeCategories = onlineUser.cachedIncomeCategories
+        cachedIncomeSources = onlineUser.cachedIncomeCategories
     }
 
     suspend fun cacheNewExpenseCategory (expenseCategory: String) {
@@ -75,16 +75,16 @@ class UserViewModel @Inject constructor(
         }
     }
 
-    suspend fun cacheNewIncomeCategory(incomeCategory: String) {
+    suspend fun cacheNewIncomeSource(incomeSource: String) {
         getOnlineUser()?.let {
-            it.cachedIncomeCategories.add(incomeCategory)
+            it.cachedIncomeCategories.add(incomeSource)
             upsertUser(it)
         }
     }
 
-    suspend fun cacheNewIncomeCategory(incomeCategoryList: List<String>) {
+    suspend fun cacheNewIncomeSource(incomeSourceList: List<String>) {
         getOnlineUser()?.let {
-            it.cachedIncomeCategories.addAll(incomeCategoryList)
+            it.cachedIncomeCategories.addAll(incomeSourceList)
             upsertUser(it)
         }
     }

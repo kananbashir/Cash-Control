@@ -29,6 +29,10 @@ class TransactionLocalDataSource @Inject constructor(private val transactionDao:
         return transactionDao.getAllTransactionsByDateFrame(dateFrameId)
     }
 
+    suspend fun getTransactionOfDateFrameById (dateFrameId: Int, transactionId: Int): List<Transaction> {
+        return transactionDao.getTransactionOfDateFrameById(dateFrameId, transactionId)
+    }
+
     suspend fun getAllExpensesByDateFrame (dateFrameId: Int): List<Transaction> {
         return transactionDao.getAllExpensesByDateFrame(TRANSACTION_TYPE_EXPENSE, dateFrameId)
     }

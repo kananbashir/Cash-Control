@@ -45,4 +45,12 @@ class TransactionViewModel @Inject constructor(private val cashControlRepository
     fun deleteTransaction (transaction: Transaction) = viewModelScope.launch {
         cashControlRepository.transactionsLocal.deleteTransaction(transaction)
     }
+
+    suspend fun getTransactionOfDateFrameById (dateFrameId: Int, transactionId: Int): Transaction? {
+        val transactionList = cashControlRepository.transactionsLocal.getTransactionOfDateFrameById(dateFrameId, transactionId)
+        if (transactionList.isNotEmpty()) {
+            return transactionList.first()
+        }
+        return null
+    }
 }

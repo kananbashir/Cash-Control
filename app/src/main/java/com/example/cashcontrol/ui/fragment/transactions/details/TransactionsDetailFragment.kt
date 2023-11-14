@@ -76,7 +76,7 @@ class TransactionsDetailFragment : Fragment(), TransactionDetailsChildListener {
             }
 
             ivReturnBackFragTransactionsDetail.setOnClickListener {
-//                dateLimitViewModel.clearPairList()
+                dateFrameViewModel.clearAllTransactionPairs()
                 findNavController().popBackStack()
             }
 
@@ -116,9 +116,8 @@ class TransactionsDetailFragment : Fragment(), TransactionDetailsChildListener {
                     val materialAlertDialog = MaterialAlertDialogBuilder(requireContext())
                     materialAlertDialog.setMessage("Are you sure you want to delete this transaction?")
                         .setPositiveButton("Yes") { _, _ ->
-                            dateFrameViewModel.clearAllTransactionPairs()
-                            dateFrameViewModel.setSelectionState(it)
                             transactionViewModel.deleteTransaction(it)
+                            dateFrameViewModel.clearAllTransactionPairs()
                         }
                         .setNegativeButton("No") { dialogInterface, _ ->
                             dialogInterface.cancel()

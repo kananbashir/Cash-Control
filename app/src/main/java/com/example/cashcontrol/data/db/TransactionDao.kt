@@ -29,6 +29,10 @@ interface TransactionDao {
     suspend fun getAllTransactionsByDateFrame (dateFrameId: Int): List<Transaction>
 
     @androidx.room.Transaction
+    @Query ("SELECT * FROM transaction_table WHERE dateFrameId = :dateFrameId AND transactionId = :transactionId")
+    suspend fun getTransactionOfDateFrameById (dateFrameId: Int, transactionId: Int): List<Transaction>
+
+    @androidx.room.Transaction
     @Query ("SELECT * FROM transaction_table WHERE transactionType = :transactionType AND dateFrameId = :dateFrameId")
     suspend fun getAllExpensesByDateFrame (transactionType: String, dateFrameId: Int): List<Transaction>
 
