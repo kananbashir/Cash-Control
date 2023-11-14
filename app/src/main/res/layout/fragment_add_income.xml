@@ -245,7 +245,7 @@
                 android:layout_marginStart="30dp"
                 android:layout_marginTop="30dp"
                 android:fontFamily="@font/open_sans"
-                android:text="@string/text_expenses_made_for"
+                android:text="@string/text_income_coming_from"
                 android:textAlignment="center"
                 android:textSize="11sp"
                 android:textStyle="bold"
@@ -276,7 +276,7 @@
                     android:orientation="vertical">
 
                     <AutoCompleteTextView
-                        android:id="@+id/etIncomeCategoryFragAddIncome"
+                        android:id="@+id/etIncomeSourceFragAddIncome"
                         style="@style/UserInput"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"

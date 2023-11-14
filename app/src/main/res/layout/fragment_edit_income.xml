@@ -223,7 +223,7 @@
                     android:orientation="vertical">
 
                     <AutoCompleteTextView
-                        android:id="@+id/etIncomeCategoryFragEditIncome"
+                        android:id="@+id/etIncomeSourceFragEditIncome"
                         style="@style/UserInput"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
