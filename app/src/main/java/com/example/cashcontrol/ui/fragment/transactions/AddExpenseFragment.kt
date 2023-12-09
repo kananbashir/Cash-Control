@@ -44,6 +44,7 @@ import java.time.Instant
 import java.time.LocalDate
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
+import java.util.Locale
 
 class AddExpenseFragment : Fragment() {
     private lateinit var binding: FragmentAddExpenseBinding
@@ -141,21 +142,21 @@ class AddExpenseFragment : Fragment() {
 
                                     val startPointDate = LocalDate.parse(
                                         unfinishedDateFrame.startPointDate,
-                                        DateTimeFormatter.ofPattern(DATE_LIMIT_DATE_PATTERN)
+                                        DateTimeFormatter.ofPattern(DATE_LIMIT_DATE_PATTERN, Locale.US)
                                     )
 
                                     if (selectedDate > LocalDate.now()) {
-                                        showErrorMessage("You cannot choose future dates..", binding)
+                                        showErrorMessage(resources.getString(R.string.error_message_add_expense_future_date_selected), binding)
                                     } else if (selectedDate < startPointDate) {
                                         showErrorMessage(
-                                            "The chosen date must not be earlier than the start point (${unfinishedDateFrame.startPointDate}) date!",
+                                            resources.getString(R.string.error_message_add_expense_earlier_date_selected, unfinishedDateFrame.startPointDate),
                                             binding
                                         )
                                     } else {
                                         tvHyphenFragAddExpense.visibility = View.VISIBLE
                                         tvSelectedDateFragAddExpense.visibility = View.VISIBLE
                                         tvSelectedDateFragAddExpense.text =
-                                            selectedDate.format(DateTimeFormatter.ofPattern(DATE_LIMIT_DATE_PATTERN))
+                                            selectedDate.format(DateTimeFormatter.ofPattern(DATE_LIMIT_DATE_PATTERN, Locale.US))
                                     }
 
                                 }
@@ -260,7 +261,7 @@ class AddExpenseFragment : Fragment() {
     private suspend fun getUnfinishedDateFrame(): DateFrame? {
         userViewModel.getOnlineUser()?.let { onlineUser ->
             profileViewModel.getOnlineProfileById(onlineUser.userId!!)?.let { onlineProfile ->
-                dateFrameViewModel.getUnfinishedDateFrameByProfile(onlineProfile.profileId!!)?.let { unfinishedDateFrame ->
+                dateFrameViewModel.getUnfinishedAndOnlineDateFrameByProfile(onlineProfile.profileId!!)?.let { unfinishedDateFrame ->
                     return unfinishedDateFrame
                 }
             }
@@ -294,25 +295,25 @@ class AddExpenseFragment : Fragment() {
 
         when {
             expenseAmount.isEmpty() -> {
-                showErrorMessage("Consider adding expense amount..", binding)
+                showErrorMessage(resources.getString(R.string.error_message_add_expense_no_amount_added), binding)
                 isReady = false
             }
             currency.isEmpty() -> {
-                showErrorMessage("Please select currency..", binding)
+                showErrorMessage(resources.getString(R.string.error_message_add_expense_no_currency_selected), binding)
                 isReady = false
             }
             initialExpenseCategory.isEmpty() -> {
-                showErrorMessage("Please write at least one expense category..", binding)
+                showErrorMessage(resources.getString(R.string.error_message_add_expense_no_expense_category_added), binding)
                 isReady = false
             }
             !isAdditionalExpenseCategoriesNotEmpty -> {
-                showErrorMessage("Please fill additionally added expense categories or delete unused ones..", binding)
+                showErrorMessage(resources.getString(R.string.error_message_add_expense_empty_additional_category_column), binding)
                 isReady = false
             }
             else -> {
                 if (binding.rgDateSelectionFragAddExpense.checkedRadioButtonId == binding.rbCustomDateFragAddExpense.id) {
                     if (binding.tvSelectedDateFragAddExpense.text.isEmpty()) {
-                        showErrorMessage("Please select an expense date..", binding)
+                        showErrorMessage(resources.getString(R.string.error_message_add_expense_no_date_selected), binding)
                         isReady = false
                     } else {
                         isReady = true
@@ -372,9 +373,8 @@ class AddExpenseFragment : Fragment() {
     }
 
     private fun showMaterialDatePickerDialog (callback: (MaterialDatePicker<Long>) -> Unit) {
-        var materialDatePicker: MaterialDatePicker<Long>? = null
-            materialDatePicker = MaterialDatePicker.Builder.datePicker()
-                .setTitleText("Select expense date")
+        val materialDatePicker: MaterialDatePicker<Long> = MaterialDatePicker.Builder.datePicker()
+                .setTitleText(resources.getString(R.string.date_picker_title_text_expense_date))
                 .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
                 .build()
 

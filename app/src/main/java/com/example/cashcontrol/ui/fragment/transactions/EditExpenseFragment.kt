@@ -45,6 +45,7 @@ import java.time.Instant
 import java.time.LocalDate
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
+import java.util.Locale
 
 @AndroidEntryPoint
 class EditExpenseFragment : Fragment() {
@@ -72,11 +73,11 @@ class EditExpenseFragment : Fragment() {
         requireActivity().onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
                 val materialAlertDialog = MaterialAlertDialogBuilder(requireContext())
-                materialAlertDialog.setMessage("Are you sure you want to discard all changes?")
-                    .setPositiveButton("Yes") { _, _ ->
+                materialAlertDialog.setMessage(resources.getString(R.string.alert_message_edit_expense_discard))
+                    .setPositiveButton(resources.getString(R.string.alert_dialog_positive_yes)) { _, _ ->
                         findNavController().popBackStack()
                     }
-                    .setNegativeButton("No") { dialogInterface, _ ->
+                    .setNegativeButton(resources.getString(R.string.alert_dialog_negative_no)) { dialogInterface, _ ->
                         dialogInterface.cancel()
                     }
                     .show()
@@ -133,14 +134,17 @@ class EditExpenseFragment : Fragment() {
                                 it.addOnPositiveButtonClickListener { selection ->
                                     val selectedDate = Instant.ofEpochMilli(selection).atZone(ZoneId.systemDefault()).toLocalDate()
 
-                                    val startPointDate = LocalDate.parse(unfinishedDateFrame.startPointDate, DateTimeFormatter.ofPattern(DATE_LIMIT_DATE_PATTERN))
+                                    val startPointDate = LocalDate.parse(unfinishedDateFrame.startPointDate, DateTimeFormatter.ofPattern(DATE_LIMIT_DATE_PATTERN, Locale.US))
 
                                     if (selectedDate > LocalDate.now()) {
-                                        showErrorMessage("You cannot choose future dates..", binding)
+                                        showErrorMessage(resources.getString(R.string.error_message_edit_expense_future_date_selected), binding)
                                     } else if (selectedDate < startPointDate) {
-                                        showErrorMessage("The chosen date must not be earlier than the start point (${unfinishedDateFrame.startPointDate}) date!", binding)
+                                        showErrorMessage(
+                                            resources.getString(R.string.error_message_edit_expense_earlier_date_selected, unfinishedDateFrame.startPointDate),
+                                            binding
+                                        )
                                     } else {
-                                        tvSelectedDateFragEditExpense.text = selectedDate.format(DateTimeFormatter.ofPattern(DATE_LIMIT_DATE_PATTERN))
+                                        tvSelectedDateFragEditExpense.text = selectedDate.format(DateTimeFormatter.ofPattern(DATE_LIMIT_DATE_PATTERN, Locale.US))
                                     }
                                 }
                                 it.show(childFragmentManager, "date_selection")
@@ -152,11 +156,11 @@ class EditExpenseFragment : Fragment() {
 
             ivReturnBackFragEditExpense.setOnClickListener {
                 val materialAlertDialog = MaterialAlertDialogBuilder(requireContext())
-                materialAlertDialog.setMessage("Are you sure you want to discard all changes?")
-                    .setPositiveButton("Yes") { _, _ ->
+                materialAlertDialog.setMessage(resources.getString(R.string.alert_message_edit_expense_discard))
+                    .setPositiveButton(resources.getString(R.string.alert_dialog_positive_yes)) { _, _ ->
                         findNavController().popBackStack()
                     }
-                    .setNegativeButton("No") { dialogInterface, _ ->
+                    .setNegativeButton(resources.getString(R.string.alert_dialog_negative_no)) { dialogInterface, _ ->
                         dialogInterface.cancel()
                     }
                     .show()
@@ -253,7 +257,7 @@ class EditExpenseFragment : Fragment() {
     private suspend fun getUnfinishedDateFrame (): DateFrame? {
         userViewModel.getOnlineUser()?.let { onlineUser ->
             profileViewModel.getOnlineProfileById(onlineUser.userId!!)?.let { onlineProfile ->
-                dateFrameViewModel.getUnfinishedDateFrameByProfile(onlineProfile.profileId!!)?.let { unfinishedDateFrame ->
+                dateFrameViewModel.getUnfinishedAndOnlineDateFrameByProfile(onlineProfile.profileId!!)?.let { unfinishedDateFrame ->
                     return unfinishedDateFrame
                 }
             }
@@ -283,19 +287,19 @@ class EditExpenseFragment : Fragment() {
 
         when {
             expenseAmount.isEmpty() -> {
-                showErrorMessage("Consider adding expense amount..", binding)
+                showErrorMessage(resources.getString(R.string.error_message_edit_expense_no_amount_added), binding)
                 isReady = false
             }
             currency.isEmpty() -> {
-                showErrorMessage("Please select currency..", binding)
+                showErrorMessage(resources.getString(R.string.error_message_edit_expense_no_currency_selected), binding)
                 isReady = false
             }
             initialExpenseCategory.isEmpty() -> {
-                showErrorMessage("Please write at least one expense category..", binding)
+                showErrorMessage(resources.getString(R.string.error_message_add_expense_no_expense_category_added), binding)
                 isReady = false
             }
             !isAdditionalExpenseCategoriesNotEmpty -> {
-                showErrorMessage("Please fill additionally added expense categories or delete unused ones..", binding)
+                showErrorMessage(resources.getString(R.string.error_message_edit_expense_empty_additional_category_column), binding)
                 isReady = false
             }
             else -> { isReady = true }
@@ -307,20 +311,20 @@ class EditExpenseFragment : Fragment() {
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         binding.apply {
-            outState.putString(UIStateConstant.TRANSACTION_AMOUNT_KEY, etAmountFragEditExpense.text.toString())
-            outState.putString(UIStateConstant.INITIAL_TRANSACTION_CATEGORY_KEY, etExpenseCategoryFragEditExpense.text.toString())
-            outState.putString(UIStateConstant.TRANSACTION_DESCRIPTION_KEY, etDescriptionFragEditExpense.text.toString())
-                outState.putString(UIStateConstant.CUSTOM_TRANSACTION_DATE_KEY, tvSelectedDateFragEditExpense.text.toString())
+            outState.putString(TRANSACTION_AMOUNT_KEY, etAmountFragEditExpense.text.toString())
+            outState.putString(INITIAL_TRANSACTION_CATEGORY_KEY, etExpenseCategoryFragEditExpense.text.toString())
+            outState.putString(TRANSACTION_DESCRIPTION_KEY, etDescriptionFragEditExpense.text.toString())
+                outState.putString(CUSTOM_TRANSACTION_DATE_KEY, tvSelectedDateFragEditExpense.text.toString())
 
             if (parentContainerLayoutFragEditExpense.childCount > 1) {
-                outState.putStringArrayList(UIStateConstant.ADDITIONAL_TRANSACTION_CATEGORY_LIST_KEY, ArrayList(getAdditionalExpenseCategoryList()))
+                outState.putStringArrayList(ADDITIONAL_TRANSACTION_CATEGORY_LIST_KEY, ArrayList(getAdditionalExpenseCategoryList()))
             } else {
-                outState.putStringArrayList(UIStateConstant.ADDITIONAL_TRANSACTION_CATEGORY_LIST_KEY, ArrayList(listOf()))
+                outState.putStringArrayList(ADDITIONAL_TRANSACTION_CATEGORY_LIST_KEY, ArrayList(listOf()))
             }
 
             actvCurrencyFragEditExpense.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
                 override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                    outState.putInt(UIStateConstant.TRANSACTION_CURRENCY_KEY, position)
+                    outState.putInt(TRANSACTION_CURRENCY_KEY, position)
                 }
                 override fun onNothingSelected(parent: AdapterView<*>?) {}
             }
@@ -382,10 +386,10 @@ class EditExpenseFragment : Fragment() {
     }
 
     private fun showMaterialDatePickerDialog (callback: (MaterialDatePicker<Long>) -> Unit) {
-        val date = LocalDate.parse(dateFrameViewModel.selectedTransaction?.date, DateTimeFormatter.ofPattern(DATE_LIMIT_DATE_PATTERN))
-        var materialDatePicker: MaterialDatePicker<Long>?
+        val date = LocalDate.parse(dateFrameViewModel.selectedTransaction?.date, DateTimeFormatter.ofPattern(DATE_LIMIT_DATE_PATTERN, Locale.US))
+        val materialDatePicker: MaterialDatePicker<Long>?
         materialDatePicker = MaterialDatePicker.Builder.datePicker()
-            .setTitleText("Select expense date")
+            .setTitleText(resources.getString(R.string.date_picker_title_text_expense_date))
             .setSelection(date.atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli())
             .build()
 

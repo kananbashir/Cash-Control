@@ -4,6 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.cashcontrol.data.repository.CashControlRepository
 import com.example.cashcontrol.data.db.entity.User
+import com.example.cashcontrol.data.db.entity.relation.UserWithProfiles
+import com.example.cashcontrol.data.repository.SettingsDataStoreRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
@@ -11,11 +13,15 @@ import javax.inject.Inject
 
 @HiltViewModel
 class UserViewModel @Inject constructor(
-    private val cashControlRepository: CashControlRepository
+    private val cashControlRepository: CashControlRepository,
+    private val settingsDataStoreRepository: SettingsDataStoreRepository
 ): ViewModel() {
 
     private var _allUsers: Flow<List<User>> = cashControlRepository.userLocal.getAllUsersFromDb()
     val allUsers: Flow<List<User>> get() = _allUsers
+
+    val languagePreferenceFlow: Flow<String> = settingsDataStoreRepository.languagePreferenceFlow
+    val themePreferenceFlow: Flow<String> = settingsDataStoreRepository.themePreferenceFlow
 
     var cachedExpenseCategories: Set<String> = setOf()
     var cachedIncomeSources: Set<String> = setOf()
@@ -26,6 +32,14 @@ class UserViewModel @Inject constructor(
 
     fun deleteUser (user: User) = viewModelScope.launch {
         cashControlRepository.userLocal.deleteUser(user)
+    }
+
+    suspend fun getUserWithProfiles(userId: Int): UserWithProfiles? {
+        val list = cashControlRepository.userLocal.getUserWithProfiles(userId)
+        if (list.isNotEmpty()) {
+            return list.first()
+        }
+        return null
     }
 
     suspend fun getOnlineUser (): User? {
@@ -44,7 +58,7 @@ class UserViewModel @Inject constructor(
         return null
     }
 
-    private suspend fun getUserByNameAndPassword (username: String, password: String): User? {
+    suspend fun getUserByNameAndPassword (username: String, password: String): User? {
         val userList = cashControlRepository.userLocal.getUserByNameAndPassword(username, password)
         if (userList.isNotEmpty()) {
             return userList.first()
@@ -87,6 +101,32 @@ class UserViewModel @Inject constructor(
             it.cachedIncomeCategories.addAll(incomeSourceList)
             upsertUser(it)
         }
+    }
+
+    suspend fun clearAllCategoriesAndSourcesForUser () {
+        getOnlineUser()?.let {
+            it.cachedIncomeCategories.clear()
+            it.cachedExpenseCategories.clear()
+            upsertUser(it)
+        }
+    }
+
+    fun setUserOffline (user: User) {
+        user.isOnline = false
+        upsertUser(user)
+    }
+
+    fun setUserOnline (user: User) {
+        user.isOnline = true
+        upsertUser(user)
+    }
+
+    fun updateAppTheme (theme: String) = viewModelScope.launch {
+        settingsDataStoreRepository.updateAppTheme(theme)
+    }
+
+    fun updateAppLanguage (languageCode: String) = viewModelScope.launch {
+        settingsDataStoreRepository.updateAppLanguage(languageCode)
     }
 
 }

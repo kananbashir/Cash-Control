@@ -7,6 +7,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -17,13 +19,11 @@ import com.example.cashcontrol.databinding.FragmentSigninBinding
 import com.example.cashcontrol.ui.viewmodel.DateFrameViewModel
 import com.example.cashcontrol.ui.viewmodel.ProfileViewModel
 import com.example.cashcontrol.ui.viewmodel.UserViewModel
+import com.example.cashcontrol.util.MessageUtil.showErrorMessage
 import com.example.cashcontrol.util.constant.UIStateConstant.PASSWORD_INPUT_KEY
 import com.example.cashcontrol.util.constant.UIStateConstant.USERNAME_INPUT_KEY
-import com.google.android.material.snackbar.BaseTransientBottomBar
-import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.zip
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -32,6 +32,7 @@ class SigninFragment : Fragment() {
     private lateinit var userViewModel: UserViewModel
     private lateinit var profileViewModel: ProfileViewModel
     private lateinit var dateFrameViewModel: DateFrameViewModel
+    private val shrinkInsideAnim: Animation by lazy { AnimationUtils.loadAnimation(requireContext(), R.anim.shrink_inside) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,35 +61,37 @@ class SigninFragment : Fragment() {
                 val password = binding.etPasswordFragSignIn.text.toString()
 
 
-//                if (username.isNotEmpty() && password.isNotEmpty()) {
-//                    viewLifecycleOwner.lifecycleScope.launch {
-//                        repeatOnLifecycle(Lifecycle.State.STARTED) {
-//                            userViewModel.allUsers.zip(profileViewModel.allProfiles) { allUsers, allProfiles ->
-//                                if (userViewModel.isUsernameAndPasswordAvailable(username, password, allUsers)) {
-//                                    if (userViewModel.userWithProfiles.first().profiles.isNotEmpty()) {
-//                                        profileViewModel.onlineProfile.zip(dateFrameViewModel.unfinishedDateFrame) { onlineProfile, unfinishedDf ->
-//                                            if (onlineProfile == null) {
-//                                                findNavController().navigate(SigninFragmentDirections.actionGlobalOnBoardingProfileFragment())
-//                                            } else {
-//                                                if (unfinishedDf == null) {
-//                                                    findNavController().navigate(SigninFragmentDirections.actionGlobalOnboardingSession())
-//                                                } else {
-//                                                    findNavController().navigate(SigninFragmentDirections.actionGlobalMainSession())
-//                                                }
-//                                            }
-//                                        }
-//                                    } else {
-//                                        findNavController().navigate(SigninFragmentDirections.actionGlobalOnBoardingStartFragment())
-//                                    }
-//                                } else {
-//                                    showErrorMessage("Username or password wrong!")
-//                                }
-//                            }.collect()
-//                        }
-//                    }
-//                } else if (username.isEmpty() || password.isEmpty()) {
-//                    showErrorMessage("All columns must be filled")
-//                }
+                if (username.isNotEmpty() && password.isNotEmpty()) {
+                    viewLifecycleOwner.lifecycleScope.launch {
+                        repeatOnLifecycle(Lifecycle.State.STARTED) {
+                            val foundUser = userViewModel.getUserByNameAndPassword(username, password)
+                            if (foundUser != null) {
+                                    val onlineProfile = profileViewModel.getOnlineProfileById(foundUser.userId!!)
+                                    if (onlineProfile != null) {
+                                        val unfinishedDateFrame = dateFrameViewModel.getUnfinishedAndOnlineDateFrameByProfile(onlineProfile.profileId!!)
+                                        if (unfinishedDateFrame != null) {
+                                            updateButtonToLoadingState()
+                                            userViewModel.setUserOnline(foundUser)
+                                            delay(1200) // JUST TO SIMULATE LOADING..
+                                            findNavController().navigate(SigninFragmentDirections.actionGlobalMainSession())
+                                        } else {
+                                            userViewModel.setUserOnline(foundUser)
+                                            delay(1200) // JUST TO SIMULATE LOADING..
+                                            findNavController().navigate(SigninFragmentDirections.actionGlobalOnboardingSession())
+                                        }
+                                    } else {
+                                        userViewModel.setUserOnline(foundUser)
+                                        delay(1200) // JUST TO SIMULATE LOADING..
+                                        findNavController().navigate(SigninFragmentDirections.actionGlobalOnBoardingStartFragment())
+                                    }
+                            } else {
+                                showErrorMessage(resources.getString(R.string.error_message_signin_username_or_pass_wrong), binding)
+                            }
+                        }
+                    }
+                } else {
+                    showErrorMessage(resources.getString(R.string.error_message_signin_empty_columns), binding)
+                }
             }
 
             ivPasswordToHideFragSignIn.setOnClickListener { changePasswordVisibility("hide") }
@@ -129,10 +132,12 @@ class SigninFragment : Fragment() {
         }
     }
 
-    private fun showErrorMessage (message: String) {
-        Snackbar.make(binding.root,message, Snackbar.LENGTH_SHORT)
-            .setAnimationMode(BaseTransientBottomBar.ANIMATION_MODE_FADE)
-            .setBackgroundTint(resources.getColor(R.color.bittersweet_red, null))
-            .show()
+    private fun updateButtonToLoadingState () {
+        binding.apply {
+            btSignInFragSignIn.startAnimation(shrinkInsideAnim)
+            ltLoadingFragSignIn.visibility = View.VISIBLE
+            btSignInFragSignIn.isClickable = false
+            btSignInFragSignIn.visibility = View.INVISIBLE
+        }
     }
 }

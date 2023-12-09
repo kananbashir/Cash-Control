@@ -27,12 +27,16 @@ import com.example.cashcontrol.ui.viewmodel.TransactionViewModel
 import com.example.cashcontrol.ui.viewmodel.UserViewModel
 import com.example.cashcontrol.util.MessageUtil
 import com.example.cashcontrol.util.constant.TransactionConstant.TRANSACTION_TYPE_EXPENSE
+import com.example.cashcontrol.util.constant.UIStateConstant.BUDGET_AMOUNT_KEY
+import com.example.cashcontrol.util.constant.UIStateConstant.END_POINT_DATE_KEY
+import com.example.cashcontrol.util.constant.UIStateConstant.START_POINT_DATE_KEY
+import com.example.cashcontrol.util.constant.UIStateConstant.TOTAL_EXPENSE_AMOUNT_KEY
+import com.example.cashcontrol.util.constant.UIStateConstant.TOTAL_INCOME_AMOUNT_KEY
+import com.example.cashcontrol.util.constant.UIStateConstant.TOTAL_SAVINGS_AMOUNT_KEY
 import com.example.cashcontrol.util.extension.getCurrencySymbol
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.google.android.material.snackbar.BaseTransientBottomBar
-import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -45,6 +49,7 @@ class TransactionsDetailFragment : Fragment(), TransactionDetailsChildListener {
     private lateinit var profileViewModel: ProfileViewModel
     private lateinit var transactionDetailsParentAdapter: TransactionDetailsParentAdapter
     private lateinit var transactionDetailsSearchParentAdapter: TransactionDetailsSearchParentAdapter
+    private var initialLoadingIsFinished: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,6 +62,17 @@ class TransactionsDetailFragment : Fragment(), TransactionDetailsChildListener {
         transactionDetailsSearchParentAdapter = TransactionDetailsSearchParentAdapter()
         transactionDetailsParentAdapter.setChildListener(this)
         binding = FragmentTransactionsDetailBinding.inflate(layoutInflater)
+
+        savedInstanceState?.let {
+            binding.apply {
+                tvStartPointDateFragTransactionsDetail.text = it.getString(START_POINT_DATE_KEY)
+                tvEndPointDateTransactionsDetail.text = it.getString(END_POINT_DATE_KEY)
+                tvTotalBudgetFragTransactionsDetail.text = it.getString(BUDGET_AMOUNT_KEY)
+                tvTotalExpensesFragTransactionsDetail.text = it.getString(TOTAL_EXPENSE_AMOUNT_KEY)
+                tvTotalIncomeFragTransactionsDetail.text = it.getString(TOTAL_INCOME_AMOUNT_KEY)
+                tvTotalSavedFragTransactionsDetail.text = it.getString(TOTAL_SAVINGS_AMOUNT_KEY)
+            }
+        }
     }
 
     override fun onCreateView(
@@ -83,10 +99,6 @@ class TransactionsDetailFragment : Fragment(), TransactionDetailsChildListener {
             viewLifecycleOwner.lifecycleScope.launch {
                 repeatOnLifecycle(Lifecycle.State.STARTED) {
                     getUnfinishedDateFrame()?.let { unfinishedDateFrame ->
-                        transactionDetailsParentAdapter.differ.submitList(dateFrameViewModel.getTransactionPairs(unfinishedDateFrame))
-                        ltLoadingFragTransactionsDetail.visibility = View.GONE
-                        rvFragTransactionsDetail.visibility = View.VISIBLE
-
                         tvStartPointDateFragTransactionsDetail.text = unfinishedDateFrame.startPointDate
                         tvEndPointDateTransactionsDetail.text = unfinishedDateFrame.endPointDate
                         tvTotalBudgetFragTransactionsDetail.text =
@@ -97,6 +109,13 @@ class TransactionsDetailFragment : Fragment(), TransactionDetailsChildListener {
                             "${unfinishedDateFrame.totalIncomeOfAll}${unfinishedDateFrame.mainCurrency.getCurrencySymbol()}"
                         tvTotalSavedFragTransactionsDetail.text =
                             "${unfinishedDateFrame.savedMoney}${unfinishedDateFrame.mainCurrency.getCurrencySymbol()}"
+
+                        delay(1300)
+                        val transactionPairs = dateFrameViewModel.getTransactionPairs(unfinishedDateFrame)
+                        transactionDetailsParentAdapter.differ.submitList(transactionPairs.toList())
+                        initialLoadingIsFinished = true
+                        ltLoadingFragTransactionsDetail.visibility = View.GONE
+                        rvFragTransactionsDetail.visibility = View.VISIBLE
                     }
                 }
             }
@@ -104,9 +123,9 @@ class TransactionsDetailFragment : Fragment(), TransactionDetailsChildListener {
             fabEditFragTransactionsDetail.setOnClickListener {
                     dateFrameViewModel.selectedTransaction?.let {
                     if (it.transactionType == TRANSACTION_TYPE_EXPENSE) {
-                        findNavController().navigate(TransactionsDetailFragmentDirections.actionExpensesDetailFragmentToEditExpenseFragment())
+                        findNavController().navigate(TransactionsDetailFragmentDirections.actionTransactionsDetailFragmentToEditExpenseFragment())
                     } else {
-                        findNavController().navigate(TransactionsDetailFragmentDirections.actionExpensesDetailFragmentToEditIncomeFragment())
+                        findNavController().navigate(TransactionsDetailFragmentDirections.actionTransactionsDetailFragmentToEditIncomeFragment())
                     }
                 }
             }
@@ -114,12 +133,12 @@ class TransactionsDetailFragment : Fragment(), TransactionDetailsChildListener {
             fabDeleteFragTransactionsDetail.setOnClickListener {
                     dateFrameViewModel.selectedTransaction?.let {
                     val materialAlertDialog = MaterialAlertDialogBuilder(requireContext())
-                    materialAlertDialog.setMessage("Are you sure you want to delete this transaction?")
-                        .setPositiveButton("Yes") { _, _ ->
+                    materialAlertDialog.setMessage(resources.getString(R.string.alert_message_transactions_detail_delete_transaction))
+                        .setPositiveButton(resources.getString(R.string.alert_dialog_positive_yes)) { _, _ ->
                             transactionViewModel.deleteTransaction(it)
                             dateFrameViewModel.clearAllTransactionPairs()
                         }
-                        .setNegativeButton("No") { dialogInterface, _ ->
+                        .setNegativeButton(resources.getString(R.string.alert_dialog_negative_no)) { dialogInterface, _ ->
                             dialogInterface.cancel()
                         }
                         .show()
@@ -158,12 +177,9 @@ class TransactionsDetailFragment : Fragment(), TransactionDetailsChildListener {
                 dateFrameViewModel.allTransactionPairs.collect {
                     getUnfinishedDateFrame()?.let { unfinishedDateFrame ->
                         val transactionPairs = dateFrameViewModel.getTransactionPairs(unfinishedDateFrame)
-                        if (transactionPairs.isNotEmpty()) {
+                        if (transactionPairs.isNotEmpty() && initialLoadingIsFinished) {
                             binding.apply {
                                 transactionDetailsParentAdapter.differ.submitList(transactionPairs.toList())
-
-                                ltLoadingFragTransactionsDetail.visibility = View.GONE
-                                rvFragTransactionsDetail.visibility = View.VISIBLE
 
                                 if (dateFrameViewModel.selectedTransaction != null) {
                                     fabDeleteFragTransactionsDetail.isClickable = true
@@ -184,6 +200,19 @@ class TransactionsDetailFragment : Fragment(), TransactionDetailsChildListener {
         }
     }
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+
+        binding.apply {
+            outState.putString(START_POINT_DATE_KEY, tvStartPointDateFragTransactionsDetail.text.toString())
+            outState.putString(END_POINT_DATE_KEY, tvEndPointDateTransactionsDetail.text.toString())
+            outState.putString(BUDGET_AMOUNT_KEY, tvTotalBudgetFragTransactionsDetail.text.toString())
+            outState.putString(TOTAL_EXPENSE_AMOUNT_KEY, tvTotalExpensesFragTransactionsDetail.text.toString())
+            outState.putString(TOTAL_INCOME_AMOUNT_KEY, tvTotalIncomeFragTransactionsDetail.text.toString())
+            outState.putString(TOTAL_SAVINGS_AMOUNT_KEY , tvTotalSavedFragTransactionsDetail.text.toString())
+        }
+    }
+
     override fun onChildItemSelected(transaction: Transaction) {
         dateFrameViewModel.setSelectionState(transaction)
     }
@@ -191,7 +220,7 @@ class TransactionsDetailFragment : Fragment(), TransactionDetailsChildListener {
     private suspend fun getUnfinishedDateFrame(): DateFrame? {
         userViewModel.getOnlineUser()?.let { onlineUser ->
             profileViewModel.getOnlineProfileById(onlineUser.userId!!)?.let { onlineProfile ->
-                dateFrameViewModel.getUnfinishedDateFrameByProfile(onlineProfile.profileId!!)?.let { unfinishedDateFrame ->
+                dateFrameViewModel.getUnfinishedAndOnlineDateFrameByProfile(onlineProfile.profileId!!)?.let { unfinishedDateFrame ->
                     return unfinishedDateFrame
                 }
             }
@@ -200,21 +229,15 @@ class TransactionsDetailFragment : Fragment(), TransactionDetailsChildListener {
     }
 
     private fun filterList(query: String) {
-        viewLifecycleOwner.lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                getUnfinishedDateFrame()?.let {  unfinishedDateFrame ->
-                    val filteredList: List<TransactionPair> = dateFrameViewModel.getFilteredList(query, unfinishedDateFrame)
-                    if (filteredList.isNotEmpty()) {
-                        transactionDetailsSearchParentAdapter.differ.submitList(filteredList)
-                        binding.rvFragTransactionsDetail.visibility = View.INVISIBLE
-                        binding.rvSearchFragTransactionsDetail.visibility = View.VISIBLE
-                    } else {
-                        MessageUtil.showNotifyingMessage("No result found for '$query'", binding)
-                        binding.rvSearchFragTransactionsDetail.visibility = View.GONE
-                        binding.rvFragTransactionsDetail.visibility = View.VISIBLE
-                    }
-                }
-            }
+        val filteredList: List<TransactionPair> = dateFrameViewModel.getFilteredList(query)
+        if (filteredList.isNotEmpty()) {
+            transactionDetailsSearchParentAdapter.differ.submitList(filteredList)
+            binding.rvFragTransactionsDetail.visibility = View.GONE
+            binding.rvSearchFragTransactionsDetail.visibility = View.VISIBLE
+        } else {
+            MessageUtil.showNotifyingMessage(resources.getString(R.string.notifying_message_transactions_detail_no_res_found, query), binding)
+            binding.rvSearchFragTransactionsDetail.visibility = View.GONE
+            binding.rvFragTransactionsDetail.visibility = View.VISIBLE
         }
     }
 }

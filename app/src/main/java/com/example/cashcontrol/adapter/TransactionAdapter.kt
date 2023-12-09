@@ -9,11 +9,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.cashcontrol.R
 import com.example.cashcontrol.data.db.entity.Transaction
 import com.example.cashcontrol.databinding.ItemLayoutTransactionsBinding
+import com.example.cashcontrol.util.constant.DateConstant.DATE_LIMIT_DATE_PATTERN
 import com.example.cashcontrol.util.constant.TransactionConstant.TRANSACTION_TYPE_EXPENSE
 import com.example.cashcontrol.util.constant.TransactionConstant.TRANSACTION_TYPE_INCOME
 import com.example.cashcontrol.util.extension.getCurrencySymbol
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
+import java.util.Locale
 
 class TransactionAdapter: RecyclerView.Adapter<TransactionAdapter.TransactionViewHolder>() {
 
@@ -97,7 +99,7 @@ class TransactionAdapter: RecyclerView.Adapter<TransactionAdapter.TransactionVie
     }
 
     private fun formatDate(dateString: String): String {
-        val localDate = LocalDate.parse(dateString, DateTimeFormatter.ofPattern("dd MMMM yyyy"))
-        return localDate.format(DateTimeFormatter.ofPattern("dd MMM yyyy"))
+        val localDate = LocalDate.parse(dateString, DateTimeFormatter.ofPattern(DATE_LIMIT_DATE_PATTERN, Locale.US))
+        return localDate.format(DateTimeFormatter.ofPattern("dd MMM yyyy", Locale.US))
     }
 }

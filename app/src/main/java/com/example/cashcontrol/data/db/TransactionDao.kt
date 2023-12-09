@@ -5,7 +5,6 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.example.cashcontrol.data.db.entity.DateFrame
 import com.example.cashcontrol.data.db.entity.Transaction
 import kotlinx.coroutines.flow.Flow
 

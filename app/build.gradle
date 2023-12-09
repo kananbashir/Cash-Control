@@ -96,4 +96,7 @@ dependencies {
 
     // Splash screen
     implementation "androidx.core:core-splashscreen:1.0.0"
+
+    // Glider
+    implementation "io.coil-kt:coil:2.5.0"
 }

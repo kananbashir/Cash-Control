@@ -1,7 +1,5 @@
 package com.example.cashcontrol.data.network.local
 
-import androidx.room.Query
-import androidx.room.Transaction
 import com.example.cashcontrol.data.db.DateFrameDao
 import com.example.cashcontrol.data.db.entity.DateFrame
 import com.example.cashcontrol.data.db.entity.relation.DateFrameWithDateLimits
@@ -23,8 +21,12 @@ class DateFrameLocalDataSource @Inject constructor(private val dateFrameDao: Dat
         return dateFrameDao.getAllDateFramesFromDb()
     }
 
-    suspend fun getUnfinishedDateFrameByProfile (profileId: Int): List<DateFrame> {
-        return dateFrameDao.getUnfinishedDateFrameByProfile(profileId)
+    suspend fun getUnfinishedAndOnlineDateFrameByProfile (profileId: Int): List<DateFrame> {
+        return dateFrameDao.getUnfinishedAndOnlineDateFrameByProfile(profileId)
+    }
+
+    suspend fun getOnlineDateFrameByProfile (profileId: Int): List<DateFrame> {
+        return dateFrameDao.getOnlineDateFrameByProfile(profileId)
     }
 
     suspend fun getDateFrameOfProfileByDates (startPointDate: String, endPointDate: String, profileId: Int): List<DateFrame> {

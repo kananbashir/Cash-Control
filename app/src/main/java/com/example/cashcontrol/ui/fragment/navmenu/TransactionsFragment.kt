@@ -5,12 +5,11 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.cashcontrol.R
 import com.example.cashcontrol.adapter.DateFramesAdapter
@@ -20,8 +19,9 @@ import com.example.cashcontrol.databinding.FragmentTransactionsBinding
 import com.example.cashcontrol.ui.viewmodel.DateFrameViewModel
 import com.example.cashcontrol.ui.viewmodel.ProfileViewModel
 import com.example.cashcontrol.ui.viewmodel.TransactionViewModel
+import com.example.cashcontrol.ui.viewmodel.UserViewModel
+import com.example.cashcontrol.util.extension.sortDateFramesByDateDescending
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -29,6 +29,7 @@ class TransactionsFragment : Fragment(), DateFramesClickListener {
     private lateinit var binding: FragmentTransactionsBinding
     private lateinit var dateFrameViewModel: DateFrameViewModel
     private lateinit var profileViewModel: ProfileViewModel
+    private lateinit var userViewModel: UserViewModel
     private lateinit var dateFramesAdapter: DateFramesAdapter
     private lateinit var transactionViewModel: TransactionViewModel
 
@@ -37,7 +38,9 @@ class TransactionsFragment : Fragment(), DateFramesClickListener {
         dateFrameViewModel = ViewModelProvider(requireActivity()).get(DateFrameViewModel::class.java)
         profileViewModel = ViewModelProvider(requireActivity()).get(ProfileViewModel::class.java)
         transactionViewModel = ViewModelProvider(requireActivity()).get(TransactionViewModel::class.java)
+        userViewModel = ViewModelProvider(requireActivity()).get(UserViewModel::class.java)
         dateFramesAdapter = DateFramesAdapter()
+        dateFramesAdapter.setListener(this)
         binding = FragmentTransactionsBinding.inflate(layoutInflater)
     }
 
@@ -51,20 +54,36 @@ class TransactionsFragment : Fragment(), DateFramesClickListener {
             rvAllTotalExpensesFragTransactions.layoutManager = LinearLayoutManager(requireContext())
         }
 
-//        viewLifecycleOwner.lifecycleScope.launch {
-//            repeatOnLifecycle(Lifecycle.State.STARTED) {
-//                transactionViewModel.sortedAllTransactions.observe(viewLifecycleOwner) {
-//                    if (profileViewModel.profileWithDateFrames.isNotEmpty()) {
-//                        dateFramesAdapter.differ.submitList(profileViewModel.profileWithDateFrames.first().dateFrames)
-//                    }
-//                }
-//            }
-//        }
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                userViewModel.getOnlineUser()?.let { onlineUser ->
+                    profileViewModel.getOnlineProfileById(onlineUser.userId!!)?.let { onlineProfile ->
+                        profileViewModel.getProfileWithDateFrames(onlineProfile.profileId!!)?.let { profileWithDateFrames ->
+                            val dateFrames = profileWithDateFrames.dateFrames.sortDateFramesByDateDescending()
+                            dateFramesAdapter.differ.submitList(dateFrames)
+                        }
+                    }
+                }
+            }
+        }
 
         return  binding.root
     }
 
     override fun onDateFrameClicked(dateFrame: DateFrame) {
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                userViewModel.getOnlineUser()?.let { onlineUser ->
+                    profileViewModel.getOnlineProfileById(onlineUser.userId!!)?.let { onlineProfile ->
+                        dateFrameViewModel.getOnlineDateFrameByProfile(onlineProfile.profileId!!)?.let { onlineDateFrame ->
+                            dateFrameViewModel.setDateFrameOffline(onlineDateFrame)
+                            dateFrameViewModel.setDateFrameOnline(dateFrame)
+                            findNavController().navigate(R.id.homeFragment)
+                        }
+                    }
+                }
+            }
+        }
 
     }
 }

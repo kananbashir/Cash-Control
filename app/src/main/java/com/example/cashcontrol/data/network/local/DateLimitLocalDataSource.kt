@@ -2,7 +2,6 @@ package com.example.cashcontrol.data.network.local
 
 import com.example.cashcontrol.data.db.DateLimitDao
 import com.example.cashcontrol.data.db.entity.DateLimit
-import com.example.cashcontrol.data.db.entity.Transaction
 import com.example.cashcontrol.data.db.entity.relation.DateLimitWithTransactions
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
@@ -36,12 +35,4 @@ class DateLimitLocalDataSource @Inject constructor(private val dateLimitDao: Dat
     suspend fun getDateLimitOfDateFrameByDate(dateFrameId: Int, currentDate: String): List<DateLimit> {
         return dateLimitDao.getDateLimitOfDateFrameByDate(dateFrameId, currentDate)
     }
-
-//    suspend fun getAllExpensesForDate (date: String): List<Transaction> {
-//        return dateLimitDao.getAllExpensesForDate(date)
-//    }
-//
-//    suspend fun getAllIncomesForDate (date: String): List<Transaction> {
-//        return dateLimitDao.getAllIncomesForDate(date)
-//    }
 }

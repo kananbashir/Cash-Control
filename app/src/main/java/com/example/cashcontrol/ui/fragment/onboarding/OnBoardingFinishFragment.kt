@@ -20,12 +20,11 @@ import com.example.cashcontrol.databinding.FragmentOnBoardingFinishBinding
 import com.example.cashcontrol.ui.viewmodel.DateFrameViewModel
 import com.example.cashcontrol.ui.viewmodel.DateLimitViewModel
 import com.example.cashcontrol.ui.viewmodel.ProfileViewModel
+import com.example.cashcontrol.ui.viewmodel.TransactionViewModel
 import com.example.cashcontrol.ui.viewmodel.UserViewModel
-import com.example.cashcontrol.util.MessageUtil.showErrorMessage
-import com.example.cashcontrol.util.MessageUtil.showErrorMessageWithButton
-import com.example.cashcontrol.util.MessageUtil.showErrorMessageWithButtonWithNavAction
 import com.example.cashcontrol.util.constant.DateConstant.DATE_LIMIT_DATE_PATTERN
 import com.example.cashcontrol.util.extension.getCurrencySymbol
+import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
@@ -33,6 +32,7 @@ import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
+import java.util.Locale
 import kotlin.math.absoluteValue
 
 @AndroidEntryPoint
@@ -42,6 +42,7 @@ class OnBoardingFinishFragment : Fragment() {
     private lateinit var profileViewModel: ProfileViewModel
     private lateinit var userViewModel: UserViewModel
     private lateinit var dateLimitViewModel: DateLimitViewModel
+    private lateinit var transactionViewModel: TransactionViewModel
     private lateinit var args: OnBoardingFinishFragmentArgs
     private val shrinkInsideAnim: Animation by lazy { AnimationUtils.loadAnimation(requireContext(), R.anim.shrink_inside) }
 
@@ -51,6 +52,7 @@ class OnBoardingFinishFragment : Fragment() {
         profileViewModel = ViewModelProvider(requireActivity()).get(ProfileViewModel::class.java)
         userViewModel = ViewModelProvider(requireActivity()).get(UserViewModel::class.java)
         dateLimitViewModel = ViewModelProvider(requireActivity()).get(DateLimitViewModel::class.java)
+        transactionViewModel = ViewModelProvider(requireActivity()).get(TransactionViewModel::class.java)
         args = OnBoardingFinishFragmentArgs.fromBundle(requireArguments())
         binding = FragmentOnBoardingFinishBinding.inflate(layoutInflater)
 
@@ -81,26 +83,37 @@ class OnBoardingFinishFragment : Fragment() {
                 viewLifecycleOwner.lifecycleScope.launch {
                     repeatOnLifecycle(Lifecycle.State.STARTED) {
                         userViewModel.getOnlineUser()?.let { onlineUser ->
-                                profileViewModel.getOnlineProfileById(onlineUser.userId!!)?.let { onlineProfile ->
+                            profileViewModel.getOnlineProfileById(onlineUser.userId!!)?.let { onlineProfile ->
                                 if (dateFrameViewModel.getDateFrameOfProfileByDates(args.startPointDate,args.endPointDate,onlineProfile.profileId!!) == null) {
                                     updateButtonToLoadingState()
+
+                                    dateFrameViewModel.getOnlineDateFrameByProfile(onlineProfile.profileId!!)?.let { onlineDateFrame ->
+                                        dateFrameViewModel.setDateFrameOffline(onlineDateFrame)
+                                    }
+
                                     dateFrameViewModel.upsertDateFrame(DateFrame(
                                         args.startPointDate,
                                         args.endPointDate,
                                         args.budget.toDouble(),
                                         args.currency,
                                         args.saving.toDouble(),
-                                        true,
+                                        isUnfinished = true,
+                                        isOnline = true,
                                         onlineProfile.profileId!!
                                     ))
+                                    delay(200)
                                     createDateLimits(onlineProfile.profileId!!)
                                 } else {
-                                    showErrorMessageWithButton(
-                                        "This profile already has such a date frame. Consider creating another profile or select different date frame",
-                                        "CHANGE DATES",
-                                        binding,
-                                        Snackbar.LENGTH_INDEFINITE
-                                    )
+                                    Snackbar.make(
+                                        root,
+                                        resources.getString(R.string.error_message_onboarding_finish_already_existed_dateframe),
+                                        Snackbar.LENGTH_INDEFINITE)
+                                        .setAnimationMode(BaseTransientBottomBar.ANIMATION_MODE_SLIDE)
+                                        .setBackgroundTint(root.resources.getColor(R.color.bittersweet_red, null))
+                                        .setAction(resources.getString(R.string.error_message_onboarding_finish_already_existed_dateframe_button)) {
+                                            findNavController().popBackStack(R.id.onBoardingDateFrameFragment, false)
+                                        }
+                                        .show()
                                 }
                             }
                         }
@@ -109,14 +122,7 @@ class OnBoardingFinishFragment : Fragment() {
             }
 
             tvPreviousFragOBFinish.setOnClickListener {
-                findNavController().navigate(
-                    OnBoardingFinishFragmentDirections.actionOnBoardingFinishFragmentToOnBoardingSavingsFragment(
-                        args.startPointDate,
-                        args.endPointDate,
-                        args.budget,
-                        args.currency
-                    )
-                )
+                findNavController().popBackStack()
             }
         }
 
@@ -124,10 +130,10 @@ class OnBoardingFinishFragment : Fragment() {
     }
 
     private suspend fun createDateLimits (profileId: Int) {
-        dateFrameViewModel.getUnfinishedDateFrameByProfile(profileId)?.let { unfinishedDateFrame ->
+        dateFrameViewModel.getUnfinishedAndOnlineDateFrameByProfile(profileId)?.let { unfinishedDateFrame ->
             val parsedStartPointDate = LocalDate.parse(
                 unfinishedDateFrame.startPointDate,
-                DateTimeFormatter.ofPattern(DATE_LIMIT_DATE_PATTERN)
+                DateTimeFormatter.ofPattern(DATE_LIMIT_DATE_PATTERN, Locale.US)
             )
             val daysPassedFromStartPoint = ChronoUnit.DAYS.between(
                 parsedStartPointDate,
@@ -140,7 +146,7 @@ class OnBoardingFinishFragment : Fragment() {
                 val updatedDate = parsedStartPointDate.plusDays(i)
 
                 val dateLimit = DateLimit(
-                    updatedDate.format(DateTimeFormatter.ofPattern(DATE_LIMIT_DATE_PATTERN)),
+                    updatedDate.format(DateTimeFormatter.ofPattern(DATE_LIMIT_DATE_PATTERN, Locale.US)),
                     unfinishedDateFrame.dateFrameId!!,
                     0.0,
                     0.0
@@ -148,7 +154,9 @@ class OnBoardingFinishFragment : Fragment() {
                 dateLimitList.add(dateLimit)
             }
             dateLimitViewModel.upsertAllDateLimits(*dateLimitList.toTypedArray())
-            delay(1500) // JUST TO SIMULATE LOADING..
+            transactionViewModel.newExpense = true
+            transactionViewModel.newIncome = true
+            delay(1300) // JUST TO SIMULATE LOADING..
             findNavController().navigate(OnBoardingFinishFragmentDirections.actionGlobalMainSession2())
         }
     }

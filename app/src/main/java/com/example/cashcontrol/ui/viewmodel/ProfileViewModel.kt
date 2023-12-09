@@ -4,10 +4,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.cashcontrol.data.repository.CashControlRepository
 import com.example.cashcontrol.data.db.entity.Profile
+import com.example.cashcontrol.data.db.entity.relation.ProfileWithDateFrames
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -43,8 +42,26 @@ class ProfileViewModel @Inject constructor(
         return null
     }
 
+    suspend fun getProfileWithDateFrames (profileId: Int): ProfileWithDateFrames? {
+        val list = cashControlRepository.profileLocal.getProfileWithDateFrames(profileId)
+        if (list.isNotEmpty()) {
+            return list.first()
+        }
+        return null
+    }
+
+    fun changeOnlineProfileName(profile: Profile, newProfileName: String) {
+        profile.profileName = newProfileName
+        upsertProfile(profile)
+    }
+
     fun setProfileOffline (profile: Profile) {
         profile.isOnline = false
+        upsertProfile(profile)
+    }
+
+    fun setProfileOnline (profile: Profile) {
+        profile.isOnline = true
         upsertProfile(profile)
     }
 }

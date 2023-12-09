@@ -3,7 +3,6 @@ package com.example.cashcontrol.ui.fragment.login
 import android.os.Bundle
 import android.text.method.HideReturnsTransformationMethod
 import android.text.method.PasswordTransformationMethod
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -11,7 +10,6 @@ import android.view.ViewGroup
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import androidx.activity.OnBackPressedCallback
-import androidx.activity.OnBackPressedDispatcher
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -25,11 +23,8 @@ import com.example.cashcontrol.util.MessageUtil.showErrorMessage
 import com.example.cashcontrol.util.constant.UIStateConstant.PASSWORD_INPUT_KEY
 import com.example.cashcontrol.util.constant.UIStateConstant.PASSWORD_REENTER_INPUT_KEY
 import com.example.cashcontrol.util.constant.UIStateConstant.USERNAME_INPUT_KEY
-import com.google.android.material.snackbar.BaseTransientBottomBar
-import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -80,16 +75,16 @@ class SignupFragment : Fragment() {
                                         delay(1000)
                                         findNavController().navigate(SignupFragmentDirections.actionGlobalOnBoardingStartFragment())
                                     } else {
-                                        showErrorMessage("This username has already been taken", binding)
+                                        showErrorMessage(resources.getString(R.string.error_message_signup_used_username), binding)
                                     }
                                 } else {
-                                    showErrorMessage("The length of password should be longer than 5!", binding)
+                                    showErrorMessage(resources.getString(R.string.error_message_signup_password_length), binding)
                                 }
                             } else {
-                                showErrorMessage("Passwords are not matching!", binding)
+                                showErrorMessage(resources.getString(R.string.error_message_signup_non_macthing_passwords), binding)
                             }
                         } else {
-                            showErrorMessage("All columns must be filled!", binding)
+                            showErrorMessage(resources.getString(R.string.error_message_signup_empty_columns), binding)
                         }
                     }
                 }

@@ -1,6 +1,7 @@
 package com.example.cashcontrol.adapter
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
@@ -14,7 +15,7 @@ import com.example.cashcontrol.util.extension.getCurrencySymbol
 class DateFramesAdapter: RecyclerView.Adapter<DateFramesAdapter.DateFramesViewHolder>() {
 
     val differ = AsyncListDiffer(this, getDifferCallBack())
-    var dateFrameClickListener: DateFramesClickListener? = null
+    private var dateFrameClickListener: DateFramesClickListener? = null
 
     inner class DateFramesViewHolder (val binding: ItemLayoutDateFramesBinding): RecyclerView.ViewHolder(binding.root)
 
@@ -32,12 +33,35 @@ class DateFramesAdapter: RecyclerView.Adapter<DateFramesAdapter.DateFramesViewHo
         val currentItem = differ.currentList[position]
 
         holder.binding.apply {
+            val mainCurrencySymbol = currentItem.mainCurrency.getCurrencySymbol()
             tvDateFrameItemLayoutDateFrames.text = root.resources.getString(R.string.placeholder_text_date_frame, currentItem.startPointDate, currentItem.endPointDate)
-            tvTotalBudgetItemLayoutDateFrames.text = "${currentItem.initialBudget}${currentItem.mainCurrency.getCurrencySymbol()}"
-            tvTotalExpenseItemLayoutDateFrames.text = "${currentItem.totalExpenseOfAll}${currentItem.mainCurrency.getCurrencySymbol()}"
-            tvTotalIncomeItemLayoutDateFrames.text = "${currentItem.totalIncomeOfAll}${currentItem.mainCurrency.getCurrencySymbol()}"
+            tvTotalBudgetItemLayoutDateFrames.text = "${currentItem.initialBudget}$mainCurrencySymbol"
+            tvTotalExpenseItemLayoutDateFrames.text = "${currentItem.totalExpenseOfAll}$mainCurrencySymbol"
+            tvTotalIncomeItemLayoutDateFrames.text = "${currentItem.totalIncomeOfAll}$mainCurrencySymbol"
+            tvTotalSavedItemLayoutDateFrames.text = "${currentItem.savedMoney} $mainCurrencySymbol"
 
-            cvSeeDetailsItemLayoutDateFrames.setOnClickListener {
+            if (position == differ.currentList.size-1) {
+                divider.visibility = View.INVISIBLE
+            } else {
+                divider.visibility = View.VISIBLE
+            }
+
+            when {
+                (!currentItem.isUnfinished && !currentItem.isOnline) -> {
+                    cvOpenItemLayoutDateFrames.visibility = View.GONE
+                    tvFinishedItemLayoutDateFrames.visibility = View.VISIBLE
+                }
+                (currentItem.isUnfinished && !currentItem.isOnline) -> {
+                    cvOpenItemLayoutDateFrames.visibility = View.VISIBLE
+                    tvFinishedItemLayoutDateFrames.visibility = View.GONE
+                }
+                else -> {
+                    cvOpenItemLayoutDateFrames.visibility = View.GONE
+                    tvFinishedItemLayoutDateFrames.visibility = View.GONE
+                }
+            }
+
+            cvOpenItemLayoutDateFrames.setOnClickListener {
                 dateFrameClickListener?.onDateFrameClicked(currentItem)
             }
         }

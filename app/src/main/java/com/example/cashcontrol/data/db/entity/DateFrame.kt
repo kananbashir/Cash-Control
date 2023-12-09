@@ -2,7 +2,6 @@ package com.example.cashcontrol.data.db.entity
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import java.time.LocalDate
 
 @Entity ("dateFrame_table")
 data class DateFrame(
@@ -12,6 +11,7 @@ data class DateFrame(
     var mainCurrency: String,
     var savedMoney: Double,
     var isUnfinished: Boolean,
+    var isOnline: Boolean,
     var profileId: Int
 
 ) {

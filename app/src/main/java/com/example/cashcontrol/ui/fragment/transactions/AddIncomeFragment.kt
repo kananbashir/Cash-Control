@@ -44,6 +44,7 @@ import java.time.Instant
 import java.time.LocalDate
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
+import java.util.Locale
 
 class AddIncomeFragment : Fragment() {
     private lateinit var binding: FragmentAddIncomeBinding
@@ -66,7 +67,7 @@ class AddIncomeFragment : Fragment() {
         val currencyArrayAdapter = ArrayAdapter(requireContext(), R.layout.app_dropdown_item, resources.getStringArray(R.array.currencies))
         binding.actvCurrencyFragAddIncome.setAdapter(currencyArrayAdapter)
 
-        setCacheCategoryDropDownList(binding.etIncomeSourceFragAddIncome)
+        setCacheSourceDropDownList(binding.etIncomeSourceFragAddIncome)
 
         requireActivity().onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true){
             override fun handleOnBackPressed() {
@@ -107,7 +108,7 @@ class AddIncomeFragment : Fragment() {
             parentContainerLayoutFragAddIncome.setOnHierarchyChangeListener(object : ViewGroup.OnHierarchyChangeListener {
                 override fun onChildViewAdded(parent: View?, child: View?) {
                     val etIncomeCategory = child?.findViewById<AutoCompleteTextView>(R.id.etCategoryItemLayoutExpenseAndIncomeCategory)
-                    setCacheCategoryDropDownList(etIncomeCategory!!)
+                    setCacheSourceDropDownList(etIncomeCategory!!)
                     updateAddMoreButton()
                 }
 
@@ -138,16 +139,16 @@ class AddIncomeFragment : Fragment() {
                                 it.addOnPositiveButtonClickListener { selection ->
                                     val selectedDate = Instant.ofEpochMilli(selection).atZone(ZoneId.systemDefault()).toLocalDate()
 
-                                    val startPointDate = LocalDate.parse(unfinishedDateFrame.startPointDate, DateTimeFormatter.ofPattern(DATE_LIMIT_DATE_PATTERN))
+                                    val startPointDate = LocalDate.parse(unfinishedDateFrame.startPointDate, DateTimeFormatter.ofPattern(DATE_LIMIT_DATE_PATTERN, Locale.US))
 
                                     if (selectedDate > LocalDate.now()) {
-                                        showErrorMessage("You cannot choose future dates..", binding)
+                                        showErrorMessage(resources.getString(R.string.error_message_add_income_future_date_selected), binding)
                                     } else if (selectedDate < startPointDate) {
-                                        showErrorMessage("The chosen date must not be earlier than the start point (${unfinishedDateFrame.startPointDate}) date!", binding)
+                                        showErrorMessage(resources.getString(R.string.error_message_add_income_earlier_date_selected, unfinishedDateFrame.startPointDate), binding)
                                     } else {
                                         tvHyphenFragHome.visibility = View.VISIBLE
                                         tvSelectedDateFragAddIncome.visibility = View.VISIBLE
-                                        tvSelectedDateFragAddIncome.text = selectedDate.format(DateTimeFormatter.ofPattern(DATE_LIMIT_DATE_PATTERN))
+                                        tvSelectedDateFragAddIncome.text = selectedDate.format(DateTimeFormatter.ofPattern(DATE_LIMIT_DATE_PATTERN, Locale.US))
                                     }
                                 }
                                 it.show(childFragmentManager, "date_selection")
@@ -251,7 +252,7 @@ class AddIncomeFragment : Fragment() {
     private suspend fun getUnfinishedDateFrame(): DateFrame? {
         userViewModel.getOnlineUser()?.let { onlineUser ->
             profileViewModel.getOnlineProfileById(onlineUser.userId!!)?.let { onlineProfile ->
-                dateFrameViewModel.getUnfinishedDateFrameByProfile(onlineProfile.profileId!!)?.let { unfinishedDateFrame ->
+                dateFrameViewModel.getUnfinishedAndOnlineDateFrameByProfile(onlineProfile.profileId!!)?.let { unfinishedDateFrame ->
                     return unfinishedDateFrame
                 }
             }
@@ -260,7 +261,7 @@ class AddIncomeFragment : Fragment() {
         return null
     }
 
-    private fun setCacheCategoryDropDownList (autoCompleteTextView: AutoCompleteTextView) {
+    private fun setCacheSourceDropDownList (autoCompleteTextView: AutoCompleteTextView) {
         if (userViewModel.cachedIncomeSources.isNotEmpty()) {
             val cachedCategoriesListAdapter = ArrayAdapter(
                 requireContext(),
@@ -296,25 +297,25 @@ class AddIncomeFragment : Fragment() {
 
         when {
             expenseAmount.isEmpty() -> {
-                showErrorMessage("Consider adding expense amount..", binding)
+                showErrorMessage(resources.getString(R.string.error_message_add_income_no_amount_added), binding)
                 isReady = false
             }
             currency.isEmpty() -> {
-                showErrorMessage("Please select currency..", binding)
+                showErrorMessage(resources.getString(R.string.error_message_add_income_no_currency_selected), binding)
                 isReady = false
             }
             initialExpenseCategory.isEmpty() -> {
-                showErrorMessage("Please write at least one expense category..", binding)
+                showErrorMessage(resources.getString(R.string.error_message_add_income_no_income_source_added), binding)
                 isReady = false
             }
             !isAdditionalExpenseCategoriesNotEmpty -> {
-                showErrorMessage("Please fill additionally added expense categories or delete unused ones..", binding)
+                showErrorMessage(resources.getString(R.string.error_message_add_income_empty_additional_category_column), binding)
                 isReady = false
             }
             else -> {
                 if (binding.rgDateSelectionFragAddIncome.checkedRadioButtonId == binding.rbCustomDateFragAddIncome.id) {
                     if (binding.tvSelectedDateFragAddIncome.text.isEmpty()) {
-                        showErrorMessage("Please select an expense date..", binding)
+                        showErrorMessage(resources.getString(R.string.error_message_add_income_no_date_selected), binding)
                         isReady = false
                     } else {
                         isReady = true
@@ -399,7 +400,7 @@ class AddIncomeFragment : Fragment() {
 
     private fun showMaterialDatePickerDialog (callback: (MaterialDatePicker<Long>) -> Unit) {
         val materialDatePicker = MaterialDatePicker.Builder.datePicker()
-            .setTitleText("Select income date")
+            .setTitleText(resources.getString(R.string.date_picker_title_text_income_date))
             .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
             .build()
 

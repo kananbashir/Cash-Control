@@ -11,7 +11,6 @@ import com.example.cashcontrol.data.db.entity.relation.DateFrameWithTransactions
 import com.example.cashcontrol.util.constant.DateConstant.DATE_LIMIT_DATE_PATTERN
 import com.example.cashcontrol.util.extension.concatenateCategories
 import com.example.cashcontrol.util.extension.sortDateLimitsByDateDescending
-import com.example.cashcontrol.util.extension.sortTransactionsByDateDescending
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -43,8 +42,16 @@ class DateFrameViewModel @Inject constructor(
         cashControlRepository.dateFrameLocal.deleteDateFrame(dateFrame)
     }
 
-    suspend fun getUnfinishedDateFrameByProfile (profileId: Int): DateFrame? {
-        val dateFrameList = cashControlRepository.dateFrameLocal.getUnfinishedDateFrameByProfile(profileId)
+    suspend fun getUnfinishedAndOnlineDateFrameByProfile (profileId: Int): DateFrame? {
+        val dateFrameList = cashControlRepository.dateFrameLocal.getUnfinishedAndOnlineDateFrameByProfile(profileId)
+        if (dateFrameList.isNotEmpty()) {
+            return dateFrameList.first()
+        }
+        return null
+    }
+
+    suspend fun getOnlineDateFrameByProfile (profileId: Int): DateFrame? {
+        val dateFrameList = cashControlRepository.dateFrameLocal.getOnlineDateFrameByProfile(profileId)
         if (dateFrameList.isNotEmpty()) {
             return dateFrameList.first()
         }
@@ -86,7 +93,7 @@ class DateFrameViewModel @Inject constructor(
     }
 
     fun updateIncomeAmount (incomeAmount: Double, unfinishedDateFrame: DateFrame) {
-        unfinishedDateFrame.totalExpenseOfAll += incomeAmount
+        unfinishedDateFrame.totalIncomeOfAll += incomeAmount
         upsertDateFrame(unfinishedDateFrame)
     }
 
@@ -124,41 +131,55 @@ class DateFrameViewModel @Inject constructor(
         return allTransactionPairs.value
     }
 
+    suspend fun updateDate (date: String, profileId: Int) {
+        getUnfinishedAndOnlineDateFrameByProfile(profileId)?.let { unfinishedDateFrame ->
+            unfinishedDateFrame.endPointDate = date
+            upsertDateFrame(unfinishedDateFrame)
+        }
+    }
+
+    suspend fun updateSavingAmount (savingAmount: Double, profileId: Int) {
+        getUnfinishedAndOnlineDateFrameByProfile(profileId)?.let { unfinishedDateFrame ->
+            unfinishedDateFrame.savedMoney = savingAmount
+            upsertDateFrame(unfinishedDateFrame)
+        }
+    }
+
     fun clearAllTransactionPairs () {
         _allTransactionPairs.value = listOf()
         _selectedTransaction = null
     }
 
     fun setSelectionState (transaction: Transaction) {
-        var updatedPairList: List<TransactionPair>
+        val updatedPairList: List<TransactionPair>
 
         if (selectedTransaction == null) {
             updatedPairList = updateTransactionPairList(allTransactionPairs.value, transaction, true)
         } else {
-//            if (selectedTransaction?.transactionId == transaction.transactionId) {
-//                updatedPairList = updateTransactionPairList(allTransactionPairs.value, selectedTransaction!!, false)
-//            } else {
+            if (selectedTransaction?.transactionId == transaction.transactionId) {
+                updatedPairList = updateTransactionPairList(allTransactionPairs.value, selectedTransaction!!, false)
+            } else {
 
                 updatedPairList = updateTransactionPairList(
                     updateTransactionPairList(allTransactionPairs.value, selectedTransaction!!, false),
                     transaction,
                     true)
-//            }
+            }
         }
 
         _allTransactionPairs.value = updatedPairList
     }
 
     private fun updateTransactionPairList (transactionPairList: List<TransactionPair>, transaction: Transaction, state: Boolean): List<TransactionPair> {
-        var updatedPairList: List<TransactionPair>
+        val updatedPairList: List<TransactionPair>
         val foundTransactionPair = transactionPairList.find { tr -> tr.dateLimit.date == transaction.date }
         val transactionList = foundTransactionPair?.transactionList
         val updatedTransactionList = updateTransactionListWith(state, transactionList!!, transaction)
-//        if (state) {
+        if (state) {
             _selectedTransaction = updatedTransactionList.find { t -> t.isSelected }
-//        } else {
-//            _selectedTransaction = null
-//        }
+        } else {
+            _selectedTransaction = null
+        }
         val updatedPair = foundTransactionPair.copy(transactionList = updatedTransactionList)
         updatedPairList = transactionPairList.map { transactionPair ->
             if (transactionPair.dateLimit.date == updatedPair.dateLimit.date) {
@@ -195,25 +216,41 @@ class DateFrameViewModel @Inject constructor(
         }
     }
 
-    suspend fun getFilteredList (query: String, unfinishedDateFrame: DateFrame): List<TransactionPair> {
+    fun getFilteredList (query: String): List<TransactionPair> {
         val foundTransactionPairsList = mutableListOf<TransactionPair>()
-        getDateFrameWithDateLimits(unfinishedDateFrame.dateFrameId!!)?.let { dateFrameWithDateLimits ->
+
+        if (allTransactionPairs.value.isNotEmpty()) {
             for (transactionPair in allTransactionPairs.value) {
+                val tempTransactionList: MutableList<Transaction> = mutableListOf()
                 for (transaction in transactionPair.transactionList) {
-                    when {
-                        transaction.transactionCategory.contains(query, true) -> { foundTransactionPairsList.add(transactionPair) }
-                        transaction.transactionCategories.concatenateCategories().contains(query, true) -> { foundTransactionPairsList.add(transactionPair) }
-                        transaction.transactionSource.contains(query, true) -> { foundTransactionPairsList.add(transactionPair) }
-                        transaction.transactionSources.concatenateCategories().contains(query, true) -> { foundTransactionPairsList.add(transactionPair) }
-                        transaction.transactionAmount.toString().contains(query, true) -> { foundTransactionPairsList.add(transactionPair) }
-                        transaction.transactionDescription.contains(query, true) -> { foundTransactionPairsList.add(transactionPair) }
-                        transaction.transactionCurrency.contains(query, true) -> { foundTransactionPairsList.add(transactionPair) }
+                    if ( transaction.transactionCategory.contains(query, true) ||
+                        transaction.transactionCategories.concatenateCategories().contains(query, true) ||
+                        transaction.transactionSource.contains(query, true) ||
+                        transaction.transactionSources.concatenateCategories().contains(query, true) ||
+                        transaction.transactionAmount.toString().contains(query, true) ||
+                        transaction.transactionDescription.contains(query, true) ||
+                        transaction.transactionCurrency.contains(query, true)) {
+
+                        tempTransactionList.add(transaction)
                     }
+                }
+                if (tempTransactionList.isNotEmpty()) {
+                    foundTransactionPairsList.add(TransactionPair(transactionPair.dateLimit, tempTransactionList))
                 }
             }
             return foundTransactionPairsList.toList()
         }
 
         return listOf()
+    }
+
+    fun setDateFrameOffline(dateFrame: DateFrame) {
+        dateFrame.isOnline = false
+        upsertDateFrame(dateFrame)
+    }
+
+    fun setDateFrameOnline(dateFrame: DateFrame) {
+        dateFrame.isOnline = true
+        upsertDateFrame(dateFrame)
     }
 }

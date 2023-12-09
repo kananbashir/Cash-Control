@@ -9,9 +9,8 @@ import androidx.activity.OnBackPressedCallback
 import androidx.navigation.fragment.findNavController
 import com.example.cashcontrol.R
 import com.example.cashcontrol.databinding.FragmentOnBoardingSavingsBinding
+import com.example.cashcontrol.util.MessageUtil.showErrorMessage
 import com.example.cashcontrol.util.constant.UIStateConstant.SAVINGS_AMOUNT_INPUT_KEY
-import com.google.android.material.snackbar.BaseTransientBottomBar
-import com.google.android.material.snackbar.Snackbar
 
 class OnBoardingSavingsFragment : Fragment() {
     private lateinit var binding: FragmentOnBoardingSavingsBinding
@@ -52,7 +51,7 @@ class OnBoardingSavingsFragment : Fragment() {
                             saving
                         ))
                     } else {
-                        showErrorMessage("The value of savings cannot exceed the budget!")
+                        showErrorMessage(resources.getString(R.string.error_message_onboarding_savings_exceeded_budget), binding)
                     }
                 } else {
                     findNavController().navigate(OnBoardingSavingsFragmentDirections.actionOnBoardingSavingsFragmentToOnBoardingFinishFragment(
@@ -66,10 +65,7 @@ class OnBoardingSavingsFragment : Fragment() {
             }
 
             tvPreviousFragOBBudget.setOnClickListener {
-                findNavController().navigate(OnBoardingSavingsFragmentDirections.actionOnBoardingSavingsFragmentToOnBoardingBudgetFragment(
-                    args.startPointDate,
-                    args.endPointDate
-                ))
+                findNavController().popBackStack()
             }
         }
 
@@ -81,12 +77,5 @@ class OnBoardingSavingsFragment : Fragment() {
 
         outState.putString(SAVINGS_AMOUNT_INPUT_KEY, binding.etSaveFragOBSavings.text.toString())
 
-    }
-
-    private fun showErrorMessage (message: String) {
-        Snackbar.make(binding.root,message, Snackbar.LENGTH_SHORT)
-            .setAnimationMode(BaseTransientBottomBar.ANIMATION_MODE_FADE)
-            .setBackgroundTint(resources.getColor(R.color.bittersweet_red, null))
-            .show()
     }
 }

@@ -5,8 +5,6 @@ import androidx.room.Room
 import com.example.cashcontrol.data.db.CashControlDatabase
 import com.example.cashcontrol.data.db.DateFrameDao
 import com.example.cashcontrol.data.db.DateLimitDao
-import com.example.cashcontrol.data.db.ExpenseDao
-import com.example.cashcontrol.data.db.IncomeDao
 import com.example.cashcontrol.data.db.ProfileDao
 import com.example.cashcontrol.data.db.TransactionDao
 import com.example.cashcontrol.data.db.UserDao
@@ -42,18 +40,6 @@ object DatabaseModule {
     fun provideProfileDao (cashControlDatabase: CashControlDatabase): ProfileDao {
         return cashControlDatabase.getProfileDao()
     }
-
-//    @Singleton
-//    @Provides
-//    fun provideIncomeDao (cashControlDatabase: CashControlDatabase): IncomeDao {
-//        return cashControlDatabase.getIncomeDao()
-//    }
-//
-//    @Singleton
-//    @Provides
-//    fun provideExpenseDao (cashControlDatabase: CashControlDatabase): ExpenseDao {
-//        return cashControlDatabase.getExpenseDao()
-//    }
 
     @Singleton
     @Provides

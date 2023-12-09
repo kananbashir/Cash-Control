@@ -5,6 +5,7 @@ import com.example.cashcontrol.data.network.local.DateLimitLocalDataSource
 import com.example.cashcontrol.data.network.local.ProfileLocalDataSource
 import com.example.cashcontrol.data.network.local.TransactionLocalDataSource
 import com.example.cashcontrol.data.network.local.UserLocalDataSource
+import com.example.cashcontrol.data.network.remote.NewsRemoteDataSource
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -15,6 +16,7 @@ class CashControlRepository @Inject constructor(
     dateFrameLocalDataSource: DateFrameLocalDataSource,
     dateLimitLocalDataSource: DateLimitLocalDataSource,
     transactionLocalDataSource: TransactionLocalDataSource,
+    newsRemoteDataSource: NewsRemoteDataSource
 ) {
 
     val userLocal = userLocalDataSource
@@ -22,5 +24,6 @@ class CashControlRepository @Inject constructor(
     val dateFrameLocal = dateFrameLocalDataSource
     val dateLimitLocal = dateLimitLocalDataSource
     val transactionsLocal = transactionLocalDataSource
+    val newsRemote = newsRemoteDataSource
 
 }

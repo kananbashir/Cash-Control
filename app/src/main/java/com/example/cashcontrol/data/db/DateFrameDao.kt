@@ -24,8 +24,8 @@ interface DateFrameDao {
     fun getAllDateFramesFromDb (): Flow<List<DateFrame>>
 
     @Transaction
-    @Query ("SELECT * FROM dateFrame_table WHERE profileId = :profileId AND isUnfinished = 1")
-    suspend fun getUnfinishedDateFrameByProfile (profileId: Int): List<DateFrame>
+    @Query ("SELECT * FROM dateFrame_table WHERE profileId = :profileId AND isUnfinished = 1 AND isOnline = 1")
+    suspend fun getUnfinishedAndOnlineDateFrameByProfile (profileId: Int): List<DateFrame>
 
     @Transaction
     @Query ("SELECT * FROM dateframe_table WHERE profileId = :profileId AND startPointDate = :startPointDate AND endPointDate = :endPointDate")
@@ -38,5 +38,9 @@ interface DateFrameDao {
     @Transaction
     @Query ("SELECT * FROM dateFrame_table WHERE dateFrameId = :dateFrameId")
     suspend fun getDateFrameWithTransactions (dateFrameId: Int): List<DateFrameWithTransactions>
+
+    @Transaction
+    @Query ("SELECT * FROM dateframe_table WHERE profileId = :profileId AND isOnline = 1")
+    suspend fun getOnlineDateFrameByProfile (profileId: Int): List<DateFrame>
 
 }

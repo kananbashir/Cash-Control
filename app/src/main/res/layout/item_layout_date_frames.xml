@@ -37,12 +37,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:cardCornerRadius="12dp"
+        android:layout_marginStart="-20dp"
         app:contentPaddingBottom="5dp"
         app:contentPaddingLeft="15dp"
         app:contentPaddingRight="15dp"
         app:contentPaddingTop="5dp"
         app:layout_constraintBottom_toBottomOf="@+id/cvBudgetItemLayoutDateFrames"
-        app:layout_constraintStart_toStartOf="@+id/cvBudgetItemLayoutDateFrames"
+        app:layout_constraintStart_toEndOf="@+id/cvBudgetItemLayoutDateFrames"
         app:layout_constraintTop_toTopOf="@+id/cvBudgetItemLayoutDateFrames">
 
         <TextView
@@ -50,12 +51,11 @@
             style="@style/MainText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="75dp"
+            android:layout_marginStart="15dp"
             android:ellipsize="end"
             android:fontFamily="@font/open_sans"
             android:includeFontPadding="false"
             android:lines="1"
-            android:text="@string/placeholder_text_income"
             android:textSize="14sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -98,12 +98,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:cardCornerRadius="12dp"
+        android:layout_marginStart="-20dp"
         app:contentPaddingBottom="5dp"
         app:contentPaddingLeft="15dp"
         app:contentPaddingRight="15dp"
         app:contentPaddingTop="5dp"
         app:layout_constraintBottom_toBottomOf="@+id/cvTotalIncomeItemLayoutDateFrames"
-        app:layout_constraintStart_toStartOf="@+id/cvTotalIncomeItemLayoutDateFrames"
+        app:layout_constraintStart_toEndOf="@+id/cvTotalIncomeItemLayoutDateFrames"
         app:layout_constraintTop_toTopOf="@+id/cvTotalIncomeItemLayoutDateFrames">
 
         <TextView
@@ -111,12 +112,11 @@
             style="@style/MainText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="113dp"
+            android:layout_marginStart="15dp"
             android:ellipsize="end"
             android:fontFamily="@font/open_sans"
             android:includeFontPadding="false"
             android:lines="1"
-            android:text="@string/placeholder_text_income_2"
             android:textSize="14sp" />
 
     </com.google.android.material.card.MaterialCardView>
@@ -156,12 +156,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:cardCornerRadius="12dp"
+        android:layout_marginStart="-20dp"
         app:contentPaddingBottom="5dp"
         app:contentPaddingLeft="15dp"
         app:contentPaddingRight="15dp"
         app:contentPaddingTop="5dp"
         app:layout_constraintBottom_toBottomOf="@+id/cvTotalExpenseItemLayoutDateFrames"
-        app:layout_constraintStart_toStartOf="@+id/cvTotalExpenseItemLayoutDateFrames"
+        app:layout_constraintStart_toEndOf="@+id/cvTotalExpenseItemLayoutDateFrames"
         app:layout_constraintTop_toTopOf="@+id/cvTotalExpenseItemLayoutDateFrames">
 
         <TextView
@@ -169,12 +170,11 @@
             style="@style/MainText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="127dp"
+            android:layout_marginStart="15dp"
             android:ellipsize="end"
             android:fontFamily="@font/open_sans"
             android:includeFontPadding="false"
             android:lines="1"
-            android:text="@string/placeholder_text_expense"
             android:textSize="14sp" />
 
     </com.google.android.material.card.MaterialCardView>
@@ -209,7 +209,64 @@
     </com.google.android.material.card.MaterialCardView>
 
     <com.google.android.material.card.MaterialCardView
-        android:id="@+id/cvSeeDetailsItemLayoutDateFrames"
+        style="@style/DateFrameInsideCardItemLayoutColor"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="12dp"
+        android:layout_marginStart="-20dp"
+        app:contentPaddingBottom="5dp"
+        app:contentPaddingLeft="15dp"
+        app:contentPaddingRight="15dp"
+        app:contentPaddingTop="5dp"
+        app:layout_constraintBottom_toBottomOf="@+id/cvTotalSavedItemLayoutDateFrames"
+        app:layout_constraintStart_toEndOf="@+id/cvTotalSavedItemLayoutDateFrames"
+        app:layout_constraintTop_toTopOf="@+id/cvTotalSavedItemLayoutDateFrames">
+
+        <TextView
+            android:id="@+id/tvTotalSavedItemLayoutDateFrames"
+            style="@style/MainText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:ellipsize="end"
+            android:fontFamily="@font/open_sans"
+            android:includeFontPadding="false"
+            android:lines="1"
+            android:textSize="14sp" />
+
+    </com.google.android.material.card.MaterialCardView>
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/cvTotalSavedItemLayoutDateFrames"
+        style="@style/DateFrameCardItemLayoutColor"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="7dp"
+        app:cardCornerRadius="12dp"
+        app:contentPaddingBottom="5dp"
+        app:contentPaddingLeft="15dp"
+        app:contentPaddingRight="15dp"
+        app:contentPaddingTop="5dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cvTotalExpenseItemLayoutDateFrames"
+        app:layout_constraintVertical_bias="0.0"
+        app:strokeWidth="0dp">
+
+        <TextView
+            style="@style/Text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:fontFamily="@font/open_sans_bold"
+            android:includeFontPadding="false"
+            android:lines="1"
+            android:text="@string/text_total_saved"
+            android:textSize="14sp" />
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/cvOpenItemLayoutDateFrames"
         style="@style/SeeAllDetailsDetailsCardBackgroundColor"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -217,23 +274,40 @@
         app:contentPaddingLeft="13dp"
         app:contentPaddingRight="13dp"
         app:contentPaddingTop="5dp"
-        app:layout_constraintBottom_toBottomOf="@+id/cvTotalExpenseItemLayoutDateFrames"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@+id/cvTotalSavedItemLayoutDateFrames"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/cvTotalExpenseItemLayoutDateFrames"
+        app:layout_constraintTop_toTopOf="@+id/cvTotalSavedItemLayoutDateFrames"
         app:strokeWidth="0dp">
 
         <TextView
-            style="@style/SeeAllDetailsDetailsText"
+            style="@style/OpenText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/open_sans"
             android:includeFontPadding="false"
-            android:text="@string/text_see_details"
+            android:text="@string/text_open"
             android:textSize="9sp" />
 
     </com.google.android.material.card.MaterialCardView>
 
+    <TextView
+        android:id="@+id/tvFinishedItemLayoutDateFrames"
+        style="@style/OpenText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="10dp"
+        android:fontFamily="@font/open_sans"
+        android:includeFontPadding="false"
+        android:text="@string/text_finished"
+        android:textSize="9sp"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="@+id/cvTotalSavedItemLayoutDateFrames"
+        app:layout_constraintEnd_toEndOf="@+id/cvOpenItemLayoutDateFrames"
+        app:layout_constraintTop_toTopOf="@+id/cvTotalSavedItemLayoutDateFrames" />
+
     <com.google.android.material.divider.MaterialDivider
+        android:id="@+id/divider"
         style="@style/DateLineDividerBackgroundColor"
         android:layout_width="match_parent"
         android:layout_height="0.3dp"
@@ -244,7 +318,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cvTotalExpenseItemLayoutDateFrames" />
+        app:layout_constraintTop_toBottomOf="@+id/cvTotalSavedItemLayoutDateFrames" />
 
 
 

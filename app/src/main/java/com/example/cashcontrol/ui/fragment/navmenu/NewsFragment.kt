@@ -14,11 +14,15 @@ class NewsFragment : Fragment() {
     private lateinit var binding: FragmentNewsBinding
     private lateinit var newsViewPagerAdapter: NewsViewPagerAdapter
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        binding = FragmentNewsBinding.inflate(layoutInflater)
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentNewsBinding.inflate(layoutInflater)
 
         newsViewPagerAdapter = NewsViewPagerAdapter(childFragmentManager, viewLifecycleOwner.lifecycle)
 
@@ -27,18 +31,13 @@ class NewsFragment : Fragment() {
         TabLayoutMediator(binding.tabLayoutFragNews, binding.viewPagerFragNews) { tab, position ->
             when (position) {
                 0 -> {
-                    tab.text = "News"
+                    tab.text = resources.getString(R.string.text_tab_layout_news)
                     tab.setIcon(R.drawable.ic_articles)
                 }
 
                 1 -> {
-                    tab.text = "Search"
+                    tab.text = resources.getString(R.string.text_tab_layout_search)
                     tab.setIcon(R.drawable.ic_search)
-                }
-
-                2 -> {
-                    tab.text = "Saved"
-                    tab.setIcon(R.drawable.ic_favorite)
                 }
 
                 else -> {

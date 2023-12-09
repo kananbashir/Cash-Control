@@ -8,11 +8,15 @@ object UIStateConstant {
     const val PASSWORD_REENTER_INPUT_KEY: String = "password_reenter_input_key"
 
 
-    // Onboarding
+    // DateFrame && Onboarding
     const val START_POINT_DATE_KEY: String = "start_point_date_key"
     const val END_POINT_DATE_KEY: String = "end_point_date_key"
     const val PROFILE_NAME_INPUT_KEY: String = "profile_name_input_key"
     const val BUDGET_AMOUNT_INPUT_KEY: String = "budget_amount_input_key"
+    const val BUDGET_AMOUNT_KEY: String = "budget_amount_key"
+    const val TOTAL_EXPENSE_AMOUNT_KEY: String = "total_expense_amount_key"
+    const val TOTAL_INCOME_AMOUNT_KEY: String = "total_income_amount_key"
+    const val TOTAL_SAVINGS_AMOUNT_KEY: String = "total_savings_amount_key"
     const val BUDGET_CURRENCY_INPUT_KEY: String = "budget_CURRENCY_input_key"
     const val SAVINGS_AMOUNT_INPUT_KEY: String = "savings_amount_input_key"
 
@@ -24,7 +28,6 @@ object UIStateConstant {
     const val WIDGET_EXPENSE_AMOUNT_KEY: String = "widget_expense_amount_key"
     const val WIDGET_SAVINGS_AMOUNT_KEY: String = "widget_savings_amount_key"
     const val LOADING_STATE_KEY: String = "loading_state_key"
-    const val _STATE_KEY: String = "loading_state_key"
 
 
     // Transaction

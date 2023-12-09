@@ -1,29 +1,19 @@
 package com.example.cashcontrol.ui.viewmodel
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.cashcontrol.adapter.TransactionPair
 import com.example.cashcontrol.data.repository.CashControlRepository
 import com.example.cashcontrol.data.db.entity.DateLimit
 import com.example.cashcontrol.data.db.entity.Transaction
-import com.example.cashcontrol.data.db.entity.relation.DateFrameWithDateLimits
 import com.example.cashcontrol.data.db.entity.relation.DateLimitWithTransactions
 import com.example.cashcontrol.util.constant.DateConstant.DATE_LIMIT_DATE_PATTERN
 import com.example.cashcontrol.util.constant.TransactionConstant.TRANSACTION_TYPE_EXPENSE
-import com.example.cashcontrol.util.constant.TransactionConstant.TRANSACTION_TYPE_INCOME
-import com.example.cashcontrol.util.extension.concatenateCategories
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
+import java.util.Locale
 import javax.inject.Inject
 
 @HiltViewModel
@@ -53,7 +43,7 @@ class DateLimitViewModel @Inject constructor(private val cashControlRepository: 
     }
 
     suspend fun getCurrentDateLimitByDateFrame (dateFrameId: Int): DateLimit? {
-        val currentDate = LocalDate.now().format(DateTimeFormatter.ofPattern(DATE_LIMIT_DATE_PATTERN))
+        val currentDate = LocalDate.now().format(DateTimeFormatter.ofPattern(DATE_LIMIT_DATE_PATTERN, Locale.US))
         val dateLimitList = cashControlRepository.dateLimitLocal.getCurrentDateLimitByDateFrame(dateFrameId, currentDate)
         if (dateLimitList.isNotEmpty()) {
             return dateLimitList.first()

@@ -5,12 +5,12 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.activity.OnBackPressedCallback
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.cashcontrol.R
 import com.example.cashcontrol.databinding.FragmentOnBoardingDateFrameBinding
 import com.example.cashcontrol.ui.viewmodel.DateFrameViewModel
+import com.example.cashcontrol.util.MessageUtil.showErrorMessage
 import com.example.cashcontrol.util.constant.DateConstant.DATE_LIMIT_DATE_PATTERN
 import com.example.cashcontrol.util.constant.UIStateConstant.END_POINT_DATE_KEY
 import com.example.cashcontrol.util.constant.UIStateConstant.START_POINT_DATE_KEY
@@ -18,13 +18,12 @@ import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.DateValidatorPointBackward
 import com.google.android.material.datepicker.DateValidatorPointForward
 import com.google.android.material.datepicker.MaterialDatePicker
-import com.google.android.material.snackbar.BaseTransientBottomBar
-import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import java.time.Instant
 import java.time.LocalDate
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
+import java.util.Locale
 
 @AndroidEntryPoint
 class OnBoardingDateFrameFragment : Fragment() {
@@ -46,11 +45,11 @@ class OnBoardingDateFrameFragment : Fragment() {
                 btSelectEndPointFragOBDateFrame.text = endPointDateFromBundle
 
                 if (startPointDateFromBundle != resources.getString(R.string.text_button_select_start_point)) {
-                    startPointDate = LocalDate.parse(startPointDateFromBundle, DateTimeFormatter.ofPattern(DATE_LIMIT_DATE_PATTERN))
+                    startPointDate = LocalDate.parse(startPointDateFromBundle, DateTimeFormatter.ofPattern(DATE_LIMIT_DATE_PATTERN, Locale.US))
                 }
 
                 if (endPointDateFromBundle != resources.getString(R.string.text_button_select_end_point)) {
-                    endPointDate = LocalDate.parse(endPointDateFromBundle, DateTimeFormatter.ofPattern(DATE_LIMIT_DATE_PATTERN))
+                    endPointDate = LocalDate.parse(endPointDateFromBundle, DateTimeFormatter.ofPattern(DATE_LIMIT_DATE_PATTERN, Locale.US))
                 }
 
                 if (startPointDateFromBundle != resources.getString(R.string.text_button_select_start_point) &&
@@ -59,13 +58,6 @@ class OnBoardingDateFrameFragment : Fragment() {
                 }
             }
         }
-
-        requireActivity().onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                findNavController().popBackStack()
-            }
-        })
-
     }
 
     override fun onCreateView(
@@ -78,7 +70,7 @@ class OnBoardingDateFrameFragment : Fragment() {
                 showMaterialDatePickerDialog (false) { materialDatePicker ->
                     materialDatePicker.addOnPositiveButtonClickListener { selection ->
                         startPointDate = Instant.ofEpochMilli(selection).atZone(ZoneId.systemDefault()).toLocalDate()
-                        btSelectStartPointFragOBDateFrame.text = startPointDate?.format(DateTimeFormatter.ofPattern(DATE_LIMIT_DATE_PATTERN))
+                        btSelectStartPointFragOBDateFrame.text = startPointDate?.format(DateTimeFormatter.ofPattern(DATE_LIMIT_DATE_PATTERN, Locale.US))
                     }
                     materialDatePicker.show(childFragmentManager, "tag")
                 }
@@ -89,9 +81,9 @@ class OnBoardingDateFrameFragment : Fragment() {
                     materialDatePicker.addOnPositiveButtonClickListener { selection ->
                         endPointDate = Instant.ofEpochMilli(selection).atZone(ZoneId.systemDefault()).toLocalDate()
                         if ((endPointDate!!.year - startPointDate!!.year) > 1) {
-                            showErrorMessage("Year gap is not allowed..")
+                            showErrorMessage(resources.getString(R.string.error_message_onboarding_dateframe_year_gap_not_allowed), binding)
                         } else {
-                            btSelectEndPointFragOBDateFrame.text = endPointDate!!.format(DateTimeFormatter.ofPattern(DATE_LIMIT_DATE_PATTERN))
+                            btSelectEndPointFragOBDateFrame.text = endPointDate!!.format(DateTimeFormatter.ofPattern(DATE_LIMIT_DATE_PATTERN, Locale.US))
                             tvNextFragOBDateFrame.visibility = View.VISIBLE
                         }
                     }
@@ -101,11 +93,11 @@ class OnBoardingDateFrameFragment : Fragment() {
 
             tvNextFragOBDateFrame.setOnClickListener {
                 if (checkDateFrames()) {
-                    val startPointDateString = startPointDate?.format(DateTimeFormatter.ofPattern(DATE_LIMIT_DATE_PATTERN))
-                    val endPointDateString = endPointDate!!.format(DateTimeFormatter.ofPattern(DATE_LIMIT_DATE_PATTERN))
+                    val startPointDateString = startPointDate?.format(DateTimeFormatter.ofPattern(DATE_LIMIT_DATE_PATTERN, Locale.US))
+                    val endPointDateString = endPointDate!!.format(DateTimeFormatter.ofPattern(DATE_LIMIT_DATE_PATTERN, Locale.US))
                     findNavController().navigate(OnBoardingDateFrameFragmentDirections.actionOnBoardingDateFrameFragmentToOnBoardingBudgetFragment(startPointDateString!!, endPointDateString!!))
                 } else {
-                    showErrorMessage("The date frame is not appropriate! The date for the start point should be less than end point.")
+                    showErrorMessage(resources.getString(R.string.error_message_onboarding_dateframe_unappropriate_dateframe), binding)
                     tvNextFragOBDateFrame.visibility = View.INVISIBLE
                     btSelectEndPointFragOBDateFrame.text = getString(R.string.text_button_select_end_point)
                 }
@@ -125,7 +117,7 @@ class OnBoardingDateFrameFragment : Fragment() {
     }
 
     private fun showMaterialDatePickerDialog (isEndPointSelection: Boolean, callback: (MaterialDatePicker<Long>) -> Unit) {
-        var materialDatePicker: MaterialDatePicker<Long>? = null
+        val materialDatePicker: MaterialDatePicker<Long>
 
         if (!isEndPointSelection) {
             val dateValidator = DateValidatorPointBackward.now()
@@ -133,7 +125,7 @@ class OnBoardingDateFrameFragment : Fragment() {
                 .setValidator(dateValidator)
 
             materialDatePicker = MaterialDatePicker.Builder.datePicker()
-                .setTitleText("Select start point")
+                .setTitleText(resources.getString(R.string.date_picker_title_text_start_point))
                 .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
                 .setCalendarConstraints(calendarConstraints.build())
                 .build()
@@ -143,7 +135,7 @@ class OnBoardingDateFrameFragment : Fragment() {
                 .setValidator(dateValidator)
 
             materialDatePicker = MaterialDatePicker.Builder.datePicker()
-                .setTitleText("Select end point")
+                .setTitleText(resources.getString(R.string.date_picker_title_text_end_point))
                 .setCalendarConstraints(calendarConstraints.build())
                 .build()
         }
@@ -152,18 +144,11 @@ class OnBoardingDateFrameFragment : Fragment() {
     }
 
     private fun checkDateFrames (): Boolean {
-        if (startPointDate!!.month <= endPointDate!!.month) {
-            if (startPointDate!!.year <= endPointDate!!.year) {
-                return true
-            }
+        if (startPointDate!!.year <= endPointDate!!.year) {
+            return true
+        } else if (startPointDate!!.month <= endPointDate!!.month) {
+            return true
         }
         return false
-    }
-
-    private fun showErrorMessage (message: String) {
-        Snackbar.make(binding.root,message, Snackbar.LENGTH_SHORT)
-            .setAnimationMode(BaseTransientBottomBar.ANIMATION_MODE_FADE)
-            .setBackgroundTint(resources.getColor(R.color.bittersweet_red, null))
-            .show()
     }
 }

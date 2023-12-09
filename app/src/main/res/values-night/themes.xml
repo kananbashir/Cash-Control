@@ -8,6 +8,10 @@
         <item name="android:background">@color/midnight_green</item>
     </style>
 
+    <style name="BottomSheetBackground">
+        <item name="android:background">@drawable/shape_bkg_bottom_sheet_dark_mode</item>
+    </style>
+
 
     // Texts
     <style name="MainText">
@@ -18,7 +22,7 @@
         <item name="android:textColor">@color/midnight_green</item>
     </style>
 
-    <style name="SeeAllDetailsDetailsText">
+    <style name="OpenText">
         <item name="android:textColor">@color/white</item>
     </style>
 
@@ -29,6 +33,13 @@
         <item name="fontFamily">@font/open_sans</item>
         <item name="android:textColor">@color/white</item>
         <item name="android:textColorHint">@color/caribbean_current</item>
+    </style>
+
+    <style name="UserInputViceVersa">
+        <item name="android:background">@drawable/selector_user_input_light_mode</item>
+        <item name="fontFamily">@font/open_sans</item>
+        <item name="android:textColor">@color/midnight_green</item>
+        <item name="android:textColorHint">@color/ash_gray</item>
     </style>
 
     <style name="UserInputStrokeColorError">
@@ -66,6 +77,11 @@
     <style name="ButtonColor">
         <item name="android:backgroundTint">@color/white</item>
         <item name="android:textColor">@color/midnight_green</item>
+    </style>
+
+    <style name="ButtonColorViceVersa">
+        <item name="android:backgroundTint">@color/midnight_green</item>
+        <item name="android:textColor">@color/white</item>
     </style>
 
     <style name="ButtonColorIfNonClickable">

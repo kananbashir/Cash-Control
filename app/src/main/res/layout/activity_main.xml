@@ -3,87 +3,85 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     style="@style/ScreenBackground"
+    android:animateLayoutChanges="true"
     android:theme="@style/Theme.Material3.DayNight"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.MainActivity">
 
-    <ImageView
-        android:id="@+id/ivProfilesActivityMain"
-        style="@style/IconColorClickable"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:visibility="gone"
-        android:src="@drawable/ic_profiles"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-
-    <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/fragmentContainerView"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/clHeaderActivityMain"
+        style="@style/ScreenBackground"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:name="androidx.navigation.fragment.NavHostFragment"
-        app:defaultNavHost="true"
-        app:layout_constraintBottom_toTopOf="@+id/bottomNavigationView"
+        android:layout_height="wrap_content"
+        android:maxHeight="70dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvProfileNameActivityMain" />
+        app:layout_constraintTop_toTopOf="parent">
 
-    <TextView
-        android:id="@+id/tvHelloUserActivityMain"
-        style="@style/MainText"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginEnd="10dp"
-        android:lines="1"
-        android:ellipsize="end"
-        android:fontFamily="@font/open_sans"
-        android:text="@string/placeholder_text_hello"
-        android:textSize="24sp"
-        android:textAlignment="center"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="@+id/ivSettingsActivityMain"
-        app:layout_constraintEnd_toStartOf="@+id/ivSettingsActivityMain"
-        app:layout_constraintStart_toEndOf="@+id/ivProfilesActivityMain"
-        app:layout_constraintTop_toTopOf="@+id/ivSettingsActivityMain" />
+        <ImageView
+            android:id="@+id/ivProfilesActivityMain"
+            style="@style/IconColorClickable"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:visibility="visible"
+            android:src="@drawable/ic_profiles"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tvHelloUserActivityMain"
+            style="@style/MainText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:lines="1"
+            android:ellipsize="end"
+            android:fontFamily="@font/open_sans"
+            android:textSize="24sp"
+            android:textAlignment="center"
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="@+id/ivSettingsActivityMain"
+            app:layout_constraintEnd_toStartOf="@+id/ivSettingsActivityMain"
+            app:layout_constraintStart_toEndOf="@+id/ivProfilesActivityMain"
+            app:layout_constraintTop_toTopOf="@+id/ivSettingsActivityMain" />
 
 
-    <TextView
-        android:id="@+id/tvProfileNameActivityMain"
-        style="@style/MainText"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp"
-        android:paddingBottom="5dp"
-        android:ellipsize="end"
-        android:fontFamily="@font/open_sans"
-        android:lines="1"
-        android:text="@string/placeholder_text_profile_name"
-        android:visibility="gone"
-        android:textAlignment="center"
-        android:textSize="11sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvHelloUserActivityMain" />
+        <TextView
+            android:id="@+id/tvProfileNameActivityMain"
+            style="@style/MainText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:paddingBottom="5dp"
+            android:ellipsize="end"
+            android:fontFamily="@font/open_sans"
+            android:lines="1"
+            android:visibility="visible"
+            android:textAlignment="center"
+            android:textSize="11sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvHelloUserActivityMain" />
 
-    <ImageView
-        android:id="@+id/ivSettingsActivityMain"
-        style="@style/IconColorClickable"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
-        android:visibility="gone"
-        android:src="@drawable/ic_settings"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        <ImageView
+            android:id="@+id/ivSettingsActivityMain"
+            style="@style/IconColorClickable"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:visibility="visible"
+            android:src="@drawable/ic_settings"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavigationView"
@@ -91,16 +89,29 @@
         android:layout_height="wrap_content"
         style="@style/BottomNavMenuColors"
         android:minHeight="60dp"
-        android:maxHeight="80dp"
-        android:elevation="20dp"
+        android:maxHeight="60dp"
         app:menu="@menu/bottom_nav_menu"
         app:itemRippleColor="@android:color/transparent"
         app:itemIconSize="20dp"
         app:itemPaddingTop="13dp"
         app:itemPaddingBottom="10dp"
         app:itemActiveIndicatorStyle="@android:color/transparent"
-        android:visibility="gone"
+        android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/fragmentContainerView"
+        android:name="androidx.navigation.fragment.NavHostFragment"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="@android:color/transparent"
+        app:defaultNavHost="true"
+        android:elevation="4dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

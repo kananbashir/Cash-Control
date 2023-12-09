@@ -1,19 +1,14 @@
 package com.example.cashcontrol.ui.fragment.onboarding
 
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
-import android.widget.Toast
-import androidx.activity.OnBackPressedCallback
 import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.get
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
@@ -24,12 +19,8 @@ import com.example.cashcontrol.ui.viewmodel.ProfileViewModel
 import com.example.cashcontrol.ui.viewmodel.UserViewModel
 import com.example.cashcontrol.util.MessageUtil.showErrorMessage
 import com.example.cashcontrol.util.constant.UIStateConstant.PROFILE_NAME_INPUT_KEY
-import com.google.android.material.snackbar.BaseTransientBottomBar
-import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.zip
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -49,12 +40,6 @@ class OnBoardingProfileFragment : Fragment() {
         if (savedInstanceState != null) {
             binding.etProfileNameFragSignIn.setText(savedInstanceState.getString(PROFILE_NAME_INPUT_KEY))
         }
-
-        requireActivity().onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                findNavController().popBackStack()
-            }
-        })
     }
 
     override fun onCreateView(
@@ -67,18 +52,24 @@ class OnBoardingProfileFragment : Fragment() {
 
             viewLifecycleOwner.lifecycleScope.launch {
                 repeatOnLifecycle(Lifecycle.State.STARTED) {
-                    userViewModel.getOnlineUser()?.let {
+                    userViewModel.getOnlineUser()?.let { onlineUser ->
                         if (profileName.isNotEmpty()) {
-                            if (profileViewModel.getProfileOfUserByName(it.userId!!, profileName) == null) {
+                            if (profileViewModel.getProfileOfUserByName(onlineUser.userId!!, profileName) == null) {
+
+                                profileViewModel.getOnlineProfileById(onlineUser.userId!!)?.let { onlineProfile ->
+                                    profileViewModel.setProfileOffline(onlineProfile)
+                                }
+
                                 updateButtonToLoadingState()
-                                profileViewModel.upsertProfile(Profile(profileName, true, it.userId!!))
+
+                                profileViewModel.upsertProfile(Profile(profileName, true, onlineUser.userId!!))
                                 delay(1500) // JUST TO SIMULATE LOADING..
                                 findNavController().navigate(OnBoardingProfileFragmentDirections.actionOnBoardingProfileFragmentToOnboardingSession())
                             } else {
-                                showErrorMessage("This profile name has already been taken!", binding)
+                                showErrorMessage(resources.getString(R.string.error_message_onboarding_profile_used_profile_name), binding)
                             }
                         } else {
-                            showErrorMessage("Consider adding profile name", binding)
+                            showErrorMessage(resources.getString(R.string.error_message_onboarding_profile_no_profile_name_added), binding)
                         }
                     }
                 }

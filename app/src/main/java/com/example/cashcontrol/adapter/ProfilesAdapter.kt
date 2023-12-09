@@ -3,17 +3,18 @@ package com.example.cashcontrol.adapter
 import android.content.res.Configuration
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.cashcontrol.R
+import com.example.cashcontrol.adapter.listener.ProfileItemClickListener
 import com.example.cashcontrol.data.db.entity.Profile
 import com.example.cashcontrol.databinding.ItemLayoutProfilesBinding
 
 class ProfilesAdapter: RecyclerView.Adapter<ProfilesAdapter.ProfilesViewHolder>() {
 
     val differ = AsyncListDiffer(this, getDifferCallback())
+    private var profileItemClickListener: ProfileItemClickListener? = null
 
     inner class ProfilesViewHolder (val binding: ItemLayoutProfilesBinding): RecyclerView.ViewHolder(binding.root)
 
@@ -45,6 +46,14 @@ class ProfilesAdapter: RecyclerView.Adapter<ProfilesAdapter.ProfilesViewHolder>(
             }
 
             tvProfileNameItemLayoutProfiles.text = currentItem.profileName
+
+            root.setOnClickListener {
+                profileItemClickListener?.onProfileItemClick(currentItem, "update")
+            }
+
+            ivDeleteProfileItemLayoutProfiles.setOnClickListener {
+                profileItemClickListener?.onProfileItemClick(currentItem, "delete")
+            }
         }
     }
 
@@ -60,5 +69,9 @@ class ProfilesAdapter: RecyclerView.Adapter<ProfilesAdapter.ProfilesViewHolder>(
         }
 
         return differCallback
+    }
+
+    fun setListener(listener: ProfileItemClickListener) {
+        profileItemClickListener = listener
     }
 }

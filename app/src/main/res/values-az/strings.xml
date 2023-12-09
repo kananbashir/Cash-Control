@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Cash Control</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="text_sign_in">Daxil ol</string>
+    <string name="text_sign_up">Qeydiyyatdan keç</string>
+    <string name="text_username">İstifadəçi adı</string>
+    <string name="text_password">Şifrə</string>
+    <string name="text_reenter_password">Şifrəni yenidən daxil edin</string>
+    <string name="text_already_have_an_account">Hesabınız var? - </string>
+    <string name="text_dont_have_an_account">Hesabınız yoxdur? - </string>
+    <string name="text_onboarding_start">Sizin xərcləmə vərdişləriniz və büdcəniz haqqında bir az məlumat almalıyıq.</string>
+    <string name="text_onboarding_profile">Yeni profil yaradaq (narahat olmayın, sonradan profil adını dəyişdirə biləcəksiniz)</string>
+    <string name="text_onboarding_date_frame">Bir başlanğıc və bitiş nöqtəsi seçin\nBu nöqtələr xərclərinizi izləmək üçün istifadə etdiyiniz tarixləri əks etdirir (narahat olmayın, tarixlərdə sonradan düzəliş edə bilərsiz)</string>
+    <string name="text_onboarding_budget">Tarixləri nəzərə alaraq, bu zaman dilimi üçün xərcləmə limitinizi və əsas valyutanızı müəyyən edək (narahat olmayın, büdcənizdə sonradan düzəliş edə bilərsiniz).</string>
+    <string name="text_onboarding_savings">Bu müddət ərzində bir az qənaət etmək istəyirsiniz? (Bu addım buraxıla bilər)</string>
+    <string name="text_onboarding_finish">We now know that you have a budget of $2,000 for the period of October 1 to October 31 and that you intend to save $100.</string>
+    <string name="text_profile_name">Profil adı</string>
+    <string name="text_give_it_a_name">Bir ad seç</string>
+    <string name="text_how_much_to_save">Nə qədər qənaət etmək istəyirsiniz?</string>
+    <string name="text_step_1">Addım 1</string>
+    <string name="text_step_2">Addım 2</string>
+    <string name="text_step_3">Addım 3</string>
+    <string name="text_next">İrəli</string>
+    <string name="text_previous">Geri</string>
+    <string name="text_usd">USD</string>
+    <string name="text_income">Gəlir</string>
+    <string name="text_expense">Xərc</string>
+    <string name="text_savings">Qənaət</string>
+    <string name="text_last_transactions">Son əməliyyatlar</string>
+    <string name="text_see_all">Hamısı</string>
+    <string name="text_open">Aç</string>
+    <string name="text_finished">Bitib</string>
+    <string name="text_add_an_expense">Xərc əlavə et</string>
+    <string name="text_add_an_income">Gəlir əlavə et</string>
+    <string name="text_amount">Miqdar</string>
+    <string name="text_currency">Valyuta</string>
+    <string name="text_today">Bu gün</string>
+    <string name="text_custom_date">Fərqli gün</string>
+    <string name="text_expenses_made_for">Xərcin səbəbi</string>
+    <string name="text_income_coming_from">Gəlirin qaynağı</string>
+    <string name="text_description">Təsvir (vacib deyil)</string>
+    <string name="text_edit">Düzəliş et</string>
+    <string name="text_transactions">Əməliyyatlar</string>
+    <string name="text_profiles">Profillər</string>
+    <string name="text_settings">Parametrlər</string>
+    <string name="text_app_settings">Tətbiq parametrləri</string>
+    <string name="text_profile_settings">Profil parametrləri</string>
+    <string name="text_date_frame_settings">Zaman dilimi üçün parametrlər</string>
+    <string name="text_total_budget">Ümumi büdcə</string>
+    <string name="text_total_expenses">Ümumi xərc</string>
+    <string name="text_total_income">Ümumi gəlir</string>
+    <string name="text_total_saved">Ümumi qənaət</string>
+    <string name="text_log_out">Çıxış</string>
+    <string name="text_currency_from">dan</string>
+    <string name="text_currency_to">a</string>
+    <string name="text_bulk">Toplu</string>
+    <string name="text_budget">Büdcə</string>
+    <string name="text_update_profile_name">Profil adını yenilə</string>
+    <string name="text_update_end_point">Son tarix nöqtəsini yenilə</string>
+    <string name="text_update_saving">Qənaət miqdarını yeniləyin</string>
+    <string name="placeholder_text_hello">Salam, %1$s</string>
+    <string name="text_onboarding_finish_header_1">Bununla da, biz bilirik ki, sizin %3$s və %4$s tarix aralığı üçün %1$s %2$s büdcəniz var və bu müddət ərzində %5$s %6$s qənaət etmək istəyirsiniz.</string>
+    <string name="text_no_data">Məlumat yoxdur</string>
+
+    <string name="text_menu_home">Ev</string>
+    <string name="text_menu_analytics">Analitika</string>
+    <string name="text_menu_date_frames">Zaman dilimləri</string>
+    <string name="text_menu_news">Xəbərlər</string>
+    <string name="text_menu_converter">Valyuta konverteri</string>
+
+    <string name="text_tab_layout_news">Xəbərlər</string>
+    <string name="text_tab_layout_search">Axtarış</string>
+    <string name="text_tab_layout_saved">Yaddaş</string>
+
+    <string name="text_app_settings_menu_language">Dil</string>
+    <string name="text_app_settings_menu_theme">Mövzu</string>
+    <string name="text_profile_settings_menu_profile_name">Profil adı</string>
+    <string name="text_profile_settings_menu_main_currency">Əsas valyuta</string>
+    <string name="text_profile_settings_menu_end_point">Son tarix</string>
+    <string name="text_profile_settings_menu_savings">Qənaət miqdarı</string>
+    <string name="text_profile_settings_menu_clear_category_history">Xərc kateqoriyaları və gəlir qaynaqları listini təmizlə</string>
+
+    <string name="placeholder_text_app_settings_menu_language">İngilis dili</string>
+    <string name="placeholder_text_app_settings_menu_theme">Light</string>
+    <string name="placeholder_text_profile_settings_menu_profile_name">Profile 1</string>
+    <string name="placeholder_text_profile_settings_menu_main_currency">AZN</string>
+    <string name="placeholder_text_profile_settings_menu_end_point">31 October 2023</string>
+    <string name="placeholder_text_profile_settings_menu_savings">200 AZN</string>
+    <string name="placeholder_text_profile_settings_clear_category_history">* Bütün profillərdən</string>
+
+    <string name="text_button_continue">Davam et</string>
+    <string name="text_button_select_start_point">Başlanğıc tarixi seçin</string>
+    <string name="text_button_select_end_point">Son tarixi seçin</string>
+    <string name="text_button_start_tracking">İzləməyə başla</string>
+    <string name="text_button_add_more">Daha çox əlavə et</string>
+    <string name="text_button_add">Əlavə et</string>
+    <string name="text_button_select_a_date">Tarix seçin</string>
+    <string name="text_button_save">Yaddaşa ver</string>
+    <string name="text_button_create_new_profile">Yeni profil yarat</string>
+    <string name="text_button_change">Düzəliş</string>
+    <string name="text_button_clear">Təmizlə</string>
+    <string name="text_button_convert">Çevir</string>
+    <string name="text_button_edit">Düzəliş</string>
+    <string name="text_button_delete">Sil</string>
+    <string name="text_button_return_home">Geri qayıt</string>
+    <string name="text_button_confirm">Təstiqlə</string>
+
+    <string name="placeholder_text_daily_limit_number">0</string>
+    <string name="placeholder_text_currency_AZN">₼</string>
+    <string name="placeholder_text_start_point_date">1 October 2023</string>
+    <string name="placeholder_text_end_point_date">31 October 2023</string>
+    <string name="placeholder_text_current_date">10 October 2023</string>
+    <string name="placeholder_text_income">0₼</string>
+    <string name="placeholder_text_income_2">342₼</string>
+    <string name="placeholder_text_expense">0₼</string>
+    <string name="placeholder_text_savings">0₼</string>
+    <string name="placeholder_you_have_spent">142</string>
+    <string name="placeholder_selected_date">8 October 2023</string>
+    <string name="placeholder_currency_converting_from">10 US Dollars =</string>
+    <string name="placeholder_currency_converting_to">17 AZN</string>
+    <string name="placeholder_currency_converting_rate">1 USD = 1.70196 AZN</string>
+    <string name="placeholder_currency_converting_rate_2">1 AZN = 0.587556 USD</string>
+    <string name="placeholder_text_last_expenses">Restaurant</string>
+    <string name="placeholder_text_last_expense_expense">-50₼</string>
+    <string name="placeholder_text_date_frame">%1$s to %2$s</string>
+    <string name="placeholder_text_description">- Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</string>
+    <string name="placeholder_text_bulk_categories">- Friend\n- Pub</string>
+    <string name="placeholder_text_article_title">This trade is where big investors are hiding out amid choppy markets, Goldman Sachs says</string>
+    <string name="placeholder_text_author">Author</string>
+    <string name="placeholder_text_publish_date">Publish date</string>
+    <string name="placeholder_text_profile_name">Profile 1</string>
+
+    <string name="hint_username">İstifadəçi adı</string>
+    <string name="hint_password">Parol</string>
+    <string name="hint_budget">Büdcə</string>
+    <string name="hint_saving">200..</string>
+    <string name="hint_amount">Miqdar</string>
+    <string name="hint_expense_category">Qida məhsulları..</string>
+    <string name="hint_income_category">Dost..</string>
+    <string name="hint_expense_description">Qəlyanaltı, yağ..</string>
+    <string name="hint_income_description">Borc..</string>
+    <string name="hint_dots">...</string>
+    <string name="hint_search">Axtarış..</string>
+    <string name="content_description_delete_icon_item_layout">Delete icon for expense and income category item layout</string>
+
+    <string name="date_picker_title_text_start_point">Başlanğıc nöqtəsini seçin</string>
+    <string name="date_picker_title_text_end_point">Bitiş nöqtəsini seçin</string>
+    <string name="date_picker_title_text_expense_date">Xərc tarixini seçin</string>
+    <string name="date_picker_title_text_income_date">Gəlir tarixini seçin</string>
+
+    <string name="alert_dialog_positive_yes">Bəli</string>
+    <string name="alert_dialog_negative_no">Xeyr</string>
+
+    <string name="error_message_signin_username_or_pass_wrong">İstifadəçi adı və ya şifrə səhvdir!</string>
+    <string name="error_message_signin_empty_columns">Bütün xanalar doldurulmalıdır!</string>
+
+    <string name="error_message_signup_used_username">Bu istifadəçi adı artıq istifadə olunub!</string>
+    <string name="error_message_signup_password_length">Şifrənin uzunluğu 5-dən uzun olmalıdır!</string>
+    <string name="error_message_signup_non_macthing_passwords">Şifrələri düzgün daxil edin!</string>
+    <string name="error_message_signup_empty_columns">Bütün xanalar doldurulmalıdır!</string>
+
+    <string name="error_message_onboarding_budget_allowable_min_budget_value">Qəbul olunan minimum büdcə miqdarı 100 vahiddən çox olmalıdır..</string>
+    <string name="error_message_onboarding_budget_currency_not_selected">Valyutanı seçməyi unutdunuz..</string>
+    <string name="error_message_onboarding_budget_no_budget_info">Büdcə məlumatını daxil edin..</string>
+
+    <string name="error_message_onboarding_profile_used_profile_name">Bu profil adı artıq istifadə olunub!</string>
+    <string name="error_message_onboarding_profile_no_profile_name_added">Profil adını daxil edin</string>
+
+    <string name="error_message_onboarding_dateframe_year_gap_not_allowed">İllər arasında 1 ildən uzun boşluq qəbul olunmur..</string>
+    <string name="error_message_onboarding_dateframe_unappropriate_dateframe">Zaman dilimi uyğun seçilməyib! Başlanğıc nöqtəsi bitiş nöqtəsindən əvvəlki tarix olmalıdır.</string>
+
+    <string name="error_message_onboarding_savings_exceeded_budget">Qənaət miqdarı büdcə limitini keçməməlidir!</string>
+
+    <string name="error_message_onboarding_finish_already_existed_dateframe">Bu profildə artıq eyni zaman dilimi eyni valyuta ilə istifadə olunub!</string>
+    <string name="error_message_onboarding_finish_already_existed_dateframe_button">TARİXLƏRİ DƏYİŞ</string>
+
+    <string name="error_message_add_expense_future_date_selected">Gələcək tarix seçə bilmərsiniz..</string>
+    <string name="error_message_add_expense_earlier_date_selected">Seçilən tarix başlanğıc nöqtə tarixindən (%1$s) əvvəl olmamalıdır!</string>
+    <string name="error_message_add_expense_no_amount_added">Xərc miqdarını əlavə edin..</string>
+    <string name="error_message_add_expense_no_currency_selected">Valyutanı seçin..</string>
+    <string name="error_message_add_expense_no_expense_category_added">Heç olmasa 1 ədəd xərc kateqoriyası daxil edin..</string>
+    <string name="error_message_add_expense_empty_additional_category_column">Əlavə olaraq əlavə olunmuş xərc kateqoriyalarını doldurun və ya lazımsızları silin..</string>
+    <string name="error_message_add_expense_no_date_selected">Zəhmət olmasa xərc tarixini seçin..</string>
+
+    <string name="error_message_add_income_future_date_selected">Gələcək tarix seçə bilmərsiniz..</string>
+    <string name="error_message_add_income_earlier_date_selected">Seçilən tarix başlanğıc nöqtə tarixindən (%1$s) əvvəl olmamalıdır!</string>
+    <string name="error_message_add_income_no_amount_added">Gəlir miqdarını əlavə edin..</string>
+    <string name="error_message_add_income_no_currency_selected">Valyutanı seçin..</string>
+    <string name="error_message_add_income_no_income_source_added">Heç olmasa 1 ədəd gəlir qaynağı daxil edin..</string>
+    <string name="error_message_add_income_empty_additional_category_column">Əlavə olaraq əlavə olunmuş gəlir qaynaqlarını doldurun və ya lazımsızları silin..</string>
+    <string name="error_message_add_income_no_date_selected">Zəhmət olmasa gəlir tarixini seçin..</string>
+
+    <string name="alert_message_edit_expense_discard">Bütün düzəlişlər ləğv olunsun?</string>
+    <string name="error_message_edit_expense_future_date_selected">Gələcək tarix seçə bilmərsiniz..</string>
+    <string name="error_message_edit_expense_earlier_date_selected">Seçilən tarix başlanğıc nöqtə tarixindən (%1$s) əvvəl olmamalıdır!</string>
+    <string name="error_message_edit_expense_no_amount_added">Xərc miqdarını əlavə edin..</string>
+    <string name="error_message_edit_expense_no_currency_selected">Valyutanı seçin..</string>
+    <string name="error_message_edit_expense_no_income_source_added">Heç olmasa 1 ədəd xərc kateqoriyası daxil edin..</string>
+    <string name="error_message_edit_expense_empty_additional_category_column">Əlavə olaraq əlavə olunmuş xərc kateqoriyalarını doldurun və ya lazımsızları silin..</string>
+    <string name="error_message_edit_expense_no_date_selected">Zəhmət olmasa xərc tarixini seçin..</string>
+
+    <string name="alert_message_edit_income_discard">Bütün düzəlişlər ləğv olunsun?</string>
+    <string name="error_message_edit_income_future_date_selected">Gələcək tarix seçə bilmərsiniz..</string>
+    <string name="error_message_edit_income_earlier_date_selected">Seçilən tarix başlanğıc nöqtə tarixindən (%1$s) əvvəl olmamalıdır!</string>
+    <string name="error_message_edit_income_no_amount_added">Gəlir miqdarını əlavə edin..</string>
+    <string name="error_message_edit_income_no_currency_selected">Valyutanı seçin..</string>
+    <string name="error_message_edit_income_no_income_source_added">Heç olmasa 1 ədəd gəlir qaynağı daxil edin..</string>
+    <string name="error_message_edit_income_empty_additional_category_column">>Əlavə olaraq əlavə olunmuş gəlir qaynaqlarını doldurun və ya lazımsızları silin..</string>
+    <string name="error_message_edit_income_no_date_selected">Zəhmət olmasa gəlir tarixini seçin..</string>
+
+    <string name="alert_message_transactions_detail_delete_transaction">Bu əməliyyatı silmək istədiyinizə əminsiniz?</string>
+    <string name="notifying_message_transactions_detail_no_res_found">\'%1$s\' üçün heç bir nəticə tapılmadı</string>
+
+    <string name="alert_message_profile_switch">\'%1$s\' adlı profilə keçid edilsin?</string>
+    <string name="alert_message_profile_delete">\'%1$s\' adlı profili silmək istədiyinizdən əminsiniz?</string>
+    <string name="notifying_message_profile_switch">\'%1$s\' adlı profilə keçid edildi</string>
+    <string name="notifying_message_profile_delete">\'%1$s\' adlı profil müvəffəqiyətlə silindi</string>
+    <string name="error_message_profile_delete">Bu istifadəçidə sadəcə 1 ədəd profil var. Yeni profil əlavə edin..</string>
+
+    <string name="alert_message_settings_signout">Çıxış etmək istədiyinizdən əminsiniz?</string>
+    <string name="notifying_message_language_english">Language set to English</string>
+    <string name="notifying_message_language_azerbaijani">Dil Azərbaycan dilinə dəyişdirildi</string>
+    <string name="notifying_message_language_turkish">Dil Türkçeye değiştirildi</string>
+
+    <string name="error_message_profile_name_update_no_profile_name">Profil adı əlavə edin</string>
+    <string name="error_message_profile_name_update_same_profile_name">Fərqli bir profil adı əlavə edin</string>
+    <string name="error_message_profile_name_update_used_profile_name">Bu profil adı artıq istifadə olunub</string>
+    <string name="notifying_message_profile_name_update_success">Profil adı müvəffəqiyyətlə \'%1$s\' adına dəyişdirildi</string>
+
+    <string name="alert_message_settings_clear_categories_and_sources">Bütün xərc kateqoriyalarını və gəlir qaynaqlarını təmizləmək istədiyinizdən əminsiniz?</string>
+    <string name="notifying_message_settings_clear_categories_and_sources">Bütün xərc kateqoriyaları və gəlir qaynaqları müvəffəqiyyətlə təmizləndi</string>
+
+    <string name="error_message_end_date_update_no_date">Zəhmət olmasa tarix seçin</string>
+    <string name="error_message_end_date_update_same_date">Zəhmət olmasa fərqli bir tarix seçin</string>
+    <string name="notifying_message_end_date_update_success">Son tarix müvəffəqiyyətlə yeniləndi</string>
+
+    <string name="error_message_saving_amount_update_no_amount">Qənaət miqdarını əlavə edin</string>
+    <string name="error_message_saving_amount_update_exceeded_amount">Qənaət miqdarı büdcə limitini keçməməlidir</string>
+    <string name="error_message_saving_amount_update_same_amount">Zəhmət olmasa fərqli bir miqdar daxil edin</string>
+    <string name="notifying_message_saving_amount_update_success">Qənaət miqdarı müvəffəqiyyətlə yeniləndi</string>
+
+    <string-array name="languages">
+        <item>İngiliscə</item>
+        <item>Azərbaycanca</item>
+        <item>Türkcə</item>
+    </string-array>
+</resources>

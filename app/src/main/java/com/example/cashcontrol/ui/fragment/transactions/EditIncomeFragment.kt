@@ -38,6 +38,7 @@ import java.time.Instant
 import java.time.LocalDate
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
+import java.util.Locale
 
 class EditIncomeFragment : Fragment() {
     private lateinit var binding: FragmentEditIncomeBinding
@@ -64,11 +65,11 @@ class EditIncomeFragment : Fragment() {
         requireActivity().onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
                 val materialAlertDialog = MaterialAlertDialogBuilder(requireContext())
-                materialAlertDialog.setMessage("Are you sure you want to discard all changes?")
-                    .setPositiveButton("Yes") { _, _ ->
+                materialAlertDialog.setMessage(resources.getString(R.string.alert_message_edit_income_discard))
+                    .setPositiveButton(resources.getString(R.string.alert_dialog_positive_yes)) { _, _ ->
                         findNavController().popBackStack()
                     }
-                    .setNegativeButton("No") { dialogInterface, _ ->
+                    .setNegativeButton(resources.getString(R.string.alert_dialog_negative_no)) { dialogInterface, _ ->
                         dialogInterface.cancel()
                     }
                     .show()
@@ -127,18 +128,18 @@ class EditIncomeFragment : Fragment() {
                                     val selectedDate = Instant.ofEpochMilli(selection).atZone(ZoneId.systemDefault()).toLocalDate()
 
                                     val startPointDate = LocalDate.parse(unfinishedDateFrame.startPointDate, DateTimeFormatter.ofPattern(
-                                        DateConstant.DATE_LIMIT_DATE_PATTERN
+                                        DateConstant.DATE_LIMIT_DATE_PATTERN, Locale.US
                                     ))
 
                                     if (selectedDate > LocalDate.now()) {
-                                        showErrorMessage("You cannot choose future dates..", binding)
+                                        showErrorMessage(resources.getString(R.string.error_message_edit_income_future_date_selected), binding)
                                     } else if (selectedDate < startPointDate) {
                                         showErrorMessage(
-                                            "The chosen date must not be earlier than the start point (${unfinishedDateFrame.startPointDate}) date!",
+                                            resources.getString(R.string.error_message_edit_income_earlier_date_selected, unfinishedDateFrame.startPointDate),
                                             binding
                                         )
                                     } else {
-                                        tvSelectedDateFragEditIncome.text = selectedDate.format(DateTimeFormatter.ofPattern(DateConstant.DATE_LIMIT_DATE_PATTERN))
+                                        tvSelectedDateFragEditIncome.text = selectedDate.format(DateTimeFormatter.ofPattern(DateConstant.DATE_LIMIT_DATE_PATTERN, Locale.US))
                                     }
                                 }
                                 it.show(childFragmentManager, "date_selection")
@@ -150,11 +151,11 @@ class EditIncomeFragment : Fragment() {
 
             ivReturnBackFragEditIncome.setOnClickListener {
                 val materialAlertDialog = MaterialAlertDialogBuilder(requireContext())
-                materialAlertDialog.setMessage("Are you sure you want to discard all changes?")
-                    .setPositiveButton("Yes") { _, _ ->
+                materialAlertDialog.setMessage(resources.getString(R.string.alert_message_edit_income_discard))
+                    .setPositiveButton(resources.getString(R.string.alert_dialog_positive_yes)) { _, _ ->
                         findNavController().popBackStack()
                     }
-                    .setNegativeButton("No") { dialogInterface, _ ->
+                    .setNegativeButton(resources.getString(R.string.alert_dialog_negative_no)) { dialogInterface, _ ->
                         dialogInterface.cancel()
                     }
                     .show()
@@ -270,19 +271,19 @@ class EditIncomeFragment : Fragment() {
 
         when {
             expenseAmount.isEmpty() -> {
-                showErrorMessage("Consider adding expense amount..", binding)
+                showErrorMessage(resources.getString(R.string.error_message_edit_income_no_amount_added), binding)
                 isReady = false
             }
             currency.isEmpty() -> {
-                showErrorMessage("Please select currency..", binding)
+                showErrorMessage(resources.getString(R.string.error_message_edit_income_no_currency_selected), binding)
                 isReady = false
             }
             initialIncomeSource.isEmpty() -> {
-                showErrorMessage("Please write at least one expense category..", binding)
+                showErrorMessage(resources.getString(R.string.error_message_edit_income_no_income_source_added), binding)
                 isReady = false
             }
             !isAdditionalExpenseCategoriesNotEmpty -> {
-                showErrorMessage("Please fill additionally added expense categories or delete unused ones..", binding)
+                showErrorMessage(resources.getString(R.string.error_message_edit_income_empty_additional_category_column), binding)
                 isReady = false
             }
             else -> { isReady = true }
@@ -371,7 +372,7 @@ class EditIncomeFragment : Fragment() {
     private suspend fun getUnfinishedDateFrame(): DateFrame? {
         userViewModel.getOnlineUser()?.let { onlineUser ->
             profileViewModel.getOnlineProfileById(onlineUser.userId!!)?.let { onlineProfile ->
-                dateFrameViewModel.getUnfinishedDateFrameByProfile(onlineProfile.profileId!!)?.let { unfinishedDateFrame ->
+                dateFrameViewModel.getUnfinishedAndOnlineDateFrameByProfile(onlineProfile.profileId!!)?.let { unfinishedDateFrame ->
                     return unfinishedDateFrame
                 }
             }
@@ -380,10 +381,9 @@ class EditIncomeFragment : Fragment() {
     }
 
     private fun showMaterialDatePickerDialog (callback: (MaterialDatePicker<Long>) -> Unit) {
-        val date = LocalDate.parse(dateFrameViewModel.selectedTransaction?.date, DateTimeFormatter.ofPattern(DateConstant.DATE_LIMIT_DATE_PATTERN))
-        var materialDatePicker: MaterialDatePicker<Long>? = null
-        materialDatePicker = MaterialDatePicker.Builder.datePicker()
-            .setTitleText("Select expense date")
+        val date = LocalDate.parse(dateFrameViewModel.selectedTransaction?.date, DateTimeFormatter.ofPattern(DateConstant.DATE_LIMIT_DATE_PATTERN, Locale.US))
+        val materialDatePicker: MaterialDatePicker<Long> = MaterialDatePicker.Builder.datePicker()
+            .setTitleText(resources.getString(R.string.date_picker_title_text_income_date))
             .setSelection(date.atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli())
             .build()
 

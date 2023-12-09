@@ -15,7 +15,7 @@ import com.example.cashcontrol.util.converter.TypeConverter
 @TypeConverters (TypeConverter::class)
 @Database (
     entities = [User::class, Profile::class, DateFrame::class, DateLimit::class, Expense::class, Income::class, Transaction::class],
-    version = 37,
+    version = 38,
     exportSchema = false)
 abstract class CashControlDatabase: RoomDatabase() {
 

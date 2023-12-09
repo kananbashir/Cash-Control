@@ -8,14 +8,12 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.activity.OnBackPressedCallback
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.cashcontrol.R
 import com.example.cashcontrol.databinding.FragmentOnBoardingBudgetBinding
+import com.example.cashcontrol.util.MessageUtil.showErrorMessage
 import com.example.cashcontrol.util.constant.UIStateConstant.BUDGET_AMOUNT_INPUT_KEY
 import com.example.cashcontrol.util.constant.UIStateConstant.BUDGET_CURRENCY_INPUT_KEY
-import com.google.android.material.snackbar.BaseTransientBottomBar
-import com.google.android.material.snackbar.Snackbar
 
 class OnBoardingBudgetFragment : Fragment() {
     private lateinit var binding: FragmentOnBoardingBudgetBinding
@@ -64,13 +62,13 @@ class OnBoardingBudgetFragment : Fragment() {
                                 currency
                             ))
                         } else {
-                            showErrorMessage("Allowable minimum budget value is 100 units..")
+                            showErrorMessage(resources.getString(R.string.error_message_onboarding_budget_allowable_min_budget_value), binding)
                         }
                     } else {
-                        showErrorMessage("You forgot to select currency..")
+                        showErrorMessage(resources.getString(R.string.error_message_onboarding_budget_currency_not_selected), binding)
                     }
                 } else {
-                    showErrorMessage("Consider adding budget information..")
+                    showErrorMessage(resources.getString(R.string.error_message_onboarding_budget_no_budget_info), binding)
                 }
             }
 
@@ -94,12 +92,5 @@ class OnBoardingBudgetFragment : Fragment() {
             override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
 
-    }
-
-    private fun showErrorMessage (message: String) {
-        Snackbar.make(binding.root,message, Snackbar.LENGTH_SHORT)
-            .setAnimationMode(BaseTransientBottomBar.ANIMATION_MODE_FADE)
-            .setBackgroundTint(resources.getColor(R.color.bittersweet_red, null))
-            .show()
     }
 }

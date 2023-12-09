@@ -6,7 +6,6 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.example.cashcontrol.data.db.entity.DateLimit
-import com.example.cashcontrol.data.db.entity.Transaction
 import com.example.cashcontrol.data.db.entity.relation.DateLimitWithTransactions
 import kotlinx.coroutines.flow.Flow
 
@@ -36,13 +35,5 @@ interface DateLimitDao {
     @androidx.room.Transaction
     @Query ("SELECT * FROM date_limit_table WHERE dateFrameId = :dateFrameId AND date = :date")
     suspend fun getDateLimitOfDateFrameByDate (dateFrameId: Int, date: String): List<DateLimit>
-
-//    @androidx.room.Transaction
-//    @Query ("SELECT * FROM date_limit_table WHERE dateLimitId = :dateLimitId")
-//    suspend fun getAllExpensesForDate (dateLimitId: Int): List<Transaction>
-//
-//    @androidx.room.Transaction
-//    @Query ("SELECT * FROM date_limit_table WHERE dateLimitId = :dateLimitId")
-//    suspend fun getAllIncomesForDate (dateLimitId: Int): List<Transaction>
 
 }
