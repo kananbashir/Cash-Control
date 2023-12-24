@@ -21,6 +21,9 @@ At first, the user creates a new profile and then creates a new date frame. Date
 
 Creating identical date frames in a profile is prohibited. For example, if the user wants to add another date frame with the same dates but different budget and currency information, he or she has to create another profile and a new date frame on this profile.
 
+Here is the YouTube link where I have shown how the app works:
+https://youtu.be/8Mx8EcTVmYI
+
 ## :rocket: **Technologies used**
 - **Kotlin**,
 - **Coroutines** - _for asynchronous and more..,_
@@ -43,7 +46,13 @@ Creating identical date frames in a profile is prohibited. For example, if the u
 |--- data // to store db/api-related classes
 |     |-- db
 |         |- entity
+|            |- expense
+|            |- income
+|            |- relation
+|     |-- model
 |     |-- network
+|         |- local
+|         |- remote
 |     |-- repository
 |
 |--- di // to store dependency injection lib related classes
@@ -51,6 +60,13 @@ Creating identical date frames in a profile is prohibited. For example, if the u
 |
 |--- ui // to store ui-related classes
 |     |-- fragment
+|         |- bottomsheet
+|         |- drawers
+|         |- login
+|         |- navmenu
+|         |- news
+|         |- onboarding
+|         |- transactions
 |     |-- viewmodel
 |
 |--- utils // to store utility classes
