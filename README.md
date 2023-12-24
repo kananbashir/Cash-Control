@@ -3,8 +3,6 @@
 # Cash Control
 A budget tracker app
 
-> Note: This project is in production (I will try to add genuine description to the commits)
-
 > Note: Unfortunately, there is no free currency converter API, so I decided to not implement automatic currency conversion. There will be only one currency.
 
 
