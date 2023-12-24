@@ -28,6 +28,9 @@ object UIStateConstant {
     const val WIDGET_EXPENSE_AMOUNT_KEY: String = "widget_expense_amount_key"
     const val WIDGET_SAVINGS_AMOUNT_KEY: String = "widget_savings_amount_key"
     const val LOADING_STATE_KEY: String = "loading_state_key"
+    const val PROGRESS_BAR_MIN_KEY: String = "progress_bar_min_key"
+    const val PROGRESS_BAR_MAX_KEY: String = "progress_bar_max_key"
+    const val PROGRESS_BAR_PROGRESS_KEY: String = "progress_bar_progress_key"
 
 
     // Transaction
@@ -38,6 +41,10 @@ object UIStateConstant {
     const val CUSTOM_TRANSACTION_DATE_KEY: String = "custom_transaction_date_key"
     const val ADDITIONAL_TRANSACTION_CATEGORY_LIST_KEY: String = "additional_transaction_date_key"
     const val RADIO_GROUP_DATE_SELECT_STATE_KEY: String = "radio_group_date_select_state_key"
+
+    // Settings
+    const val SELECTED_THEME_KEY: String = "selected_theme_key"
+    const val SELECTED_LANGUAGE_KEY: String = "selected_language_key"
 
 
 }

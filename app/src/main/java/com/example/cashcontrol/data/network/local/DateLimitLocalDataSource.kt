@@ -3,7 +3,6 @@ package com.example.cashcontrol.data.network.local
 import com.example.cashcontrol.data.db.DateLimitDao
 import com.example.cashcontrol.data.db.entity.DateLimit
 import com.example.cashcontrol.data.db.entity.relation.DateLimitWithTransactions
-import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class DateLimitLocalDataSource @Inject constructor(private val dateLimitDao: DateLimitDao) {
@@ -16,12 +15,8 @@ class DateLimitLocalDataSource @Inject constructor(private val dateLimitDao: Dat
         dateLimitDao.upsertAllDateLimit(*dateLimit)
     }
 
-    suspend fun deleteDateLimit (dateLimit: DateLimit) {
-        dateLimitDao.deleteDateLimit(dateLimit)
-    }
-
-    fun getAllDateLimitsFromDb (): Flow<List<DateLimit>> {
-        return dateLimitDao.getAllDateLimitsFromDb()
+    suspend fun deleteAllDateLimits (vararg dateLimit: DateLimit) {
+        dateLimitDao.deleteAllDateLimits(*dateLimit)
     }
 
     suspend fun getDateLimitWithTransactions(dateLimitId: Int): List<DateLimitWithTransactions> {

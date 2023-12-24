@@ -6,4 +6,6 @@ object DateLimitConstant {
     const val SECOND_DAY_ALLOWED_PERCENTAGE: Int = 20
     const val THIRD_DAY_ALLOWED_PERCENTAGE: Int = 10
 
+    const val MIN_ALLOWED_INITIAL_DAILY_LIMIT_VAL: Int = 10
+
 }

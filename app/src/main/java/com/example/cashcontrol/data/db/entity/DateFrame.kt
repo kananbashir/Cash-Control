@@ -19,6 +19,12 @@ data class DateFrame(
     var dateFrameId: Int? = null
     var totalIncomeOfAll: Double = 0.0
     var totalExpenseOfAll: Double = 0.0
-    var totalBudget: Double = initialBudget + totalIncomeOfAll - savedMoney
-    var remainingBudget: Double = totalBudget - totalExpenseOfAll
+
+    fun getTotalBudget (): Double {
+        return initialBudget + totalIncomeOfAll - savedMoney
+    }
+
+    fun getRemainingBudget (): Double {
+        return getTotalBudget() - totalExpenseOfAll
+    }
 }

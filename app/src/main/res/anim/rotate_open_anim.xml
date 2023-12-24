@@ -7,6 +7,7 @@
         android:pivotX="50%"
         android:pivotY="50%"
         android:toDegrees="45"
-        android:duration="240" />
+        android:duration="300"
+        android:interpolator="@android:interpolator/bounce"/>
 
 </set>

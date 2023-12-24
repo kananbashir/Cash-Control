@@ -2,8 +2,8 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     style="@style/CachedCategoriesBackground"
-    android:paddingTop="5dp"
-    android:paddingBottom="5dp"
+    android:paddingTop="15dp"
+    android:paddingBottom="15dp"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 

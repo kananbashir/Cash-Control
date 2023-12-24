@@ -19,7 +19,7 @@ interface DateLimitDao {
     suspend fun upsertAllDateLimit (vararg dateLimit: DateLimit)
 
     @Delete
-    suspend fun deleteDateLimit (dateLimit: DateLimit)
+    suspend fun deleteAllDateLimits(vararg dateLimit: DateLimit)
 
     @Query ("SELECT * FROM date_limit_table")
     fun getAllDateLimitsFromDb (): Flow<List<DateLimit>>

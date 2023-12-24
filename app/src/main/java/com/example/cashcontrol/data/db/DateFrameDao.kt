@@ -18,7 +18,7 @@ interface DateFrameDao {
     suspend fun upsertDateFrame (dateFrame: DateFrame)
 
     @Delete
-    suspend fun deleteDateFrame (dateFrame: DateFrame)
+    suspend fun deleteAllDateFrames (vararg dateFrame: DateFrame)
 
     @Query ("SELECT * FROM dateFrame_table")
     fun getAllDateFramesFromDb (): Flow<List<DateFrame>>
@@ -28,7 +28,7 @@ interface DateFrameDao {
     suspend fun getUnfinishedAndOnlineDateFrameByProfile (profileId: Int): List<DateFrame>
 
     @Transaction
-    @Query ("SELECT * FROM dateframe_table WHERE profileId = :profileId AND startPointDate = :startPointDate AND endPointDate = :endPointDate")
+    @Query ("SELECT * FROM dateFrame_table WHERE profileId = :profileId AND startPointDate = :startPointDate AND endPointDate = :endPointDate")
     suspend fun getDateFrameOfProfileByDates (startPointDate: String, endPointDate: String, profileId: Int): List<DateFrame>
 
     @Transaction
@@ -40,7 +40,7 @@ interface DateFrameDao {
     suspend fun getDateFrameWithTransactions (dateFrameId: Int): List<DateFrameWithTransactions>
 
     @Transaction
-    @Query ("SELECT * FROM dateframe_table WHERE profileId = :profileId AND isOnline = 1")
+    @Query ("SELECT * FROM dateFrame_table WHERE profileId = :profileId AND isOnline = 1")
     suspend fun getOnlineDateFrameByProfile (profileId: Int): List<DateFrame>
 
 }

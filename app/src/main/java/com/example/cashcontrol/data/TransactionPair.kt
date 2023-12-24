@@ -1,4 +1,4 @@
-package com.example.cashcontrol.adapter
+package com.example.cashcontrol.data
 
 import com.example.cashcontrol.data.db.entity.DateLimit
 import com.example.cashcontrol.data.db.entity.Transaction

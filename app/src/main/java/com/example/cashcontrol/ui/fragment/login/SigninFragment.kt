@@ -32,13 +32,14 @@ class SigninFragment : Fragment() {
     private lateinit var userViewModel: UserViewModel
     private lateinit var profileViewModel: ProfileViewModel
     private lateinit var dateFrameViewModel: DateFrameViewModel
-    private val shrinkInsideAnim: Animation by lazy { AnimationUtils.loadAnimation(requireContext(), R.anim.shrink_inside) }
+    private val shrinkButtonAnim: Animation by lazy { AnimationUtils.loadAnimation(requireContext(), R.anim.shrink_button_anim) }
+    private val expandButtonAnim: Animation by lazy { AnimationUtils.loadAnimation(requireContext(), R.anim.expand_button_anim) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        userViewModel = ViewModelProvider (requireActivity()).get(UserViewModel::class.java)
-        profileViewModel = ViewModelProvider (requireActivity()).get(ProfileViewModel::class.java)
-        dateFrameViewModel = ViewModelProvider (requireActivity()).get(DateFrameViewModel::class.java)
+        userViewModel = ViewModelProvider (requireActivity())[UserViewModel::class.java]
+        profileViewModel = ViewModelProvider (requireActivity())[ProfileViewModel::class.java]
+        dateFrameViewModel = ViewModelProvider (requireActivity())[DateFrameViewModel::class.java]
 
         binding = FragmentSigninBinding.inflate(layoutInflater)
 
@@ -62,30 +63,30 @@ class SigninFragment : Fragment() {
 
 
                 if (username.isNotEmpty() && password.isNotEmpty()) {
+                    buttonLoadingState(true)
                     viewLifecycleOwner.lifecycleScope.launch {
                         repeatOnLifecycle(Lifecycle.State.STARTED) {
+                            delay(500) // JUST TO SIMULATE LOADING..
                             val foundUser = userViewModel.getUserByNameAndPassword(username, password)
                             if (foundUser != null) {
                                     val onlineProfile = profileViewModel.getOnlineProfileById(foundUser.userId!!)
                                     if (onlineProfile != null) {
                                         val unfinishedDateFrame = dateFrameViewModel.getUnfinishedAndOnlineDateFrameByProfile(onlineProfile.profileId!!)
                                         if (unfinishedDateFrame != null) {
-                                            updateButtonToLoadingState()
                                             userViewModel.setUserOnline(foundUser)
-                                            delay(1200) // JUST TO SIMULATE LOADING..
+                                            delay(300)
                                             findNavController().navigate(SigninFragmentDirections.actionGlobalMainSession())
                                         } else {
                                             userViewModel.setUserOnline(foundUser)
-                                            delay(1200) // JUST TO SIMULATE LOADING..
                                             findNavController().navigate(SigninFragmentDirections.actionGlobalOnboardingSession())
                                         }
                                     } else {
                                         userViewModel.setUserOnline(foundUser)
-                                        delay(1200) // JUST TO SIMULATE LOADING..
                                         findNavController().navigate(SigninFragmentDirections.actionGlobalOnBoardingStartFragment())
                                     }
                             } else {
                                 showErrorMessage(resources.getString(R.string.error_message_signin_username_or_pass_wrong), binding)
+                                buttonLoadingState(false)
                             }
                         }
                     }
@@ -132,12 +133,22 @@ class SigninFragment : Fragment() {
         }
     }
 
-    private fun updateButtonToLoadingState () {
+    private fun buttonLoadingState (isLoading: Boolean) {
         binding.apply {
-            btSignInFragSignIn.startAnimation(shrinkInsideAnim)
-            ltLoadingFragSignIn.visibility = View.VISIBLE
-            btSignInFragSignIn.isClickable = false
-            btSignInFragSignIn.visibility = View.INVISIBLE
+            when (isLoading) {
+                true -> {
+                    btSignInFragSignIn.startAnimation(shrinkButtonAnim)
+                    ltLoadingFragSignIn.visibility = View.VISIBLE
+                    btSignInFragSignIn.isClickable = false
+                    btSignInFragSignIn.visibility = View.INVISIBLE
+                }
+                else -> {
+                    btSignInFragSignIn.startAnimation(expandButtonAnim)
+                    ltLoadingFragSignIn.visibility = View.INVISIBLE
+                    btSignInFragSignIn.isClickable = true
+                    btSignInFragSignIn.visibility = View.VISIBLE
+                }
+            }
         }
     }
 }

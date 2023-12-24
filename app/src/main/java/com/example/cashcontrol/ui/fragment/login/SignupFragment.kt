@@ -31,11 +31,12 @@ import kotlinx.coroutines.launch
 class SignupFragment : Fragment() {
     private lateinit var binding: FragmentSignupBinding
     private lateinit var userViewModel: UserViewModel
-    private val shrinkInsideAnim: Animation by lazy { AnimationUtils.loadAnimation(requireContext(), R.anim.shrink_inside) }
+    private val shrinkButtonAnim: Animation by lazy { AnimationUtils.loadAnimation(requireContext(), R.anim.shrink_button_anim) }
+    private val expandButtonAnim: Animation by lazy { AnimationUtils.loadAnimation(requireContext(), R.anim.expand_button_anim) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        userViewModel = ViewModelProvider (requireActivity()).get(UserViewModel::class.java)
+        userViewModel = ViewModelProvider (requireActivity())[UserViewModel::class.java]
         binding = FragmentSignupBinding.inflate(layoutInflater)
 
         if (savedInstanceState != null) {
@@ -67,21 +68,25 @@ class SignupFragment : Fragment() {
                 viewLifecycleOwner.lifecycleScope.launch {
                     repeatOnLifecycle(Lifecycle.State.STARTED) {
                         if (username.isNotEmpty() && password.isNotEmpty() && passwordReenter.isNotEmpty()) {
+                            buttonLoadingState(true)
+                            delay(500) // JUST TO SIMULATE LOADING..
                             if (password == passwordReenter) {
                                 if (password.length > 5) {
                                     if (userViewModel.isUsernameValid(username)) {
-                                        updateButtonToLoadingState()
                                         userViewModel.upsertUser(User(username, password, true, mutableSetOf(), mutableSetOf()))
-                                        delay(1000)
+                                        delay(300)
                                         findNavController().navigate(SignupFragmentDirections.actionGlobalOnBoardingStartFragment())
                                     } else {
                                         showErrorMessage(resources.getString(R.string.error_message_signup_used_username), binding)
+                                        buttonLoadingState(false)
                                     }
                                 } else {
                                     showErrorMessage(resources.getString(R.string.error_message_signup_password_length), binding)
+                                    buttonLoadingState(false)
                                 }
                             } else {
                                 showErrorMessage(resources.getString(R.string.error_message_signup_non_macthing_passwords), binding)
+                                buttonLoadingState(false)
                             }
                         } else {
                             showErrorMessage(resources.getString(R.string.error_message_signup_empty_columns), binding)
@@ -131,12 +136,22 @@ class SignupFragment : Fragment() {
         }
     }
 
-    private fun updateButtonToLoadingState () {
+    private fun buttonLoadingState (isLoading: Boolean) {
         binding.apply {
-            btSignUpFragSignUp.startAnimation(shrinkInsideAnim)
-            ltLoadingFragSignUp.visibility = View.VISIBLE
-            btSignUpFragSignUp.isClickable = false
-            btSignUpFragSignUp.visibility = View.INVISIBLE
+            when (isLoading) {
+                true -> {
+                    btSignUpFragSignUp.startAnimation(shrinkButtonAnim)
+                    ltLoadingFragSignUp.visibility = View.VISIBLE
+                    btSignUpFragSignUp.isClickable = false
+                    btSignUpFragSignUp.visibility = View.INVISIBLE
+                }
+                else -> {
+                    btSignUpFragSignUp.startAnimation(expandButtonAnim)
+                    ltLoadingFragSignUp.visibility = View.INVISIBLE
+                    btSignUpFragSignUp.isClickable = true
+                    btSignUpFragSignUp.visibility = View.VISIBLE
+                }
+            }
         }
     }
 }

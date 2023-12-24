@@ -8,7 +8,9 @@ data class DateLimit(
     var date: String = "",
     var dateFrameId: Int,
     var expenseLimit: Double,
-    var limitExceededValue: Double
+    var limitExceededValue: Double,
+    var isInTernaryCycle: Boolean,
+    var bonusExpenseValue: Double
 ) {
     @PrimaryKey (autoGenerate = true)
     var dateLimitId: Int? = null

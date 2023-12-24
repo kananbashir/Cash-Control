@@ -61,7 +61,11 @@
     <string name="text_update_end_point">Update end point</string>
     <string name="text_update_saving">Update saving amount</string>
     <string name="placeholder_text_hello">Hello, %1$s</string>
-    <string name="text_onboarding_finish_header_1">Now we know that you have a budget of %1$s %2$s for the period of %3$s to %4$s and you intend to save %5$s %6$s</string>
+    <string name="text_onboarding_finish_header_1">Please check that the information you have entered is correct</string>
+    <string name="text_onboarding_finish_selected_start_point_date">Selected start point date:</string>
+    <string name="text_onboarding_finish_selected_end_point_date">Selected end point date:</string>
+    <string name="text_onboarding_finish_budget_entered">Budget entered:</string>
+    <string name="text_onboarding_finish_saving_amount">Saving amount:</string>
     <string name="text_no_data">No data</string>
 
     <string name="text_menu_home">Home</string>
@@ -124,7 +128,7 @@
     <string name="placeholder_currency_converting_rate_2">1 AZN = 0.587556 USD</string>
     <string name="placeholder_text_last_expenses">Restaurant</string>
     <string name="placeholder_text_last_expense_expense">-50₼</string>
-    <string name="placeholder_text_date_frame">%1$s to %2$s</string>
+    <string name="placeholder_text_date_frame">%1$s — %2$s</string>
     <string name="placeholder_text_description">- Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</string>
     <string name="placeholder_text_bulk_categories">- Friend\n- Pub</string>
     <string name="placeholder_text_article_title">This trade is where big investors are hiding out amid choppy markets, Goldman Sachs says</string>
@@ -141,7 +145,7 @@
     <string name="hint_income_category">Friend..</string>
     <string name="hint_expense_description">Snacks, butter..</string>
     <string name="hint_income_description">Dept..</string>
-    <string name="hint_dots">...</string>
+    <string name="hint_dots">…</string>
     <string name="hint_search">Search..</string>
     <string name="content_description_delete_icon_item_layout">Delete icon for expense and income category item layout</string>
 
@@ -174,6 +178,7 @@
     <string name="error_message_onboarding_savings_exceeded_budget">The value of savings cannot exceed the budget!</string>
 
     <string name="error_message_onboarding_finish_already_existed_dateframe">This profile already has such a date frame with same currency!</string>
+    <string name="error_message_onboarding_finish_incompatible_dateframe_and_budget">This date frame is too long for this budget. Please, change date frame, budget or saving amount..</string>
     <string name="error_message_onboarding_finish_already_existed_dateframe_button">CHANGE DATES</string>
 
     <string name="error_message_add_expense_future_date_selected">You cannot choose future dates..</string>
@@ -234,11 +239,13 @@
 
     <string name="error_message_end_date_update_no_date">Please, select a date</string>
     <string name="error_message_end_date_update_same_date">Please, select a different date</string>
+    <string name="error_message_end_date_update_incompatible_dateframe_and_budget">This date frame is too long for this budget</string>
     <string name="notifying_message_end_date_update_success">The end date successfully updated</string>
 
     <string name="error_message_saving_amount_update_no_amount">Consider adding saving amount</string>
-    <string name="error_message_saving_amount_update_exceeded_amount">The value of savings cannot exceed the budget</string>
+    <string name="error_message_saving_amount_update_exceeded_amount">The value of savings cannot exceed the remaining budget</string>
     <string name="error_message_saving_amount_update_same_amount">Please, type a different amount</string>
+    <string name="error_message_saving_amount_update_incompatible_dateframe_and_budget">This date frame is too long for this budget. Please, decrease saving amount.</string>
     <string name="notifying_message_saving_amount_update_success">Saving amount successfully updated</string>
 
     <string-array name="languages">

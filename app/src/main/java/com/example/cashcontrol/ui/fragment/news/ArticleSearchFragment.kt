@@ -25,7 +25,7 @@ class ArticleSearchFragment : Fragment() {
         super.onCreate(savedInstanceState)
         binding = FragmentArticleSearchBinding.inflate(layoutInflater)
         newsAdapter = NewsAdapter()
-        newsViewModel = ViewModelProvider(requireActivity()).get(NewsViewModel::class.java)
+        newsViewModel = ViewModelProvider(requireActivity())[NewsViewModel::class.java]
     }
 
     override fun onCreateView(

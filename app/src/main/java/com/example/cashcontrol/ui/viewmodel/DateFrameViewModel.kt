@@ -2,13 +2,14 @@ package com.example.cashcontrol.ui.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.cashcontrol.adapter.TransactionPair
+import com.example.cashcontrol.data.TransactionPair
 import com.example.cashcontrol.data.repository.CashControlRepository
 import com.example.cashcontrol.data.db.entity.DateFrame
 import com.example.cashcontrol.data.db.entity.Transaction
 import com.example.cashcontrol.data.db.entity.relation.DateFrameWithDateLimits
 import com.example.cashcontrol.data.db.entity.relation.DateFrameWithTransactions
-import com.example.cashcontrol.util.constant.DateConstant.DATE_LIMIT_DATE_PATTERN
+import com.example.cashcontrol.util.constant.TransactionConstant.TRANSACTION_TYPE_EXPENSE
+import com.example.cashcontrol.util.constant.TransactionConstant.TRANSACTION_TYPE_INCOME
 import com.example.cashcontrol.util.extension.concatenateCategories
 import com.example.cashcontrol.util.extension.sortDateLimitsByDateDescending
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -16,6 +17,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import java.math.BigDecimal
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import javax.inject.Inject
@@ -38,8 +40,8 @@ class DateFrameViewModel @Inject constructor(
         cashControlRepository.dateFrameLocal.upsertDateFrame(dateFrame)
     }
 
-    fun deleteDateFrame (dateFrame: DateFrame) = viewModelScope.launch {
-        cashControlRepository.dateFrameLocal.deleteDateFrame(dateFrame)
+    fun deleteAllDateFrames (vararg dateFrame: DateFrame) = viewModelScope.launch {
+        cashControlRepository.dateFrameLocal.deleteAllDateFrames(*dateFrame)
     }
 
     suspend fun getUnfinishedAndOnlineDateFrameByProfile (profileId: Int): DateFrame? {
@@ -74,27 +76,34 @@ class DateFrameViewModel @Inject constructor(
         return null
     }
 
-    fun getPreviousDayLimitExceedValue (dateFrameWithDateLimits: DateFrameWithDateLimits): Double {
-        val allDateLimits = dateFrameWithDateLimits.dateLimits
-        if (allDateLimits.isNotEmpty()) {
-            val previousDay = LocalDate.now().minusDays(1).format(DateTimeFormatter.ofPattern(DATE_LIMIT_DATE_PATTERN))
-            val previousDayDateLimit = allDateLimits.find { dl -> dl.date == previousDay }
-            previousDayDateLimit?.let {
-                return it.limitExceededValue
+    suspend fun updateTotalExpenseAmountOf(unfinishedDateFrame: DateFrame) {
+        getDateFrameWithTransactions(unfinishedDateFrame.dateFrameId!!)?.let {
+            val allTransactions = it.transactions
+            val allExpenses = allTransactions.filter { transaction -> transaction.transactionType == TRANSACTION_TYPE_EXPENSE }
+            var sumOfExpenses: BigDecimal = BigDecimal.valueOf(0.0)
+
+            for (expense in allExpenses) {
+                sumOfExpenses = sumOfExpenses.plus(expense.transactionAmount.toBigDecimal())
             }
+
+            unfinishedDateFrame.totalExpenseOfAll = sumOfExpenses.toDouble()
+            upsertDateFrame(unfinishedDateFrame)
         }
-
-        return 0.0
     }
 
-    fun updateExpenseAmount (expenseAmount: Double, unfinishedDateFrame: DateFrame) {
-        unfinishedDateFrame.totalExpenseOfAll += expenseAmount
-        upsertDateFrame(unfinishedDateFrame)
-    }
+    suspend fun updateTotalIncomeAmountOf(unfinishedDateFrame: DateFrame) {
+        getDateFrameWithTransactions(unfinishedDateFrame.dateFrameId!!)?.let {
+            val allTransactions = it.transactions
+            val allIncomes = allTransactions.filter { transaction -> transaction.transactionType == TRANSACTION_TYPE_INCOME }
+            var sumOfIncomes: BigDecimal = BigDecimal.valueOf(0.0)
 
-    fun updateIncomeAmount (incomeAmount: Double, unfinishedDateFrame: DateFrame) {
-        unfinishedDateFrame.totalIncomeOfAll += incomeAmount
-        upsertDateFrame(unfinishedDateFrame)
+            for (income in allIncomes) {
+                sumOfIncomes = sumOfIncomes.plus(income.transactionAmount.toBigDecimal())
+            }
+
+            unfinishedDateFrame.totalIncomeOfAll = sumOfIncomes.toDouble()
+            upsertDateFrame(unfinishedDateFrame)
+        }
     }
 
     suspend fun getDateFrameWithTransactions (dateFrameId: Int): DateFrameWithTransactions? {
@@ -151,16 +160,14 @@ class DateFrameViewModel @Inject constructor(
     }
 
     fun setSelectionState (transaction: Transaction) {
-        val updatedPairList: List<TransactionPair>
-
-        if (selectedTransaction == null) {
-            updatedPairList = updateTransactionPairList(allTransactionPairs.value, transaction, true)
+        val updatedPairList: List<TransactionPair> = if (selectedTransaction == null) {
+            updateTransactionPairList(allTransactionPairs.value, transaction, true)
         } else {
             if (selectedTransaction?.transactionId == transaction.transactionId) {
-                updatedPairList = updateTransactionPairList(allTransactionPairs.value, selectedTransaction!!, false)
+                updateTransactionPairList(allTransactionPairs.value, selectedTransaction!!, false)
             } else {
 
-                updatedPairList = updateTransactionPairList(
+                updateTransactionPairList(
                     updateTransactionPairList(allTransactionPairs.value, selectedTransaction!!, false),
                     transaction,
                     true)
@@ -175,11 +182,13 @@ class DateFrameViewModel @Inject constructor(
         val foundTransactionPair = transactionPairList.find { tr -> tr.dateLimit.date == transaction.date }
         val transactionList = foundTransactionPair?.transactionList
         val updatedTransactionList = updateTransactionListWith(state, transactionList!!, transaction)
-        if (state) {
-            _selectedTransaction = updatedTransactionList.find { t -> t.isSelected }
+
+        _selectedTransaction = if (state) {
+            updatedTransactionList.find { t -> t.isSelected }
         } else {
-            _selectedTransaction = null
+            null
         }
+
         val updatedPair = foundTransactionPair.copy(transactionList = updatedTransactionList)
         updatedPairList = transactionPairList.map { transactionPair ->
             if (transactionPair.dateLimit.date == updatedPair.dateLimit.date) {
@@ -252,5 +261,18 @@ class DateFrameViewModel @Inject constructor(
     fun setDateFrameOnline(dateFrame: DateFrame) {
         dateFrame.isOnline = true
         upsertDateFrame(dateFrame)
+    }
+
+    fun isDateFrameFinished (dateFrame: DateFrame): Boolean {
+        val parsedEndPointDate = LocalDate.parse(dateFrame.endPointDate, DateTimeFormatter.ISO_LOCAL_DATE)
+
+        return if (LocalDate.now() > parsedEndPointDate) {
+            dateFrame.isUnfinished = false
+            dateFrame.isOnline = false
+            upsertDateFrame(dateFrame)
+            true
+        } else {
+            false
+        }
     }
 }

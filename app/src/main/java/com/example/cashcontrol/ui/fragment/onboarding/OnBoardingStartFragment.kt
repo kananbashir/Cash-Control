@@ -20,8 +20,8 @@ class OnBoardingStartFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        userViewModel = ViewModelProvider(requireActivity()).get(UserViewModel::class.java)
-        profileViewModel = ViewModelProvider(requireActivity()).get(ProfileViewModel::class.java)
+        userViewModel = ViewModelProvider(requireActivity())[UserViewModel::class.java]
+        profileViewModel = ViewModelProvider(requireActivity())[ProfileViewModel::class.java]
         binding = FragmentOnBoardingStartBinding.inflate(layoutInflater)
     }
 

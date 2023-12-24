@@ -1,4 +1,4 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <style name="Base.Theme.CashControl" parent="Theme.Material3.DayNight.NoActionBar">
         <item name="android:statusBarColor">@color/white</item>
         <item name="android:windowLightStatusBar">true</item>
@@ -268,13 +268,6 @@
         <item name="backgroundTint">@color/midnight_green</item>
         <item name="itemIconTint">@color/color_selector_bottom_nav_menu_icon_light_mode</item>
         <item name="itemTextColor">@color/color_selector_bottom_nav_menu_icon_light_mode</item>
-    </style>
-    
-
-    // SplashScreen
-    <style name="Theme.App.SplashScreen" parent="Theme.SplashScreen">
-        <item name="windowSplashScreenBackground">@color/bittersweet_red</item>
-        <item name="postSplashScreenTheme">@style/Base.Theme.CashControl</item>
     </style>
 
 

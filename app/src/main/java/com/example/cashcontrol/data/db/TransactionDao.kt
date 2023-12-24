@@ -20,6 +20,9 @@ interface TransactionDao {
     @Delete
     suspend fun deleteTransaction (transaction: Transaction)
 
+    @Delete
+    suspend fun deleteAllTransactions (vararg transaction: Transaction)
+
     @Query ("SELECT * FROM transaction_table")
     fun getAllTransactionsFromDb (): Flow<List<Transaction>>
 

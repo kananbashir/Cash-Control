@@ -9,19 +9,17 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.cashcontrol.R
 import com.example.cashcontrol.data.db.entity.Transaction
 import com.example.cashcontrol.databinding.ItemLayoutTransactionsBinding
-import com.example.cashcontrol.util.constant.DateConstant.DATE_LIMIT_DATE_PATTERN
+import com.example.cashcontrol.util.constant.DateConstant.TRANSACTION_DATE_PATTERN
 import com.example.cashcontrol.util.constant.TransactionConstant.TRANSACTION_TYPE_EXPENSE
 import com.example.cashcontrol.util.constant.TransactionConstant.TRANSACTION_TYPE_INCOME
+import com.example.cashcontrol.util.extension.convertDateFromIso8601To
 import com.example.cashcontrol.util.extension.getCurrencySymbol
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
-import java.util.Locale
 
 class TransactionAdapter: RecyclerView.Adapter<TransactionAdapter.TransactionViewHolder>() {
 
     val differ = AsyncListDiffer(this, getDifferCallBack())
 
-    inner class TransactionViewHolder (val binding: ItemLayoutTransactionsBinding): RecyclerView.ViewHolder(binding.root) {}
+    inner class TransactionViewHolder (val binding: ItemLayoutTransactionsBinding): RecyclerView.ViewHolder(binding.root)
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TransactionViewHolder {
@@ -50,7 +48,7 @@ class TransactionAdapter: RecyclerView.Adapter<TransactionAdapter.TransactionVie
                     cvBulkTransactionTransactionsItemLayout.visibility = View.VISIBLE
                     tvBulkTransactionAmountTransactionsItemLayout.visibility = View.VISIBLE
                     tvBulkTransactionAmountTransactionsItemLayout.text = "-${currentItem.transactionAmount}${currentItem.transactionCurrency.getCurrencySymbol()}"
-                    tvTransactionDateTransactionsItemLayout.text = formatDate(currentItem.date)
+                    tvTransactionDateTransactionsItemLayout.text = currentItem.date.convertDateFromIso8601To(TRANSACTION_DATE_PATTERN)
                 } else {
                     tvSingleTransactionAmountTransactionsItemLayout.setTextColor(root.resources.getColor(R.color.bittersweet_red, null))
                     cvBulkTransactionTransactionsItemLayout.visibility = View.GONE
@@ -58,7 +56,7 @@ class TransactionAdapter: RecyclerView.Adapter<TransactionAdapter.TransactionVie
                     cvSingleTransactionTransactionsItemLayout.visibility = View.VISIBLE
                     tvSingleTransactionAmountTransactionsItemLayout.visibility = View.VISIBLE
                     tvSingleTransactionAmountTransactionsItemLayout.text = "-${currentItem.transactionAmount}${currentItem.transactionCurrency.getCurrencySymbol()}"
-                    tvTransactionDateTransactionsItemLayout.text = formatDate(currentItem.date)
+                    tvTransactionDateTransactionsItemLayout.text = currentItem.date.convertDateFromIso8601To(TRANSACTION_DATE_PATTERN)
                     tvSingleTransactionCategoryTransactionsItemLayout.text = currentItem.transactionCategory
                 }
             } else if (currentItem.transactionType == TRANSACTION_TYPE_INCOME) {
@@ -69,7 +67,7 @@ class TransactionAdapter: RecyclerView.Adapter<TransactionAdapter.TransactionVie
                     cvBulkTransactionTransactionsItemLayout.visibility = View.VISIBLE
                     tvBulkTransactionAmountTransactionsItemLayout.visibility = View.VISIBLE
                     tvBulkTransactionAmountTransactionsItemLayout.text = "+${currentItem.transactionAmount}${currentItem.transactionCurrency.getCurrencySymbol()}"
-                    tvTransactionDateTransactionsItemLayout.text = formatDate(currentItem.date)
+                    tvTransactionDateTransactionsItemLayout.text = currentItem.date.convertDateFromIso8601To(TRANSACTION_DATE_PATTERN)
                 } else {
                     tvSingleTransactionAmountTransactionsItemLayout.setTextColor(root.resources.getColor(R.color.mantis_green, null))
                     cvBulkTransactionTransactionsItemLayout.visibility = View.GONE
@@ -77,7 +75,7 @@ class TransactionAdapter: RecyclerView.Adapter<TransactionAdapter.TransactionVie
                     cvSingleTransactionTransactionsItemLayout.visibility = View.VISIBLE
                     tvSingleTransactionAmountTransactionsItemLayout.visibility = View.VISIBLE
                     tvSingleTransactionAmountTransactionsItemLayout.text = "+${currentItem.transactionAmount}${currentItem.transactionCurrency.getCurrencySymbol()}"
-                    tvTransactionDateTransactionsItemLayout.text = formatDate(currentItem.date)
+                    tvTransactionDateTransactionsItemLayout.text = currentItem.date.convertDateFromIso8601To(TRANSACTION_DATE_PATTERN)
                     tvSingleTransactionCategoryTransactionsItemLayout.text = currentItem.transactionSource
                 }
             }
@@ -96,10 +94,5 @@ class TransactionAdapter: RecyclerView.Adapter<TransactionAdapter.TransactionVie
         }
 
         return differCallback
-    }
-
-    private fun formatDate(dateString: String): String {
-        val localDate = LocalDate.parse(dateString, DateTimeFormatter.ofPattern(DATE_LIMIT_DATE_PATTERN, Locale.US))
-        return localDate.format(DateTimeFormatter.ofPattern("dd MMM yyyy", Locale.US))
     }
 }

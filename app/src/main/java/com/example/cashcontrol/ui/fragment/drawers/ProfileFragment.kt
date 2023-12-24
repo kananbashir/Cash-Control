@@ -18,7 +18,10 @@ import com.example.cashcontrol.data.db.entity.Profile
 import com.example.cashcontrol.data.db.entity.User
 import com.example.cashcontrol.data.db.entity.relation.UserWithProfiles
 import com.example.cashcontrol.databinding.FragmentProfileBinding
+import com.example.cashcontrol.ui.viewmodel.DateFrameViewModel
+import com.example.cashcontrol.ui.viewmodel.DateLimitViewModel
 import com.example.cashcontrol.ui.viewmodel.ProfileViewModel
+import com.example.cashcontrol.ui.viewmodel.TransactionViewModel
 import com.example.cashcontrol.ui.viewmodel.UserViewModel
 import com.example.cashcontrol.util.MessageUtil.showErrorMessage
 import com.example.cashcontrol.util.MessageUtil.showNotifyingMessage
@@ -31,6 +34,9 @@ import kotlinx.coroutines.launch
 class ProfileFragment : Fragment(), ProfileItemClickListener {
     private lateinit var binding: FragmentProfileBinding
     private lateinit var profileViewModel: ProfileViewModel
+    private lateinit var dateLimitViewModel: DateLimitViewModel
+    private lateinit var dateFrameViewModel: DateFrameViewModel
+    private lateinit var transactionViewModel: TransactionViewModel
     private lateinit var userViewModel: UserViewModel
     private lateinit var profilesAdapter: ProfilesAdapter
     private var onlineUser: User? = null
@@ -40,8 +46,11 @@ class ProfileFragment : Fragment(), ProfileItemClickListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        profileViewModel = ViewModelProvider(requireActivity()).get(ProfileViewModel::class.java)
-        userViewModel = ViewModelProvider(requireActivity()).get(UserViewModel::class.java)
+        profileViewModel = ViewModelProvider(requireActivity())[ProfileViewModel::class.java]
+        dateLimitViewModel = ViewModelProvider(requireActivity())[DateLimitViewModel::class.java]
+        dateFrameViewModel = ViewModelProvider(requireActivity())[DateFrameViewModel::class.java]
+        transactionViewModel = ViewModelProvider(requireActivity())[TransactionViewModel::class.java]
+        userViewModel = ViewModelProvider(requireActivity())[UserViewModel::class.java]
         profilesAdapter = ProfilesAdapter()
         profilesAdapter.setListener(this)
         binding = FragmentProfileBinding.inflate(layoutInflater)
@@ -102,7 +111,7 @@ class ProfileFragment : Fragment(), ProfileItemClickListener {
                                 showNotifyingMessage(resources.getString(R.string.notifying_message_profile_switch, profile.profileName), binding)
                                 profileViewModel.setProfileOffline(it)
                                 profileViewModel.setProfileOnline(profile)
-                                findNavController().navigate(ProfileFragmentDirections.actionProfileFragmentToMainSession())
+                                findNavController().popBackStack()
                             }
                         }
                         .setNegativeButton(resources.getString(R.string.alert_dialog_negative_no)) { dialogInterface, _ -> dialogInterface.cancel() }
@@ -119,7 +128,7 @@ class ProfileFragment : Fragment(), ProfileItemClickListener {
                                     onlineUserWithProfiles?.let { userWithProfiles ->
                                         if (onlineProfile == profile) {
                                             if (userWithProfiles.profiles.size > 1) {
-                                                profileViewModel.deleteProfile(profile)
+                                                deleteProfile(profile)
                                                 showNotifyingMessage(resources.getString(R.string.notifying_message_profile_delete, profile.profileName), binding)
                                                 val lastProfile = userViewModel.getUserWithProfiles(onlineUser?.userId!!)?.profiles!!.last()
                                                 profileViewModel.setProfileOnline(lastProfile)
@@ -128,7 +137,7 @@ class ProfileFragment : Fragment(), ProfileItemClickListener {
                                                 showErrorMessage(resources.getString(R.string.error_message_profile_delete), binding)
                                             }
                                         } else {
-                                            profileViewModel.deleteProfile(profile)
+                                            deleteProfile(profile)
                                             showNotifyingMessage(resources.getString(R.string.notifying_message_profile_delete, profile.profileName), binding)
                                         }
                                         delay(200)
@@ -141,6 +150,23 @@ class ProfileFragment : Fragment(), ProfileItemClickListener {
                     .setNegativeButton(resources.getString(R.string.alert_dialog_negative_no)) { dialogInterface, _ -> dialogInterface.cancel() }
                     .show()
             }
+        }
+    }
+
+    private suspend fun deleteProfile (profile: Profile) {
+        profileViewModel.getProfileWithDateFrames(profile.profileId!!)?.let { profileWithDateFrames ->
+            for (dateFrame in profileWithDateFrames.dateFrames) {
+                dateFrameViewModel.getDateFrameWithDateLimits(dateFrame.dateFrameId!!)?.let { dateFrameWithDateLimits ->
+                    for (dateLimit in dateFrameWithDateLimits.dateLimits) {
+                        dateLimitViewModel.getDateLimitWithTransactions(dateLimit.dateLimitId!!)?.let { dateLimitWithTransactions ->
+                            transactionViewModel.deleteAllTransactions(*dateLimitWithTransactions.transactions.toTypedArray())
+                        }
+                    }
+                    dateLimitViewModel.deleteAllDateLimits(*dateFrameWithDateLimits.dateLimits.toTypedArray())
+                }
+            }
+            dateFrameViewModel.deleteAllDateFrames(*profileWithDateFrames.dateFrames.toTypedArray())
+            profileViewModel.deleteProfile(profile)
         }
     }
 }

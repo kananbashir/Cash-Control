@@ -12,10 +12,6 @@ class UserLocalDataSource @Inject constructor(private val userDao: UserDao) {
         userDao.upsertUser(user)
     }
 
-    suspend fun deleteUser (user: User) {
-        userDao.deleteUser(user)
-    }
-
     fun getAllUsersFromDb (): Flow<List<User>> {
         return userDao.getAllUsersFromDb()
     }

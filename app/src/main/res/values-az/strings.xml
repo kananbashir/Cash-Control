@@ -61,7 +61,11 @@
     <string name="text_update_end_point">Son tarix nöqtəsini yenilə</string>
     <string name="text_update_saving">Qənaət miqdarını yeniləyin</string>
     <string name="placeholder_text_hello">Salam, %1$s</string>
-    <string name="text_onboarding_finish_header_1">Bununla da, biz bilirik ki, sizin %3$s və %4$s tarix aralığı üçün %1$s %2$s büdcəniz var və bu müddət ərzində %5$s %6$s qənaət etmək istəyirsiniz.</string>
+    <string name="text_onboarding_finish_header_1">Zəhmət olmasa daxil etdiyiniz məlumatların düzgünlüyünü yoxlayın</string>
+    <string name="text_onboarding_finish_selected_start_point_date">Seçilmiş başlanğıc tarix:</string>
+    <string name="text_onboarding_finish_selected_end_point_date">Seçilmiş son tarix:</string>
+    <string name="text_onboarding_finish_budget_entered">Əlavə edilən büdcə:</string>
+    <string name="text_onboarding_finish_saving_amount">Qənaət miqdarı:</string>
     <string name="text_no_data">Məlumat yoxdur</string>
 
     <string name="text_menu_home">Ev</string>
@@ -124,7 +128,7 @@
     <string name="placeholder_currency_converting_rate_2">1 AZN = 0.587556 USD</string>
     <string name="placeholder_text_last_expenses">Restaurant</string>
     <string name="placeholder_text_last_expense_expense">-50₼</string>
-    <string name="placeholder_text_date_frame">%1$s to %2$s</string>
+    <string name="placeholder_text_date_frame">%1$s — %2$s</string>
     <string name="placeholder_text_description">- Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</string>
     <string name="placeholder_text_bulk_categories">- Friend\n- Pub</string>
     <string name="placeholder_text_article_title">This trade is where big investors are hiding out amid choppy markets, Goldman Sachs says</string>
@@ -141,7 +145,7 @@
     <string name="hint_income_category">Dost..</string>
     <string name="hint_expense_description">Qəlyanaltı, yağ..</string>
     <string name="hint_income_description">Borc..</string>
-    <string name="hint_dots">...</string>
+    <string name="hint_dots">…</string>
     <string name="hint_search">Axtarış..</string>
     <string name="content_description_delete_icon_item_layout">Delete icon for expense and income category item layout</string>
 
@@ -174,6 +178,7 @@
     <string name="error_message_onboarding_savings_exceeded_budget">Qənaət miqdarı büdcə limitini keçməməlidir!</string>
 
     <string name="error_message_onboarding_finish_already_existed_dateframe">Bu profildə artıq eyni zaman dilimi eyni valyuta ilə istifadə olunub!</string>
+    <string name="error_message_onboarding_finish_incompatible_dateframe_and_budget">Bu zaman dilimi büdcə ilə uyğunlaşmır. Zaman dilimini və ya büdcəni yaxud qənaət miqdarını dəyişin..</string>
     <string name="error_message_onboarding_finish_already_existed_dateframe_button">TARİXLƏRİ DƏYİŞ</string>
 
     <string name="error_message_add_expense_future_date_selected">Gələcək tarix seçə bilmərsiniz..</string>
@@ -234,11 +239,13 @@
 
     <string name="error_message_end_date_update_no_date">Zəhmət olmasa tarix seçin</string>
     <string name="error_message_end_date_update_same_date">Zəhmət olmasa fərqli bir tarix seçin</string>
+    <string name="error_message_end_date_update_incompatible_dateframe_and_budget">Bu zaman dilimi bu büdcə üçün uyğun deyil</string>
     <string name="notifying_message_end_date_update_success">Son tarix müvəffəqiyyətlə yeniləndi</string>
 
     <string name="error_message_saving_amount_update_no_amount">Qənaət miqdarını əlavə edin</string>
-    <string name="error_message_saving_amount_update_exceeded_amount">Qənaət miqdarı büdcə limitini keçməməlidir</string>
+    <string name="error_message_saving_amount_update_exceeded_amount">Qənaət miqdarı qalan büdcəni keçməməlidir</string>
     <string name="error_message_saving_amount_update_same_amount">Zəhmət olmasa fərqli bir miqdar daxil edin</string>
+    <string name="error_message_saving_amount_update_incompatible_dateframe_and_budget">Bu zaman dilimi bu büdcə üçün uyğun deyil. Qənaət miqdarını azaldın</string>
     <string name="notifying_message_saving_amount_update_success">Qənaət miqdarı müvəffəqiyyətlə yeniləndi</string>
 
     <string-array name="languages">

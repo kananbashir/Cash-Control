@@ -10,6 +10,7 @@ import androidx.navigation.fragment.findNavController
 import com.example.cashcontrol.R
 import com.example.cashcontrol.databinding.FragmentOnBoardingDateFrameBinding
 import com.example.cashcontrol.ui.viewmodel.DateFrameViewModel
+import com.example.cashcontrol.ui.viewmodel.UserViewModel
 import com.example.cashcontrol.util.MessageUtil.showErrorMessage
 import com.example.cashcontrol.util.constant.DateConstant.DATE_LIMIT_DATE_PATTERN
 import com.example.cashcontrol.util.constant.UIStateConstant.END_POINT_DATE_KEY
@@ -29,12 +30,14 @@ import java.util.Locale
 class OnBoardingDateFrameFragment : Fragment() {
     private lateinit var binding: FragmentOnBoardingDateFrameBinding
     private lateinit var dateFrameViewModel: DateFrameViewModel
+    private lateinit var userViewModel: UserViewModel
     private var startPointDate: LocalDate? = null
     private var endPointDate: LocalDate? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        dateFrameViewModel = ViewModelProvider (requireActivity()).get(DateFrameViewModel::class.java)
+        dateFrameViewModel = ViewModelProvider (requireActivity())[DateFrameViewModel::class.java]
+        userViewModel = ViewModelProvider (requireActivity())[UserViewModel::class.java]
         binding = FragmentOnBoardingDateFrameBinding.inflate(layoutInflater)
 
         savedInstanceState?.let { bundle ->
@@ -70,7 +73,7 @@ class OnBoardingDateFrameFragment : Fragment() {
                 showMaterialDatePickerDialog (false) { materialDatePicker ->
                     materialDatePicker.addOnPositiveButtonClickListener { selection ->
                         startPointDate = Instant.ofEpochMilli(selection).atZone(ZoneId.systemDefault()).toLocalDate()
-                        btSelectStartPointFragOBDateFrame.text = startPointDate?.format(DateTimeFormatter.ofPattern(DATE_LIMIT_DATE_PATTERN, Locale.US))
+                        btSelectStartPointFragOBDateFrame.text = startPointDate?.format(DateTimeFormatter.ofPattern(DATE_LIMIT_DATE_PATTERN, Locale.getDefault()))
                     }
                     materialDatePicker.show(childFragmentManager, "tag")
                 }
@@ -83,7 +86,7 @@ class OnBoardingDateFrameFragment : Fragment() {
                         if ((endPointDate!!.year - startPointDate!!.year) > 1) {
                             showErrorMessage(resources.getString(R.string.error_message_onboarding_dateframe_year_gap_not_allowed), binding)
                         } else {
-                            btSelectEndPointFragOBDateFrame.text = endPointDate!!.format(DateTimeFormatter.ofPattern(DATE_LIMIT_DATE_PATTERN, Locale.US))
+                            btSelectEndPointFragOBDateFrame.text = endPointDate?.format(DateTimeFormatter.ofPattern(DATE_LIMIT_DATE_PATTERN, Locale.getDefault()))
                             tvNextFragOBDateFrame.visibility = View.VISIBLE
                         }
                     }
@@ -93,8 +96,8 @@ class OnBoardingDateFrameFragment : Fragment() {
 
             tvNextFragOBDateFrame.setOnClickListener {
                 if (checkDateFrames()) {
-                    val startPointDateString = startPointDate?.format(DateTimeFormatter.ofPattern(DATE_LIMIT_DATE_PATTERN, Locale.US))
-                    val endPointDateString = endPointDate!!.format(DateTimeFormatter.ofPattern(DATE_LIMIT_DATE_PATTERN, Locale.US))
+                    val startPointDateString = startPointDate?.format(DateTimeFormatter.ISO_LOCAL_DATE)
+                    val endPointDateString = endPointDate?.format(DateTimeFormatter.ISO_LOCAL_DATE)
                     findNavController().navigate(OnBoardingDateFrameFragmentDirections.actionOnBoardingDateFrameFragmentToOnBoardingBudgetFragment(startPointDateString!!, endPointDateString!!))
                 } else {
                     showErrorMessage(resources.getString(R.string.error_message_onboarding_dateframe_unappropriate_dateframe), binding)
@@ -130,7 +133,13 @@ class OnBoardingDateFrameFragment : Fragment() {
                 .setCalendarConstraints(calendarConstraints.build())
                 .build()
         } else {
-            val dateValidator = DateValidatorPointForward.from(startPointDate!!.plusDays(1).atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli())
+
+            val dateValidator: DateValidatorPointForward = if (startPointDate != null) {
+                DateValidatorPointForward.from(startPointDate!!.plusDays(1).atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli())
+            } else {
+                DateValidatorPointForward.now()
+            }
+
             val calendarConstraints = CalendarConstraints.Builder()
                 .setValidator(dateValidator)
 

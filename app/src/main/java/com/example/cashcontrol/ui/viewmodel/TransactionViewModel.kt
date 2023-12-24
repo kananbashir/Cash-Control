@@ -25,12 +25,12 @@ class TransactionViewModel @Inject constructor(private val cashControlRepository
         }
     }
 
-    fun upsertAllTransactions (vararg transaction: Transaction) = viewModelScope.launch {
-        cashControlRepository.transactionsLocal.upsertAllTransactions(*transaction)
-    }
-
     fun deleteTransaction (transaction: Transaction) = viewModelScope.launch {
         cashControlRepository.transactionsLocal.deleteTransaction(transaction)
+    }
+
+    fun deleteAllTransactions (vararg transaction: Transaction) = viewModelScope.launch {
+        cashControlRepository.transactionsLocal.deleteAllTransactions(*transaction)
     }
 
     suspend fun getTransactionOfDateFrameById (dateFrameId: Int, transactionId: Int): Transaction? {

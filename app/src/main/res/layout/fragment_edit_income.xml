@@ -118,7 +118,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/etAmountFragEditIncome">
 
-                <AutoCompleteTextView
+                <com.google.android.material.textfield.MaterialAutoCompleteTextView
                     android:id="@+id/actvCurrencyFragEditIncome"
                     style="@style/DropDownTextColor"
                     android:layout_width="match_parent"

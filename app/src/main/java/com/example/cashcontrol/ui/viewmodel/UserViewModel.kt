@@ -30,10 +30,6 @@ class UserViewModel @Inject constructor(
         cashControlRepository.userLocal.upsertUser(user)
     }
 
-    fun deleteUser (user: User) = viewModelScope.launch {
-        cashControlRepository.userLocal.deleteUser(user)
-    }
-
     suspend fun getUserWithProfiles(userId: Int): UserWithProfiles? {
         val list = cashControlRepository.userLocal.getUserWithProfiles(userId)
         if (list.isNotEmpty()) {

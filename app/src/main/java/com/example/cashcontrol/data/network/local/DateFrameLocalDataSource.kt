@@ -13,8 +13,8 @@ class DateFrameLocalDataSource @Inject constructor(private val dateFrameDao: Dat
         dateFrameDao.upsertDateFrame(dateFrame)
     }
 
-    suspend fun deleteDateFrame (dateFrame: DateFrame) {
-        dateFrameDao.deleteDateFrame(dateFrame)
+    suspend fun deleteAllDateFrames (vararg dateFrame: DateFrame) {
+        dateFrameDao.deleteAllDateFrames(*dateFrame)
     }
 
     fun getAllDateFramesFromDb (): Flow<List<DateFrame>> {

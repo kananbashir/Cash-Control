@@ -28,12 +28,13 @@ class OnBoardingProfileFragment : Fragment() {
     private lateinit var binding: FragmentOnBoardingProfileBinding
     private lateinit var profileViewModel: ProfileViewModel
     private lateinit var userViewModel: UserViewModel
-    private val shrinkInsideAnim: Animation by lazy { AnimationUtils.loadAnimation(requireContext(), R.anim.shrink_inside) }
+    private val shrinkButtonAnim: Animation by lazy { AnimationUtils.loadAnimation(requireContext(), R.anim.shrink_button_anim) }
+    private val expandButtonAnim: Animation by lazy { AnimationUtils.loadAnimation(requireContext(), R.anim.expand_button_anim) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        userViewModel = ViewModelProvider (requireActivity()).get(UserViewModel::class.java)
-        profileViewModel = ViewModelProvider (requireActivity()).get(ProfileViewModel::class.java)
+        userViewModel = ViewModelProvider (requireActivity())[UserViewModel::class.java]
+        profileViewModel = ViewModelProvider (requireActivity())[ProfileViewModel::class.java]
 
         binding = FragmentOnBoardingProfileBinding.inflate(layoutInflater)
 
@@ -54,19 +55,20 @@ class OnBoardingProfileFragment : Fragment() {
                 repeatOnLifecycle(Lifecycle.State.STARTED) {
                     userViewModel.getOnlineUser()?.let { onlineUser ->
                         if (profileName.isNotEmpty()) {
+                            buttonLoadingState(true)
+                            delay(500)
                             if (profileViewModel.getProfileOfUserByName(onlineUser.userId!!, profileName) == null) {
 
                                 profileViewModel.getOnlineProfileById(onlineUser.userId!!)?.let { onlineProfile ->
                                     profileViewModel.setProfileOffline(onlineProfile)
                                 }
 
-                                updateButtonToLoadingState()
-
                                 profileViewModel.upsertProfile(Profile(profileName, true, onlineUser.userId!!))
-                                delay(1500) // JUST TO SIMULATE LOADING..
+                                delay(300)
                                 findNavController().navigate(OnBoardingProfileFragmentDirections.actionOnBoardingProfileFragmentToOnboardingSession())
                             } else {
                                 showErrorMessage(resources.getString(R.string.error_message_onboarding_profile_used_profile_name), binding)
+                                buttonLoadingState(false)
                             }
                         } else {
                             showErrorMessage(resources.getString(R.string.error_message_onboarding_profile_no_profile_name_added), binding)
@@ -86,12 +88,22 @@ class OnBoardingProfileFragment : Fragment() {
 
     }
 
-    private fun updateButtonToLoadingState () {
+    private fun buttonLoadingState (isLoading: Boolean) {
         binding.apply {
-            btContinueFragOBProfile.startAnimation(shrinkInsideAnim)
-            ltLoadingFragOBProfile.visibility = View.VISIBLE
-            btContinueFragOBProfile.isClickable = false
-            btContinueFragOBProfile.visibility = View.INVISIBLE
+            when (isLoading) {
+                true -> {
+                    btContinueFragOBProfile.startAnimation(shrinkButtonAnim)
+                    ltLoadingFragOBProfile.visibility = View.VISIBLE
+                    btContinueFragOBProfile.isClickable = false
+                    btContinueFragOBProfile.visibility = View.INVISIBLE
+                }
+                else -> {
+                    btContinueFragOBProfile.startAnimation(expandButtonAnim)
+                    ltLoadingFragOBProfile.visibility = View.INVISIBLE
+                    btContinueFragOBProfile.isClickable = true
+                    btContinueFragOBProfile.visibility = View.VISIBLE
+                }
+            }
         }
     }
 }

@@ -8,6 +8,7 @@
         android:toYScale="0"
         android:toXScale="0"
         android:duration="120"
+        android:interpolator="@android:interpolator/fast_out_slow_in"
         />
 
     <alpha

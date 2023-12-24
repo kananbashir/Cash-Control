@@ -36,16 +36,16 @@
                 app:lottie_rawRes="@raw/lottie_success" />
 
             <TextView
-                android:id="@+id/tvOnBoardingFinishFragOBFinish"
+                android:id="@+id/textOnBoardingFinishFragOBFinish"
                 style="@style/MainText"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="40dp"
                 android:layout_marginEnd="40dp"
                 android:fontFamily="@font/open_sans_bold"
-                android:text="@string/text_onboarding_finish"
+                android:text="@string/text_onboarding_finish_header_1"
                 android:textAlignment="center"
-                android:textSize="24sp"
+                android:textSize="22sp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -53,6 +53,183 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/ltSuccessFragOBFinish"
                 app:layout_constraintVertical_bias="0.12" />
+
+
+            <TextView
+                android:id="@+id/textStartPointDateOnBoardingFinishFragOBFinish"
+                style="@style/MainText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="40dp"
+                android:layout_marginEnd="20dp"
+                android:fontFamily="@font/open_sans_bold"
+                android:text="@string/text_onboarding_finish_selected_start_point_date"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textOnBoardingFinishFragOBFinish" />
+
+            <com.google.android.material.divider.MaterialDivider
+                android:id="@+id/dividerTextStartPointDateOnBoardingFinishFragOBFinish"
+                style="@style/DateLineDividerBackgroundColor"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                app:dividerThickness="0.3dp"
+                app:layout_constraintEnd_toEndOf="@+id/textStartPointDateOnBoardingFinishFragOBFinish"
+                app:layout_constraintStart_toStartOf="@+id/textStartPointDateOnBoardingFinishFragOBFinish"
+                app:layout_constraintTop_toBottomOf="@+id/textStartPointDateOnBoardingFinishFragOBFinish" />
+
+            <TextView
+                android:id="@+id/tvStartPointDateOnBoardingFinishFragOBFinish"
+                style="@style/MainText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:paddingEnd="20dp"
+                android:fontFamily="@font/open_sans"
+                android:textSize="12sp"
+                android:textStyle="italic"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/dividerTextStartPointDateOnBoardingFinishFragOBFinish" />
+
+            <TextView
+                android:id="@+id/textEndPointDateOnBoardingFinishFragOBFinish"
+                style="@style/MainText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="40dp"
+                android:layout_marginEnd="20dp"
+                android:fontFamily="@font/open_sans_bold"
+                android:text="@string/text_onboarding_finish_selected_end_point_date"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textStartPointDateOnBoardingFinishFragOBFinish" />
+
+            <com.google.android.material.divider.MaterialDivider
+                android:id="@+id/dividerTextEndPointDateOnBoardingFinishFragOBFinish"
+                style="@style/DateLineDividerBackgroundColor"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                app:dividerThickness="0.3dp"
+                app:layout_constraintEnd_toEndOf="@+id/textEndPointDateOnBoardingFinishFragOBFinish"
+                app:layout_constraintStart_toStartOf="@+id/textEndPointDateOnBoardingFinishFragOBFinish"
+                app:layout_constraintTop_toBottomOf="@+id/textEndPointDateOnBoardingFinishFragOBFinish" />
+
+            <TextView
+                android:id="@+id/tvEndPointDateOnBoardingFinishFragOBFinish"
+                style="@style/MainText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:paddingEnd="20dp"
+                android:fontFamily="@font/open_sans"
+                android:textSize="12sp"
+                android:textStyle="italic"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/dividerTextEndPointDateOnBoardingFinishFragOBFinish" />
+
+            <TextView
+                android:id="@+id/textBudgetOnBoardingFinishFragOBFinish"
+                style="@style/MainText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="40dp"
+                android:layout_marginEnd="20dp"
+                android:fontFamily="@font/open_sans_bold"
+                android:text="@string/text_onboarding_finish_budget_entered"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textEndPointDateOnBoardingFinishFragOBFinish" />
+
+            <com.google.android.material.divider.MaterialDivider
+                android:id="@+id/dividerTextBudgetOnBoardingFinishFragOBFinish"
+                style="@style/DateLineDividerBackgroundColor"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                app:dividerThickness="0.3dp"
+                app:layout_constraintEnd_toEndOf="@+id/textBudgetOnBoardingFinishFragOBFinish"
+                app:layout_constraintStart_toStartOf="@+id/textBudgetOnBoardingFinishFragOBFinish"
+                app:layout_constraintTop_toBottomOf="@+id/textBudgetOnBoardingFinishFragOBFinish" />
+
+            <TextView
+                android:id="@+id/tvBudgetOnBoardingFinishFragOBFinish"
+                style="@style/MainText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:paddingEnd="20dp"
+                android:fontFamily="@font/open_sans"
+                android:textSize="12sp"
+                android:textStyle="italic"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/dividerTextBudgetOnBoardingFinishFragOBFinish" />
+
+            <TextView
+                android:id="@+id/textSavingAmountOnBoardingFinishFragOBFinish"
+                style="@style/MainText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="40dp"
+                android:layout_marginEnd="20dp"
+                android:fontFamily="@font/open_sans_bold"
+                android:text="@string/text_onboarding_finish_saving_amount"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textBudgetOnBoardingFinishFragOBFinish" />
+
+            <com.google.android.material.divider.MaterialDivider
+                android:id="@+id/dividerTextSavingAmountOnBoardingFinishFragOBFinish"
+                style="@style/DateLineDividerBackgroundColor"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                app:dividerThickness="0.3dp"
+                app:layout_constraintEnd_toEndOf="@+id/textSavingAmountOnBoardingFinishFragOBFinish"
+                app:layout_constraintStart_toStartOf="@+id/textSavingAmountOnBoardingFinishFragOBFinish"
+                app:layout_constraintTop_toBottomOf="@+id/textSavingAmountOnBoardingFinishFragOBFinish" />
+
+            <TextView
+                android:id="@+id/tvSavingAmountOnBoardingFinishFragOBFinish"
+                style="@style/MainText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:paddingEnd="20dp"
+                android:fontFamily="@font/open_sans"
+                android:textSize="12sp"
+                android:textStyle="italic"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/dividerTextSavingAmountOnBoardingFinishFragOBFinish" />
 
             <com.airbnb.lottie.LottieAnimationView
                 android:id="@+id/ltLoadingFragOBFinish"
@@ -76,6 +253,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="32dp"
                 android:layout_marginEnd="32dp"
+                android:layout_marginTop="30dp"
+                android:layout_marginBottom="20dp"
                 android:fontFamily="@font/open_sans_bold"
                 android:text="@string/text_button_start_tracking"
                 android:textSize="32sp"
@@ -83,8 +262,7 @@
                 app:layout_constraintBottom_toTopOf="@+id/tvPreviousFragOBFinish"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tvOnBoardingFinishFragOBFinish"
-                app:layout_constraintVertical_bias="0.76" />
+                app:layout_constraintTop_toBottomOf="@+id/tvSavingAmountOnBoardingFinishFragOBFinish" />
 
             <TextView
                 android:id="@+id/tvPreviousFragOBFinish"

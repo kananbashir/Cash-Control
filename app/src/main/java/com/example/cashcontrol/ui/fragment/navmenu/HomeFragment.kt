@@ -21,6 +21,7 @@ import com.example.cashcontrol.adapter.TransactionAdapter
 import com.example.cashcontrol.data.DateLimitCalculator
 import com.example.cashcontrol.data.db.entity.DateFrame
 import com.example.cashcontrol.data.db.entity.DateLimit
+import com.example.cashcontrol.data.db.entity.Transaction
 import com.example.cashcontrol.data.db.entity.relation.DateFrameWithDateLimits
 import com.example.cashcontrol.data.db.entity.relation.DateFrameWithTransactions
 import com.example.cashcontrol.databinding.FragmentHomeBinding
@@ -30,21 +31,15 @@ import com.example.cashcontrol.ui.viewmodel.ProfileViewModel
 import com.example.cashcontrol.ui.viewmodel.TransactionViewModel
 import com.example.cashcontrol.ui.viewmodel.UserViewModel
 import com.example.cashcontrol.util.constant.DateConstant.DATE_LIMIT_DATE_PATTERN
-import com.example.cashcontrol.util.constant.UIStateConstant.DAILY_LIMIT_VALUE_KEY
-import com.example.cashcontrol.util.constant.UIStateConstant.LOADING_STATE_KEY
-import com.example.cashcontrol.util.constant.UIStateConstant.TOTAL_SPENT_AMOUNT_KEY
-import com.example.cashcontrol.util.constant.UIStateConstant.WIDGET_EXPENSE_AMOUNT_KEY
-import com.example.cashcontrol.util.constant.UIStateConstant.WIDGET_INCOME_AMOUNT_KEY
-import com.example.cashcontrol.util.constant.UIStateConstant.WIDGET_SAVINGS_AMOUNT_KEY
+import com.example.cashcontrol.util.constant.UIStateConstant
+import com.example.cashcontrol.util.extension.convertDateFromIso8601To
 import com.example.cashcontrol.util.extension.getCurrencySymbol
 import com.example.cashcontrol.util.extension.sortTransactionsByDateDescending
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
-import java.time.temporal.ChronoUnit
 import java.util.Locale
-import kotlin.math.absoluteValue
 
 class HomeFragment : Fragment() {
     private lateinit var binding: FragmentHomeBinding
@@ -54,20 +49,21 @@ class HomeFragment : Fragment() {
     private lateinit var userViewModel: UserViewModel
     private lateinit var profileViewModel: ProfileViewModel
     private lateinit var transactionAdapter: TransactionAdapter
+    private var unfinishedAndOnlineDateFrame: DateFrame? = null
 
     private val rotateOpenAnim: Animation by lazy { AnimationUtils.loadAnimation(requireContext(), R.anim.rotate_open_anim) }
     private val rotateCloseAnim: Animation by lazy { AnimationUtils.loadAnimation(requireContext(), R.anim.rotate_close_anim) }
     private val fromBottomAnim: Animation by lazy { AnimationUtils.loadAnimation(requireContext(), R.anim.from_bottom_anim) }
     private val toBottomAnim: Animation by lazy { AnimationUtils.loadAnimation(requireContext(), R.anim.to_bottom_anim) }
-    private var isExpanded: Boolean = false
+    private var isFabExpanded: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        dateLimitViewModel = ViewModelProvider(requireActivity()).get(DateLimitViewModel::class.java)
-        dateFrameViewModel = ViewModelProvider(requireActivity()).get(DateFrameViewModel::class.java)
-        userViewModel = ViewModelProvider(requireActivity()).get(UserViewModel::class.java)
-        profileViewModel = ViewModelProvider(requireActivity()).get(ProfileViewModel::class.java)
-        transactionViewModel = ViewModelProvider(requireActivity()).get(TransactionViewModel::class.java)
+        dateLimitViewModel = ViewModelProvider(requireActivity())[DateLimitViewModel::class.java]
+        dateFrameViewModel = ViewModelProvider(requireActivity())[DateFrameViewModel::class.java]
+        userViewModel = ViewModelProvider(requireActivity())[UserViewModel::class.java]
+        profileViewModel = ViewModelProvider(requireActivity())[ProfileViewModel::class.java]
+        transactionViewModel = ViewModelProvider(requireActivity())[TransactionViewModel::class.java]
         transactionAdapter = TransactionAdapter()
         binding = FragmentHomeBinding.inflate(layoutInflater)
 
@@ -85,117 +81,107 @@ class HomeFragment : Fragment() {
             }
 
             savedInstanceState?.let {
-//                tvDailyLimitFragHome.text = savedInstanceState.getString(DAILY_LIMIT_VALUE_KEY)
-//                tvSpentMoneyFragHome.text = savedInstanceState.getString(TOTAL_SPENT_AMOUNT_KEY)
-//                tvWidgetIncomeNumberFragHome.text = savedInstanceState.getString(WIDGET_INCOME_AMOUNT_KEY)
-//                tvWidgetExpenseNumberFragHome.text = savedInstanceState.getString(WIDGET_EXPENSE_AMOUNT_KEY)
-//                tvWidgetSavingsNumberFragHome.text = savedInstanceState.getString(WIDGET_SAVINGS_AMOUNT_KEY)
-//                ltLoadingDailyLimitFragHome.visibility = savedInstanceState.getInt(LOADING_STATE_KEY)
-//                ltLoadingSpentMoneyFragHome.visibility = savedInstanceState.getInt(LOADING_STATE_KEY)
-//                if (savedInstanceState.getInt(LOADING_STATE_KEY) == View.GONE) {
-//                    tvDailyLimitFragHome.visibility = View.VISIBLE
-//                    tvSpentMoneyFragHome.visibility = View.VISIBLE
-//                }
+                tvDailyLimitFragHome.text = it.getString(UIStateConstant.DAILY_LIMIT_VALUE_KEY)
+                tvSpentMoneyFragHome.text = it.getString(UIStateConstant.TOTAL_SPENT_AMOUNT_KEY)
+                tvWidgetIncomeNumberFragHome.text = it.getString(UIStateConstant.WIDGET_INCOME_AMOUNT_KEY)
+                tvWidgetExpenseNumberFragHome.text = it.getString(UIStateConstant.WIDGET_EXPENSE_AMOUNT_KEY)
+                tvWidgetSavingsNumberFragHome.text = it.getString(UIStateConstant.WIDGET_SAVINGS_AMOUNT_KEY)
+                ltLoadingDailyLimitFragHome.visibility = it.getInt(UIStateConstant.LOADING_STATE_KEY)
+                ltLoadingSpentMoneyFragHome.visibility = it.getInt(UIStateConstant.LOADING_STATE_KEY)
+                progressBarExpenseFragHome.apply {
+                    min = it.getInt(UIStateConstant.PROGRESS_BAR_MIN_KEY)
+                    max = it.getInt(UIStateConstant.PROGRESS_BAR_MAX_KEY)
+                    progress = it.getInt(UIStateConstant.PROGRESS_BAR_PROGRESS_KEY)
+                }
+
+                if (it.getInt(UIStateConstant.LOADING_STATE_KEY) == View.GONE) {
+                    tvDailyLimitFragHome.visibility = View.VISIBLE
+                    tvSpentMoneyFragHome.visibility = View.VISIBLE
+                }
             }
         }
-
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 getUnfinishedAndOnlineDateFrame()?.let { unfinishedDateFrame ->
+                    unfinishedAndOnlineDateFrame = unfinishedDateFrame
                     dateFrameViewModel.getDateFrameWithTransactions(unfinishedDateFrame.dateFrameId!!)
                         ?.let { dateFrameWithTransactions ->
                             setAdapterItems(dateFrameWithTransactions)
-                        }
 
-                    if (savedInstanceState == null) {
-                        binding.tvStartPointDateFragHome.text = unfinishedDateFrame.startPointDate
-                        binding.tvEndPointDateFragHome.text = unfinishedDateFrame.endPointDate
-                        binding.tvCurrentDateFragHome.text = LocalDate.now().format(DateTimeFormatter.ofPattern(DATE_LIMIT_DATE_PATTERN, Locale.US))
-                        val currentDateLimit = dateLimitViewModel.getCurrentDateLimitByDateFrame(unfinishedDateFrame.dateFrameId!!)
+                            binding.tvStartPointDateFragHome.text = unfinishedDateFrame.startPointDate.convertDateFromIso8601To(DATE_LIMIT_DATE_PATTERN)
+                            binding.tvEndPointDateFragHome.text = unfinishedDateFrame.endPointDate.convertDateFromIso8601To(DATE_LIMIT_DATE_PATTERN)
+                            binding.tvCurrentDateFragHome.text = LocalDate.now().format(DateTimeFormatter.ofPattern(DATE_LIMIT_DATE_PATTERN, Locale.getDefault()))
 
-                        when {
-                                currentDateLimit == null -> {
-                                createDateLimits()
+                            if (savedInstanceState == null) {
+                                dateFrameViewModel.getDateFrameWithDateLimits(unfinishedDateFrame.dateFrameId!!)?.let { dateFrameWithDateLimits ->
+                                    val currentDateLimit = dateLimitViewModel.getCurrentDateLimitByDateFrame(unfinishedDateFrame.dateFrameId!!)
 
-                                transactionViewModel.newExpense = true
-                                transactionViewModel.newIncome = true
+                                    when {
+                                        currentDateLimit == null -> {
+                                            createDateLimits(dateFrameWithDateLimits, dateFrameWithTransactions)
+                                            transactionViewModel.newExpense = true
+                                            transactionViewModel.newIncome = true
 
-                                dateLimitViewModel.getCurrentDateLimitByDateFrame(unfinishedDateFrame.dateFrameId!!)?.let { currentDl ->
-                                    dateFrameViewModel.getDateFrameWithDateLimits(unfinishedDateFrame.dateFrameId!!)?.let { dateFrameWithDateLimits ->
-                                        dateLimitViewModel.setExpenseLimit(calculateExpenseLimit(unfinishedDateFrame, dateFrameWithDateLimits), currentDl)
-                                        setUIData(
-                                            unfinishedDateFrame,
-                                            dateLimitViewModel.getCurrentDateLimitByDateFrame(unfinishedDateFrame.dateFrameId!!)!!
-                                        )
+                                            delay(200)
+                                            dateLimitViewModel.getCurrentDateLimitByDateFrame(unfinishedDateFrame.dateFrameId!!)
+                                                ?.let { currentDl ->
+                                                    setUIData(unfinishedDateFrame, currentDl)
+                                                }
+                                        }
+
+                                        currentDateLimit.expenseLimit == 0.0 -> {
+                                            dateLimitViewModel.setExpenseLimit(
+                                                calculateExpenseLimitOf(
+                                                    currentDateLimit,
+                                                    unfinishedDateFrame,
+                                                    dateFrameWithDateLimits.dateLimits,
+                                                    dateFrameWithTransactions.transactions
+                                                ),
+                                                currentDateLimit
+                                            )
+                                            transactionViewModel.newExpense = true
+                                            transactionViewModel.newIncome = true
+                                            setUIData(unfinishedDateFrame, currentDateLimit)
+                                        }
+
+                                        else -> {
+                                            setUIData(unfinishedDateFrame, currentDateLimit)
+                                        }
                                     }
                                 }
                             }
-
-                            currentDateLimit.expenseLimit == 0.0 -> {
-                                dateFrameViewModel.getDateFrameWithDateLimits(unfinishedDateFrame.dateFrameId!!)
-                                    ?.let { dateFrameWithDateLimits ->
-                                        dateLimitViewModel.setExpenseLimit(
-                                            calculateExpenseLimit(
-                                                unfinishedDateFrame,
-                                                dateFrameWithDateLimits
-                                            ), currentDateLimit
-                                        )
-                                        transactionViewModel.newExpense = true
-                                        transactionViewModel.newIncome = true
-                                        setUIData(unfinishedDateFrame, currentDateLimit)
-                                    }
-                            }
-
-                            else -> {
-                                setUIData(unfinishedDateFrame, currentDateLimit)
-                            }
                         }
-                    } else {
-                        binding.apply {
-                            tvDailyLimitFragHome.text = savedInstanceState.getString(DAILY_LIMIT_VALUE_KEY)
-                            tvSpentMoneyFragHome.text = savedInstanceState.getString(TOTAL_SPENT_AMOUNT_KEY)
-                            tvWidgetIncomeNumberFragHome.text = savedInstanceState.getString(WIDGET_INCOME_AMOUNT_KEY)
-                            tvWidgetExpenseNumberFragHome.text = savedInstanceState.getString(WIDGET_EXPENSE_AMOUNT_KEY)
-                            tvWidgetSavingsNumberFragHome.text = savedInstanceState.getString(WIDGET_SAVINGS_AMOUNT_KEY)
-                            ltLoadingDailyLimitFragHome.visibility = savedInstanceState.getInt(LOADING_STATE_KEY)
-                            ltLoadingSpentMoneyFragHome.visibility = savedInstanceState.getInt(LOADING_STATE_KEY)
-                            if (savedInstanceState.getInt(LOADING_STATE_KEY) == View.GONE) {
-                                tvDailyLimitFragHome.visibility = View.VISIBLE
-                                tvSpentMoneyFragHome.visibility = View.VISIBLE
-                            }
-                        }
-                    }
                 }
             }
         }
 
         binding.apply {
-
             rvLastTransactionsFragHome.adapter = transactionAdapter
             rvLastTransactionsFragHome.layoutManager = LinearLayoutManager(requireContext())
 
             fabPlusFragHome.setOnClickListener {
-                onAddButtonClicked()
+                onFabButtonClicked()
             }
 
             fabAddExpenseFragHome.setOnClickListener {
-                onAddButtonClicked()
+                onFabButtonClicked()
                 findNavController().navigate(HomeFragmentDirections.actionGlobalAddExpenseFragment())
             }
 
             fabAddIncomeFragHome.setOnClickListener {
-                onAddButtonClicked()
+                onFabButtonClicked()
                 findNavController().navigate(HomeFragmentDirections.actionGlobalAddIncomeFragment())
             }
 
             fabCreateNewSessionFragHome.setOnClickListener {
-                onAddButtonClicked()
+                onFabButtonClicked()
                 findNavController().navigate(HomeFragmentDirections.actionGlobalOnboardingSession2())
             }
 
@@ -207,33 +193,20 @@ class HomeFragment : Fragment() {
         return binding.root
     }
 
-    private suspend fun createDateLimits() {
-        getUnfinishedAndOnlineDateFrame()?.let { unfinishedDateFrame ->
-            dateFrameViewModel.getDateFrameWithDateLimits(unfinishedDateFrame.dateFrameId!!)?.let { dateFrameWithDateLimits ->
-                val lastDate = dateFrameWithDateLimits.dateLimits.last().date
-                val parsedLastDate = LocalDate.parse(
-                    lastDate,
-                    DateTimeFormatter.ofPattern(DATE_LIMIT_DATE_PATTERN, Locale.US)
-                )
-                val daysPassedFromLastDate = ChronoUnit.DAYS.between(
-                    parsedLastDate,
-                    LocalDate.now().plusDays(1)
-                ).absoluteValue
-
-                val dateLimitList: MutableList<DateLimit> = mutableListOf()
-
-                for (i in 0 until daysPassedFromLastDate) {
-                    val updatedDate = parsedLastDate.plusDays(i)
-
-                    val dateLimit = DateLimit(
-                        updatedDate.format(DateTimeFormatter.ofPattern(DATE_LIMIT_DATE_PATTERN, Locale.US)),
-                        unfinishedDateFrame.dateFrameId!!,
-                        0.0,
-                        0.0
+    private fun createDateLimits(dateFrameWithDateLimits: DateFrameWithDateLimits, dateFrameWithTransactions: DateFrameWithTransactions) {
+        unfinishedAndOnlineDateFrame?.let { unfinishedDateFrame ->
+            if (!dateFrameViewModel.isDateFrameFinished(unfinishedDateFrame)) {
+                val createdDateLimits = DateLimitCalculator()
+                    .setDateFrame(unfinishedDateFrame)
+                    .createSubsequentDateLimits(
+                        dateFrameWithDateLimits.dateLimits,
+                        dateFrameWithTransactions.transactions
                     )
-                    dateLimitList.add(dateLimit)
-                }
-                dateLimitViewModel.upsertAllDateLimits(*dateLimitList.toTypedArray())
+                dateLimitViewModel.upsertAllDateLimits(*createdDateLimits.toTypedArray())
+                transactionViewModel.newExpense = true
+                transactionViewModel.newIncome = true
+            } else {
+                findNavController().navigate(HomeFragmentDirections.actionGlobalOnboardingSession3())
             }
         }
     }
@@ -252,40 +225,53 @@ class HomeFragment : Fragment() {
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         binding.apply {
-            outState.putString(DAILY_LIMIT_VALUE_KEY, tvDailyLimitFragHome.text.toString())
-            outState.putString(TOTAL_SPENT_AMOUNT_KEY, tvSpentMoneyFragHome.text.toString())
-            outState.putString(WIDGET_INCOME_AMOUNT_KEY, tvWidgetIncomeNumberFragHome.text.toString())
-            outState.putString(WIDGET_EXPENSE_AMOUNT_KEY, tvWidgetExpenseNumberFragHome.text.toString())
-            outState.putString(WIDGET_SAVINGS_AMOUNT_KEY, tvWidgetSavingsNumberFragHome.text.toString())
-            outState.putInt(LOADING_STATE_KEY, ltLoadingDailyLimitFragHome.visibility)
+            outState.putString(UIStateConstant.DAILY_LIMIT_VALUE_KEY, tvDailyLimitFragHome.text.toString())
+            outState.putString(UIStateConstant.TOTAL_SPENT_AMOUNT_KEY, tvSpentMoneyFragHome.text.toString())
+            outState.putString(UIStateConstant.WIDGET_INCOME_AMOUNT_KEY, tvWidgetIncomeNumberFragHome.text.toString())
+            outState.putString(UIStateConstant.WIDGET_EXPENSE_AMOUNT_KEY, tvWidgetExpenseNumberFragHome.text.toString())
+            outState.putString(UIStateConstant.WIDGET_SAVINGS_AMOUNT_KEY, tvWidgetSavingsNumberFragHome.text.toString())
+            outState.putInt(UIStateConstant.LOADING_STATE_KEY, ltLoadingDailyLimitFragHome.visibility)
+            outState.putInt(UIStateConstant.PROGRESS_BAR_MIN_KEY, progressBarExpenseFragHome.min)
+            outState.putInt(UIStateConstant.PROGRESS_BAR_MAX_KEY, progressBarExpenseFragHome.max)
+            outState.putInt(UIStateConstant.PROGRESS_BAR_PROGRESS_KEY, progressBarExpenseFragHome.progress)
         }
     }
 
-    private fun calculateExpenseLimit(unfinishedDateFrame: DateFrame, dateFrameWithDateLimits: DateFrameWithDateLimits): Double {
-        return DateLimitCalculator(
-            unfinishedDateFrame.totalBudget,
-            unfinishedDateFrame.remainingBudget,
-            dateFrameViewModel.getPreviousDayLimitExceedValue(dateFrameWithDateLimits),
-            unfinishedDateFrame.startPointDate,
-            unfinishedDateFrame.endPointDate
-        ).calculate()
+    private fun calculateExpenseLimitOf(
+        dateLimit: DateLimit,
+        unfinishedDateFrame: DateFrame,
+        allDateLimits: List<DateLimit>,
+        allTransactions: List<Transaction>
+    ): Double {
+        val issueDate = LocalDate.parse(dateLimit.date, DateTimeFormatter.ISO_LOCAL_DATE).plusDays(1)
+        val allExpenses = DateLimitCalculator.Util.extractExpensesFromTransactionList(allTransactions)
+        val previousDayLimitExceedValue = DateLimitCalculator.Util.getPreviousDayLimitExceededValueFor(
+            dateLimit,
+            allDateLimits
+        )
+
+        return DateLimitCalculator()
+            .setDateFrame(unfinishedDateFrame)
+            .setPreviousDayLimitExceedValue(previousDayLimitExceedValue)
+            .setIssueDate(issueDate)
+            .setBonusExpenseValue(DateLimitCalculator.Util.calculateBonusExpenseValueOf(
+                issueDate,
+                allDateLimits,
+                allExpenses
+            ))
+            .calculate()
     }
 
-    private suspend fun getTotalExpenseForToday (dateLimitId: Int): Double {
-        val dateLimitWithTransactions = dateLimitViewModel.getDateLimitWithTransactions(dateLimitId)
+    private suspend fun getTotalExpenseForToday (dateLimit: DateLimit): Double {
+        val dateLimitWithTransactions = dateLimitViewModel.getDateLimitWithTransactions(dateLimit.dateLimitId!!)
         if (dateLimitWithTransactions != null) {
-            val allExpenses = dateLimitViewModel.getExpensesForCurrentDate(dateLimitWithTransactions)
-            var totalExpense = 0.0
-            for (expenses in allExpenses) {
-                totalExpense += expenses.transactionAmount
-            }
-            return totalExpense
+            return dateLimitViewModel.getTotalExpensesForDate(dateLimitWithTransactions)
         }
         return 0.0
     }
 
     private suspend fun setUIData (unfinishedDateFrame: DateFrame, currentDateLimit: DateLimit) {
-        val totalExpenseForCurrentDailyLimit = getTotalExpenseForToday(currentDateLimit.dateLimitId!!)
+        val totalExpenseForCurrentDailyLimit = getTotalExpenseForToday(currentDateLimit)
         val initialBudgetWithIncome = unfinishedDateFrame.initialBudget + unfinishedDateFrame.totalIncomeOfAll
         val currencySymbol = unfinishedDateFrame.mainCurrency.getCurrencySymbol()
         binding.apply {
@@ -297,7 +283,7 @@ class HomeFragment : Fragment() {
                     startCounterAnimationWithProgressBar(
                         0,
                         totalExpenseForCurrentDailyLimit.toInt(),
-                        1000,
+                        1200,
                         currentDateLimit.expenseLimit,
                         currencySymbol,
                         binding.tvSpentMoneyFragHome,
@@ -317,7 +303,7 @@ class HomeFragment : Fragment() {
                 if (transactionViewModel.newIncome) {
                     delay(700) // JUST TO SIMULATE LOADING..
                     ltLoadingDailyLimitFragHome.visibility = View.INVISIBLE
-                    startCounterAnimation(2,currentDateLimit.expenseLimit.toInt(),2000,currencySymbol,tvDailyLimitFragHome)
+                    startCounterAnimation(2,currentDateLimit.expenseLimit.toInt(),1300,currencySymbol,tvDailyLimitFragHome)
                     startCounterAnimation(1,initialBudgetWithIncome.toInt(),1000,currencySymbol,tvWidgetIncomeNumberFragHome)
                     startCounterAnimation(1,unfinishedDateFrame.savedMoney.toInt(),1000,currencySymbol,tvWidgetSavingsNumberFragHome)
                 } else {
@@ -353,35 +339,54 @@ class HomeFragment : Fragment() {
         }
     }
 
-    private fun onAddButtonClicked() {
-        setFabVisibility(isExpanded)
-        setFabAnimation(isExpanded)
-        isExpanded = !isExpanded
+    private fun onFabButtonClicked() {
+        setFabVisibility()
+        setFabAnimation()
+        setClickable()
+        isFabExpanded = !isFabExpanded
     }
 
-    private fun setFabVisibility(isExpanded: Boolean) {
-        if (!isExpanded) {
-            binding.fabCreateNewSessionFragHome.visibility = View.VISIBLE
-            binding.fabAddExpenseFragHome.visibility = View.VISIBLE
-            binding.fabAddIncomeFragHome.visibility = View.VISIBLE
-        } else {
-            binding.fabCreateNewSessionFragHome.visibility = View.GONE
-            binding.fabAddExpenseFragHome.visibility = View.GONE
-            binding.fabAddIncomeFragHome.visibility = View.GONE
+    private fun setFabVisibility() {
+        binding.apply {
+            if (!isFabExpanded) {
+                fabCreateNewSessionFragHome.visibility = View.VISIBLE
+                fabAddExpenseFragHome.visibility = View.VISIBLE
+                fabAddIncomeFragHome.visibility = View.VISIBLE
+            } else {
+                fabCreateNewSessionFragHome.visibility = View.INVISIBLE
+                fabAddExpenseFragHome.visibility = View.INVISIBLE
+                fabAddIncomeFragHome.visibility = View.INVISIBLE
+            }
         }
     }
 
-    private fun setFabAnimation(isExpanded: Boolean) {
-        if (!isExpanded) {
-            binding.fabPlusFragHome.startAnimation(rotateOpenAnim)
-            binding.fabCreateNewSessionFragHome.startAnimation(fromBottomAnim)
-            binding.fabAddExpenseFragHome.startAnimation(fromBottomAnim)
-            binding.fabAddIncomeFragHome.startAnimation(fromBottomAnim)
-        } else {
-            binding.fabPlusFragHome.startAnimation(rotateCloseAnim)
-            binding.fabCreateNewSessionFragHome.startAnimation(toBottomAnim)
-            binding.fabAddExpenseFragHome.startAnimation(toBottomAnim)
-            binding.fabAddIncomeFragHome.startAnimation(toBottomAnim)
+    private fun setFabAnimation() {
+        binding.apply {
+            if (!isFabExpanded) {
+                fabCreateNewSessionFragHome.startAnimation(fromBottomAnim)
+                fabAddExpenseFragHome.startAnimation(fromBottomAnim)
+                fabAddIncomeFragHome.startAnimation(fromBottomAnim)
+                fabPlusFragHome.startAnimation(rotateOpenAnim)
+            } else {
+                fabCreateNewSessionFragHome.startAnimation(toBottomAnim)
+                fabAddExpenseFragHome.startAnimation(toBottomAnim)
+                fabAddIncomeFragHome.startAnimation(toBottomAnim)
+                fabPlusFragHome.startAnimation(rotateCloseAnim)
+            }
+        }
+    }
+
+    private fun setClickable() {
+        binding.apply {
+            if (!isFabExpanded) {
+                fabCreateNewSessionFragHome.isClickable = true
+                fabAddExpenseFragHome.isClickable = true
+                fabAddIncomeFragHome.isClickable = true
+            } else {
+                fabCreateNewSessionFragHome.isClickable = false
+                fabAddExpenseFragHome.isClickable = false
+                fabAddIncomeFragHome.isClickable = false
+            }
         }
     }
 

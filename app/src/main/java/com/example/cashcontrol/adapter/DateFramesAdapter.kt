@@ -10,6 +10,8 @@ import com.example.cashcontrol.R
 import com.example.cashcontrol.adapter.listener.DateFramesClickListener
 import com.example.cashcontrol.data.db.entity.DateFrame
 import com.example.cashcontrol.databinding.ItemLayoutDateFramesBinding
+import com.example.cashcontrol.util.constant.DateConstant.DATE_LIMIT_DATE_PATTERN
+import com.example.cashcontrol.util.extension.convertDateFromIso8601To
 import com.example.cashcontrol.util.extension.getCurrencySymbol
 
 class DateFramesAdapter: RecyclerView.Adapter<DateFramesAdapter.DateFramesViewHolder>() {
@@ -34,11 +36,20 @@ class DateFramesAdapter: RecyclerView.Adapter<DateFramesAdapter.DateFramesViewHo
 
         holder.binding.apply {
             val mainCurrencySymbol = currentItem.mainCurrency.getCurrencySymbol()
-            tvDateFrameItemLayoutDateFrames.text = root.resources.getString(R.string.placeholder_text_date_frame, currentItem.startPointDate, currentItem.endPointDate)
+            tvDateFrameItemLayoutDateFrames.text = root.resources.getString(
+                R.string.placeholder_text_date_frame,
+                currentItem.startPointDate.convertDateFromIso8601To(DATE_LIMIT_DATE_PATTERN),
+                currentItem.endPointDate.convertDateFromIso8601To(DATE_LIMIT_DATE_PATTERN)
+            )
             tvTotalBudgetItemLayoutDateFrames.text = "${currentItem.initialBudget}$mainCurrencySymbol"
             tvTotalExpenseItemLayoutDateFrames.text = "${currentItem.totalExpenseOfAll}$mainCurrencySymbol"
             tvTotalIncomeItemLayoutDateFrames.text = "${currentItem.totalIncomeOfAll}$mainCurrencySymbol"
-            tvTotalSavedItemLayoutDateFrames.text = "${currentItem.savedMoney} $mainCurrencySymbol"
+            tvTotalSavedItemLayoutDateFrames.text = if (!currentItem.isUnfinished && !currentItem.isOnline) {
+                "${(currentItem.savedMoney)+currentItem.getRemainingBudget()} $mainCurrencySymbol"
+            } else {
+                "${currentItem.savedMoney} $mainCurrencySymbol"
+            }
+
 
             if (position == differ.currentList.size-1) {
                 divider.visibility = View.INVISIBLE

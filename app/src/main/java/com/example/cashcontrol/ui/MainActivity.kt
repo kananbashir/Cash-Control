@@ -47,9 +47,9 @@ class MainActivity : AppCompatActivity() {
             }
         }
         super.onCreate(savedInstanceState)
-        userViewModel = ViewModelProvider (this).get(UserViewModel::class.java)
-        profileViewModel = ViewModelProvider (this).get(ProfileViewModel::class.java)
-        dateFrameViewModel = ViewModelProvider (this).get(DateFrameViewModel::class.java)
+        userViewModel = ViewModelProvider (this)[UserViewModel::class.java]
+        profileViewModel = ViewModelProvider (this)[ProfileViewModel::class.java]
+        dateFrameViewModel = ViewModelProvider (this)[DateFrameViewModel::class.java]
 
         installSplashScreen().setKeepOnScreenCondition { loadingCounter >= 2 }
 

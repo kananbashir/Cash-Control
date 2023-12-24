@@ -1,4 +1,4 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <!-- Base application theme. -->
     <style name="Base.Theme.CashControl" parent="Theme.Material3.DayNight.NoActionBar">
         <item name="android:statusBarColor">@color/midnight_green</item>
@@ -267,14 +267,6 @@
         <item name="itemIconTint">@color/color_selector_bottom_nav_menu_icon_dark_mode</item>
         <item name="itemTextColor">@color/color_selector_bottom_nav_menu_icon_dark_mode</item>
     </style>
-
-
-    // Splash screen
-    <style name="Theme.App.SplashScreen" parent="Theme.SplashScreen">
-        <item name="windowSplashScreenBackground">@color/bittersweet_red</item>
-        <item name="postSplashScreenTheme">@style/Base.Theme.CashControl</item>
-    </style>
-
 
     // Loading indicator
     <style name="LottieLoadingIndicatorColor">

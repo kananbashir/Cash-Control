@@ -146,7 +146,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:drawablePadding="-10dp"
-                        android:hint="@string/placeholder_text_app_settings_menu_language"
                         android:inputType="none"
                         android:textSize="14sp" />
                 </com.google.android.material.textfield.TextInputLayout>
@@ -231,7 +230,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:drawablePadding="-10dp"
-                        android:hint="@string/placeholder_text_app_settings_menu_theme"
                         android:inputType="none"
                         android:textSize="14sp" />
                 </com.google.android.material.textfield.TextInputLayout>

@@ -9,32 +9,40 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.example.cashcontrol.R
+import com.example.cashcontrol.data.DateLimitCalculator
 import com.example.cashcontrol.data.db.entity.DateFrame
 import com.example.cashcontrol.data.db.entity.Profile
 import com.example.cashcontrol.data.db.entity.User
 import com.example.cashcontrol.databinding.FragmentUpdateEndPointDateBottomSheetBinding
 import com.example.cashcontrol.ui.viewmodel.DateFrameViewModel
+import com.example.cashcontrol.ui.viewmodel.DateLimitViewModel
 import com.example.cashcontrol.ui.viewmodel.ProfileViewModel
+import com.example.cashcontrol.ui.viewmodel.TransactionViewModel
 import com.example.cashcontrol.ui.viewmodel.UserViewModel
+import com.example.cashcontrol.util.DateFrameUtil.checkBudgetAndSubsequentDaysCompatibility
 import com.example.cashcontrol.util.MessageUtil.showErrorMessage
 import com.example.cashcontrol.util.MessageUtil.showNotifyingMessage
 import com.example.cashcontrol.util.constant.DateConstant.DATE_LIMIT_DATE_PATTERN
+import com.example.cashcontrol.util.extension.convertDateFromIso8601To
+import com.example.cashcontrol.util.extension.convertDateToIso8601From
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.DateValidatorPointForward
 import com.google.android.material.datepicker.MaterialDatePicker
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.time.Instant
 import java.time.LocalDate
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
-import java.util.Locale
 
 class UpdateEndPointDateBottomSheetFragment : BottomSheetDialogFragment() {
     private lateinit var binding: FragmentUpdateEndPointDateBottomSheetBinding
     private lateinit var userViewModel: UserViewModel
     private lateinit var profileViewModel: ProfileViewModel
     private lateinit var dateFrameViewModel: DateFrameViewModel
+    private lateinit var dateLimitViewModel: DateLimitViewModel
+    private lateinit var transactionViewModel: TransactionViewModel
     private var oldEndPointDate: LocalDate? = null
     private var oldStartPointDate: LocalDate? = null
     private var onlineUser: User? = null
@@ -43,9 +51,11 @@ class UpdateEndPointDateBottomSheetFragment : BottomSheetDialogFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        userViewModel = ViewModelProvider(requireActivity()).get(UserViewModel::class.java)
-        profileViewModel = ViewModelProvider(requireActivity()).get(ProfileViewModel::class.java)
-        dateFrameViewModel = ViewModelProvider(requireActivity()).get(DateFrameViewModel::class.java)
+        userViewModel = ViewModelProvider(requireActivity())[UserViewModel::class.java]
+        profileViewModel = ViewModelProvider(requireActivity())[ProfileViewModel::class.java]
+        dateFrameViewModel = ViewModelProvider(requireActivity())[DateFrameViewModel::class.java]
+        dateLimitViewModel = ViewModelProvider(requireActivity())[DateLimitViewModel::class.java]
+        transactionViewModel = ViewModelProvider(requireActivity())[TransactionViewModel::class.java]
         binding = FragmentUpdateEndPointDateBottomSheetBinding.inflate(layoutInflater)
 
     }
@@ -62,8 +72,8 @@ class UpdateEndPointDateBottomSheetFragment : BottomSheetDialogFragment() {
                         onlineProfile = p
                         dateFrameViewModel.getUnfinishedAndOnlineDateFrameByProfile(onlineProfile!!.profileId!!)?.let { unfinishedDateFrame ->
                             unfinishedAndOnlineDateFrame = unfinishedDateFrame
-                            oldEndPointDate = LocalDate.parse(unfinishedDateFrame.endPointDate, DateTimeFormatter.ofPattern(DATE_LIMIT_DATE_PATTERN, Locale.US))
-                            oldStartPointDate = LocalDate.parse(unfinishedDateFrame.startPointDate, DateTimeFormatter.ofPattern(DATE_LIMIT_DATE_PATTERN, Locale.US))
+                            oldEndPointDate = LocalDate.parse(unfinishedDateFrame.endPointDate, DateTimeFormatter.ISO_LOCAL_DATE)
+                            oldStartPointDate = LocalDate.parse(unfinishedDateFrame.startPointDate, DateTimeFormatter.ISO_LOCAL_DATE)
                         }
                     }
                 }
@@ -71,52 +81,86 @@ class UpdateEndPointDateBottomSheetFragment : BottomSheetDialogFragment() {
         }
 
         binding.btDateFragUpdateEndPoint.setOnClickListener {
-            unfinishedAndOnlineDateFrame?.let { unfinishedAndOnlineDateFrame ->
-                oldEndPointDate?.let { oldDate ->
-                    val dateValidator = DateValidatorPointForward.from(oldDate.plusDays(1).atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli())
-                    val calendarConstraints = CalendarConstraints.Builder().setValidator(dateValidator)
-                    val datePicker = MaterialDatePicker.Builder.datePicker()
-                        .setTitleText(resources.getString(R.string.date_picker_title_text_end_point))
-                        .setSelection(oldDate.atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli())
-                        .setCalendarConstraints(calendarConstraints.build())
-                        .build()
+            oldEndPointDate?.let { oldDate ->
+                val dateValidator =
+                    DateValidatorPointForward.from(oldDate.plusDays(1).atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli())
+                val calendarConstraints = CalendarConstraints.Builder().setValidator(dateValidator)
+                val datePicker = MaterialDatePicker.Builder.datePicker()
+                    .setTitleText(resources.getString(R.string.date_picker_title_text_end_point))
+                    .setSelection(oldDate.atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli())
+                    .setCalendarConstraints(calendarConstraints.build())
+                    .build()
 
-                    datePicker.addOnPositiveButtonClickListener { selection ->
-                        val selectedDate: LocalDate = Instant.ofEpochMilli(selection).atZone(ZoneId.systemDefault()).toLocalDate()
-                        if (selectedDate != oldEndPointDate) {
-                            binding.btDateFragUpdateEndPoint.text = selectedDate.format(DateTimeFormatter.ofPattern(
-                                DATE_LIMIT_DATE_PATTERN, Locale.US
-                            ))
-                        } else {
-                            showErrorMessage(resources.getString(R.string.error_message_end_date_update_same_date), binding)
-                        }
+                datePicker.addOnPositiveButtonClickListener { selection ->
+                    val selectedDate: LocalDate = Instant.ofEpochMilli(selection).atZone(ZoneId.systemDefault()).toLocalDate()
+                    if (selectedDate != oldEndPointDate) {
+                        binding.btDateFragUpdateEndPoint.text = selectedDate
+                            .format(DateTimeFormatter.ISO_LOCAL_DATE)
+                            .convertDateFromIso8601To(DATE_LIMIT_DATE_PATTERN)
+                    } else {
+                        showErrorMessage(resources.getString(R.string.error_message_end_date_update_same_date), binding)
                     }
-
-                    datePicker.show(childFragmentManager, "datePicker")
                 }
+
+                datePicker.show(childFragmentManager, "datePicker")
             }
         }
 
         binding.btConfirmFragUpdateEndPoint.setOnClickListener {
-            if (binding.btDateFragUpdateEndPoint.text.toString() != resources.getString(R.string.text_button_select_end_point)) {
-                viewLifecycleOwner.lifecycleScope.launch {
-                    repeatOnLifecycle(Lifecycle.State.STARTED) {
-                        val date = binding.btDateFragUpdateEndPoint.text.toString()
-                        val parsedDate = LocalDate.parse(date, DateTimeFormatter.ofPattern(DATE_LIMIT_DATE_PATTERN, Locale.US))
-                        if ((parsedDate.year - oldStartPointDate!!.year) > 1) {
-                            showErrorMessage(resources.getString(R.string.error_message_onboarding_dateframe_year_gap_not_allowed), binding)
+            unfinishedAndOnlineDateFrame?.let { unfinishedDateFrame ->
+                if (binding.btDateFragUpdateEndPoint.text.toString() != resources.getString(R.string.text_button_select_end_point)) {
+                    val date = binding.btDateFragUpdateEndPoint.text.toString().convertDateToIso8601From(DATE_LIMIT_DATE_PATTERN)
+                    val parsedDate = LocalDate.parse(date, DateTimeFormatter.ISO_LOCAL_DATE)
+                    if ((parsedDate.year - oldStartPointDate!!.year) <= 1) {
+                        if (checkBudgetAndSubsequentDaysCompatibility(
+                                binding.btDateFragUpdateEndPoint.text.toString().convertDateToIso8601From(DATE_LIMIT_DATE_PATTERN),
+                                unfinishedDateFrame.getRemainingBudget()
+                            )
+                        ) {
+                            viewLifecycleOwner.lifecycleScope.launch {
+                                repeatOnLifecycle(Lifecycle.State.STARTED) {
+                                    showNotifyingMessage(resources.getString(R.string.notifying_message_end_date_update_success), binding)
+                                    dateFrameViewModel.updateDate(date, onlineProfile!!.profileId!!)
+                                    delay(300)
+                                    reCalculateAllExpenseLimits()
+                                }
+                            }
                         } else {
-                            showNotifyingMessage(resources.getString(R.string.notifying_message_end_date_update_success), binding)
-                            dateFrameViewModel.updateDate(date, onlineProfile!!.profileId!!)
-                            dismiss()
+                            showErrorMessage(resources.getString(R.string.error_message_end_date_update_incompatible_dateframe_and_budget), binding)
                         }
+                    } else {
+                        showErrorMessage(resources.getString(R.string.error_message_onboarding_dateframe_year_gap_not_allowed), binding)
                     }
+                } else {
+                    showErrorMessage(resources.getString(R.string.error_message_end_date_update_no_date), binding)
                 }
-            } else {
-                showErrorMessage(resources.getString(R.string.error_message_end_date_update_no_date), binding)
             }
         }
 
         return binding.root
+    }
+
+    private suspend fun reCalculateAllExpenseLimits() {
+        userViewModel.getOnlineUser()?.let { onlineUser ->
+            profileViewModel.getOnlineProfileById(onlineUser.userId!!)?.let { onlineProfile ->
+                dateFrameViewModel.getUnfinishedAndOnlineDateFrameByProfile(onlineProfile.profileId!!)?.let { unfinishedDf ->
+                    dateFrameViewModel.getDateFrameWithTransactions(unfinishedDf.dateFrameId!!)?.let { dateFrameWithTransactions ->
+                        dateFrameViewModel.getDateFrameWithDateLimits(unfinishedDf.dateFrameId!!)?.let { dateFrameWithDateLimits ->
+                            val updatedDateLimitList = DateLimitCalculator()
+                                .setDateFrame(unfinishedDf)
+                                .reCalculateAllExpenseLimits(
+                                dateFrameWithDateLimits.dateLimits,
+                                dateFrameWithTransactions
+                            )
+
+                            dateLimitViewModel.upsertAllDateLimits(*updatedDateLimitList.toTypedArray())
+                            transactionViewModel.newExpense = true
+                            transactionViewModel.newIncome = true
+                            dismiss()
+                        }
+                    }
+                }
+            }
+        }
     }
 }

@@ -11,7 +11,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.cashcontrol.R
 import com.example.cashcontrol.adapter.DateFramesAdapter
 import com.example.cashcontrol.adapter.listener.DateFramesClickListener
 import com.example.cashcontrol.data.db.entity.DateFrame
@@ -35,10 +34,10 @@ class TransactionsFragment : Fragment(), DateFramesClickListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        dateFrameViewModel = ViewModelProvider(requireActivity()).get(DateFrameViewModel::class.java)
-        profileViewModel = ViewModelProvider(requireActivity()).get(ProfileViewModel::class.java)
-        transactionViewModel = ViewModelProvider(requireActivity()).get(TransactionViewModel::class.java)
-        userViewModel = ViewModelProvider(requireActivity()).get(UserViewModel::class.java)
+        dateFrameViewModel = ViewModelProvider(requireActivity())[DateFrameViewModel::class.java]
+        profileViewModel = ViewModelProvider(requireActivity())[ProfileViewModel::class.java]
+        transactionViewModel = ViewModelProvider(requireActivity())[TransactionViewModel::class.java]
+        userViewModel = ViewModelProvider(requireActivity())[UserViewModel::class.java]
         dateFramesAdapter = DateFramesAdapter()
         dateFramesAdapter.setListener(this)
         binding = FragmentTransactionsBinding.inflate(layoutInflater)
@@ -78,7 +77,7 @@ class TransactionsFragment : Fragment(), DateFramesClickListener {
                         dateFrameViewModel.getOnlineDateFrameByProfile(onlineProfile.profileId!!)?.let { onlineDateFrame ->
                             dateFrameViewModel.setDateFrameOffline(onlineDateFrame)
                             dateFrameViewModel.setDateFrameOnline(dateFrame)
-                            findNavController().navigate(R.id.homeFragment)
+                            findNavController().popBackStack()
                         }
                     }
                 }

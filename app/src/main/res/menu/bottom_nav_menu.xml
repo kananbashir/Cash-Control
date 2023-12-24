@@ -7,10 +7,10 @@
         android:title="@string/text_menu_home"
         android:icon="@drawable/ic_home"/>
 
-    <item
-        android:id="@+id/analyticsFragment"
-        android:title="@string/text_menu_analytics"
-        android:icon="@drawable/ic_analytics"/>
+<!--    <item-->
+<!--        android:id="@+id/analyticsFragment"-->
+<!--        android:title="@string/text_menu_analytics"-->
+<!--        android:icon="@drawable/ic_analytics"/>-->
 
     <item
         android:id="@+id/expenseFragment"

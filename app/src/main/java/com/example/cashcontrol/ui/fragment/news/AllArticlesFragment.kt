@@ -23,7 +23,7 @@ class AllArticlesFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        newsViewModel = ViewModelProvider(requireActivity()).get(NewsViewModel::class.java)
+        newsViewModel = ViewModelProvider(requireActivity())[NewsViewModel::class.java]
         newsAdapter = NewsAdapter()
         binding = FragmentAllArticlesBinding.inflate(layoutInflater)
     }
